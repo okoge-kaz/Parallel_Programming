@@ -33,6 +33,11 @@
     > brew install java
     ```
 
+    追加で以下を実行しても良いが、しなくも今回の講義用なら不要なはず
+    ```shell
+    brew install liberica-jdk18-full
+    ```
+
 6. .zshrcまわり
     ```shell
     > echo 'export PATH="/usr/local/opt/openjdk/bin:$PATH"' >> ~/.zshrc
