@@ -65,21 +65,44 @@ public class Paint extends Application {
         Number oldv, Number nv) -> {
       graphicsContext.setFill(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
 
+      double green = sliderGreen.getValue();
+      double blue = sliderBlue.getValue();
+      double transparency = sliderTransparency.getValue();
+
+      graphicsContext.setStroke(new Color(nv.doubleValue(), green, blue, transparency));
     });
 
     sliderGreen.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
       graphicsContext.setFill(Color.GREEN.deriveColor(0, 1, 1, nv.doubleValue()));
+
+      double red = sliderRed.getValue();
+      double blue = sliderBlue.getValue();
+      double transparency = sliderTransparency.getValue();
+
+      graphicsContext.setFill(new Color(red, nv.doubleValue(), blue, transparency));
     });
 
     sliderBlue.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
       graphicsContext.setFill(Color.BLUE.deriveColor(0, 1, 1, nv.doubleValue()));
+
+      double red = sliderRed.getValue();
+      double green = sliderGreen.getValue();
+      double alpha = sliderTransparency.getValue();
+
+      graphicsContext.setFill(new Color(red, green, nv.doubleValue(), alpha));
     });
 
     sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
       graphicsContext.setFill(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
+
+      double red = sliderRed.getValue();
+      double green = sliderGreen.getValue();
+      double blue = sliderBlue.getValue();
+
+      graphicsContext.setStroke(new Color(red, green, blue, nv.doubleValue()));
     });
 
     sliderLineWidth.valueProperty().addListener((ObservableValue<? extends Number> ov,
