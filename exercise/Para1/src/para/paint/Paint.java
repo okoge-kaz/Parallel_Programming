@@ -20,12 +20,11 @@ import javafx.stage.Stage;
 public class Paint extends Application {
   Canvas canvas;
   GraphicsContext graphicsContext;
+  Button buttonClear;
 
   double oldX; // 直前のポインタのx座標
   double oldY; // 直前のポインタのy座標
-
   final int SIZE = 600; // 描画領域の大きさ
-  Button buttonClear;
 
   // お絵描きプログラムの準備をして、ウィンドウを開きます
   public void start(Stage stage) {
@@ -60,7 +59,7 @@ public class Paint extends Application {
     Slider sliderRed = new Slider(0, 1, 0);
     Slider sliderGreen = new Slider(0, 1, 0);
     Slider sliderBlue = new Slider(0, 1, 1);
-    Slider sliderTransparency = new Slider(0, 1, 1);
+    Slider sliderTransparency = new Slider(0, 1, 0.5);
     Slider sliderLineWidth = new Slider(0, 10, 4);
 
     sliderRed.valueProperty().addListener((ObservableValue<? extends Number> ov,
@@ -92,10 +91,13 @@ public class Paint extends Application {
     vBox.getChildren().add(sliderRed);
     vBox.getChildren().add(sliderGreen);
     vBox.getChildren().add(sliderBlue);
+    vBox.getChildren().add(sliderTransparency);
+    vBox.getChildren().add(sliderLineWidth);
     vBox.getChildren().add(buttonClear);
 
     borderPane.setTop(vBox);
     borderPane.setCenter(canvas);
+
     Scene scene = new Scene(borderPane);
 
     stage.setScene(scene);
