@@ -1,0 +1,141 @@
+--------------------------
+
+学籍番号 : 20B30790
+氏名 : 藤井 一喜
+
+--------------------------
+
+回答1.2 : Buttonクラスの継承関係は次のとおり
+
+Button -> ButtonBase -> Labeled -> Control -> Region -> Parent -> Node -> Object
+
+詳細:
+
+public class Button
+extends ButtonBase
+
+public abstract class ButtonBase
+extends Labeled
+
+public abstract class Labeled
+extends Control
+
+public abstract class Control
+extends Region
+implements Skinnable
+
+public class Region
+extends Parent
+
+public abstract class Parent
+extends Node
+
+public abstract class Node
+extends Object
+implements EventTarget, Styleable
+
+
+
+回答1.3 : setOnAction メソッドが定義されているクラスは次のとおり
+
+javafx.scene.control.ButtonBase.setOnAction
+
+javafx.scene.control.ChoiceBox.setOnAction
+javafx.scene.control.ComboBoxBase.setOnAction
+javafx.scene.control.ContextMenu.setOnAction
+javafx.scene.control.MenuItem.setOnAction
+javafx.scene.control.TextField.setOnAction
+
+
+回答1.4 : handle メソッドが呼ばれる時の引数のクラス含まれている情報は次のとおり
+
+
+
+
+
+
+
+回答1.5 : パッケージcalc内のクラス、インタフェースの継承、実装関係は次のとおり
+
+
+
+
+
+
+
+
+回答2.1 : 作成されたclassファイルのディレクトリ位置はそれぞれ次のとおり
+
+
+
+
+
+
+
+回答2.2 : 説明は次のとおり
+
+
+
+
+
+
+
+回答2.3 : 説明は次のとおり
+
+
+
+
+
+
+
+回答3.1 : ソースコードの変更を次のように行った
+
+
+
+
+
+
+回答3.2 : ソースコードの変更を次のように行った
+
+
+
+
+
+
+回答3.3 : ソースコードの変更を次のように行った
+
+
+
+
+
+
+回答3.4 : 機能拡張を次のように行った
+
+追加機能その1
+　具体的な実装の説明
+
+
+
+
+追加機能その2
+　具体的な実装の説明
+
+
+
+
+
+回答4.1 :
+　実装に工夫した点があれば説明
+
+
+
+回答4.2 :
+  (イベントハンドラの登録の実装をどう行ったかを説明
+  工夫した点があれば、その説明)
+
+
+回答4.3 :
+
+
+
+
