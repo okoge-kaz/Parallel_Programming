@@ -16,98 +16,104 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/**
- * JavaFX お絵描きアプリケーションのメインクラス
- */
+// JavaFX お絵描きアプリケーションのメインクラス
 public class Paint extends Application {
   Canvas canvas;
-  GraphicsContext gc;
-  /** 直前のポインタのx座標 */
-  double oldx;
-  /** 直前のポインタのy座標 */
-  double oldy;
-  /** 描画領域の大きさ */
-  final int SIZE = 600;
-  Button clear;
+  GraphicsContext graphicsContext;
 
-  /**
-   * お絵描きプログラムの準備をして、ウィンドウを開きます
-   */
+  double oldX; // 直前のポインタのx座標
+  double oldY; // 直前のポインタのy座標
+
+  final int SIZE = 600; // 描画領域の大きさ
+  Button buttonClear;
+
+  // お絵描きプログラムの準備をして、ウィンドウを開きます
   public void start(Stage stage) {
     Group group = new Group();
+
     canvas = new Canvas(SIZE, SIZE);
-    gc = canvas.getGraphicsContext2D();
-    drawShapes(gc);
-    canvas.setOnMousePressed(ev -> {
-      oldx = ev.getX();
-      oldy = ev.getY();
+    canvas.setOnMousePressed(mouseEvent -> {
+      oldX = mouseEvent.getX();
+      oldY = mouseEvent.getY();
     });
+
+    graphicsContext = canvas.getGraphicsContext2D();
+    drawShapes(graphicsContext);
 
     canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
         new EventHandler<MouseEvent>() {
           public void handle(MouseEvent ev) {
-            gc.strokeLine(oldx, oldy, ev.getX(), ev.getY());
-            oldx = ev.getX();
-            oldy = ev.getY();
+            graphicsContext.strokeLine(oldX, oldY, ev.getX(), ev.getY());
+            oldX = ev.getX();
+            oldY = ev.getY();
           }
         });
-    clear = new Button("clear");
-    clear.setOnAction(e -> {
-      gc.setFill(Color.WHITE);
-      gc.fillRect(0, 0, SIZE, SIZE);
+    buttonClear = new Button("clear");
+    buttonClear.setOnAction(e -> {
+      graphicsContext.setFill(Color.WHITE);
+      graphicsContext.fillRect(0, 0, SIZE, SIZE);
     });
 
-    BorderPane bp = new BorderPane();
-    VBox vb = new VBox();
+    BorderPane borderPane = new BorderPane();
+    VBox vBox = new VBox();
 
-    Slider sliderr = new Slider(0, 1, 0);
-    Slider sliderg = new Slider(0, 1, 0);
-    Slider sliderb = new Slider(0, 1, 1);
+    Slider sliderRed = new Slider(0, 1, 0);
+    Slider sliderGreen = new Slider(0, 1, 0);
+    Slider sliderBlue = new Slider(0, 1, 1);
+    Slider sliderTransparency = new Slider(0, 1, 1);
+    Slider sliderLineWidth = new Slider(0, 10, 4);
 
-    sliderr.valueProperty().addListener((ObservableValue<? extends Number> ov,
+    sliderRed.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      gc.setStroke(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setStroke(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
-    sliderg.valueProperty().addListener((ObservableValue<? extends Number> ov,
+    sliderGreen.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      gc.setStroke(Color.GREEN.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setStroke(Color.GREEN.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
-    sliderb.valueProperty().addListener((ObservableValue<? extends Number> ov,
+    sliderBlue.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      gc.setStroke(Color.BLUE.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setStroke(Color.BLUE.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
-    vb.setAlignment(Pos.CENTER);
-    vb.getChildren().add(sliderr);
-    vb.getChildren().add(sliderg);
-    vb.getChildren().add(sliderb);
-    vb.getChildren().add(clear);
-    bp.setTop(vb);
-    bp.setCenter(canvas);
-    Scene scene = new Scene(bp);
+    sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setStroke(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
+    });
+
+    sliderLineWidth.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setLineWidth(nv.doubleValue());
+    });
+
+    vBox.setAlignment(Pos.CENTER);
+    vBox.getChildren().add(sliderRed);
+    vBox.getChildren().add(sliderGreen);
+    vBox.getChildren().add(sliderBlue);
+    vBox.getChildren().add(buttonClear);
+
+    borderPane.setTop(vBox);
+    borderPane.setCenter(canvas);
+    Scene scene = new Scene(borderPane);
+
     stage.setScene(scene);
     stage.setTitle("JavaFX Draw");
     stage.show();
   }
 
-  /**
-   * 初期化メソッド、startメソッドの呼び出され方とは異なる呼び出され方をする。必要ならば定義する
-   */
+  // 初期化メソッド、startメソッドの呼び出され方とは異なる呼び出され方をする。必要ならば定義する
+
   public void init() {
   }
 
-  /**
-   * 図形を描きます。
-   * 図形描画の実装サンプルです
-   */
-  private void drawShapes(GraphicsContext gc) {
-    gc.setFill(Color.WHITE);
-    gc.fillRect(0, 0, SIZE, SIZE);
-    gc.setFill(Color.GREEN);
-    gc.setStroke(Color.BLUE);
-    gc.setLineWidth(4);
+  private void drawShapes(GraphicsContext graphicsContext) {
+    graphicsContext.setFill(Color.WHITE);
+    graphicsContext.fillRect(0, 0, SIZE, SIZE);
+    graphicsContext.setFill(Color.GREEN);
+    graphicsContext.setStroke(Color.BLUE);
+    graphicsContext.setLineWidth(4);
     // gc.strokeLine(40, 10, 10, 40);
     // gc.fillOval(60, 10, 30, 30);
     // gc.strokeOval(110, 10, 30, 30);
