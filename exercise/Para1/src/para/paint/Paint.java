@@ -12,8 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 // JavaFX お絵描きアプリケーションのメインクラス
@@ -57,26 +59,27 @@ public class Paint extends Application {
     Slider sliderGreen = new Slider(0, 1, 0);
     Slider sliderBlue = new Slider(0, 1, 1);
     Slider sliderTransparency = new Slider(0, 1, 0.5);
-    Slider sliderLineWidth = new Slider(0, 10, 4);
+    Slider sliderLineWidth = new Slider(0, 10, 1);
 
     sliderRed.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      graphicsContext.setStroke(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setFill(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
+
     });
 
     sliderGreen.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      graphicsContext.setStroke(Color.GREEN.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setFill(Color.GREEN.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
     sliderBlue.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      graphicsContext.setStroke(Color.BLUE.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setFill(Color.BLUE.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
     sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
-      graphicsContext.setStroke(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
+      graphicsContext.setFill(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
     });
 
     sliderLineWidth.valueProperty().addListener((ObservableValue<? extends Number> ov,
@@ -84,13 +87,16 @@ public class Paint extends Application {
       graphicsContext.setLineWidth(nv.doubleValue());
     });
 
+    Rectangle rectangle = new Rectangle(25, 25);
+    rectangle.setFill(Color.BLACK);
+
+    HBox hBox = new HBox();
+    hBox.setAlignment(Pos.CENTER);
+    hBox.getChildren().addAll(buttonClear, rectangle);
+
     vBox.setAlignment(Pos.CENTER);
-    vBox.getChildren().add(sliderRed);
-    vBox.getChildren().add(sliderGreen);
-    vBox.getChildren().add(sliderBlue);
-    vBox.getChildren().add(sliderTransparency);
-    vBox.getChildren().add(sliderLineWidth);
-    vBox.getChildren().add(buttonClear);
+    vBox.getChildren().addAll(sliderRed, sliderGreen, sliderBlue, sliderTransparency, sliderLineWidth);
+    vBox.getChildren().add(hBox);
 
     borderPane.setTop(vBox);
     borderPane.setCenter(canvas);
@@ -110,12 +116,16 @@ public class Paint extends Application {
   private void drawShapes(GraphicsContext graphicsContext) {
     graphicsContext.setFill(Color.WHITE);
     graphicsContext.fillRect(0, 0, SIZE, SIZE);
+
     graphicsContext.setFill(Color.GREEN);
     graphicsContext.setStroke(Color.BLUE);
+
     graphicsContext.setLineWidth(4);
-    // gc.strokeLine(40, 10, 10, 40);
-    // gc.fillOval(60, 10, 30, 30);
-    // gc.strokeOval(110, 10, 30, 30);
-    // gc.fillRoundRect(160, 10, 30, 30, 10, 10);
+
+    graphicsContext.strokeLine(40, 10, 10, 40);
+    graphicsContext.strokeOval(110, 10, 30, 30); // 丸外枠
+
+    graphicsContext.fillOval(60, 10, 30, 30); // 丸
+    graphicsContext.fillRoundRect(160, 10, 30, 30, 10, 10); // 四角
   }
 }
