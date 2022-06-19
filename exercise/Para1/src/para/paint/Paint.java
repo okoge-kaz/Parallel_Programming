@@ -55,6 +55,9 @@ public class Paint extends Application {
     BorderPane borderPane = new BorderPane();
     VBox vBox = new VBox();
 
+    Rectangle rectangle = new Rectangle(25, 25);
+    rectangle.setFill(Color.BLUE);
+
     Slider sliderRed = new Slider(0, 1, 0);
     Slider sliderGreen = new Slider(0, 1, 0);
     Slider sliderBlue = new Slider(0, 1, 1);
@@ -70,6 +73,8 @@ public class Paint extends Application {
       double transparency = sliderTransparency.getValue();
 
       graphicsContext.setStroke(new Color(nv.doubleValue(), green, blue, transparency));
+      init(rectangle, nv.doubleValue(), green, blue, transparency);
+
     });
 
     sliderGreen.valueProperty().addListener((ObservableValue<? extends Number> ov,
@@ -80,7 +85,8 @@ public class Paint extends Application {
       double blue = sliderBlue.getValue();
       double transparency = sliderTransparency.getValue();
 
-      graphicsContext.setFill(new Color(red, nv.doubleValue(), blue, transparency));
+      graphicsContext.setStroke(new Color(red, nv.doubleValue(), blue, transparency));
+      init(rectangle, red, nv.doubleValue(), blue, transparency);
     });
 
     sliderBlue.valueProperty().addListener((ObservableValue<? extends Number> ov,
@@ -91,7 +97,8 @@ public class Paint extends Application {
       double green = sliderGreen.getValue();
       double alpha = sliderTransparency.getValue();
 
-      graphicsContext.setFill(new Color(red, green, nv.doubleValue(), alpha));
+      graphicsContext.setStroke(new Color(red, green, nv.doubleValue(), alpha));
+      init(rectangle, red, green, nv.doubleValue(), alpha);
     });
 
     sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
@@ -103,15 +110,13 @@ public class Paint extends Application {
       double blue = sliderBlue.getValue();
 
       graphicsContext.setStroke(new Color(red, green, blue, nv.doubleValue()));
+      init(rectangle, red, green, blue, nv.doubleValue());
     });
 
     sliderLineWidth.valueProperty().addListener((ObservableValue<? extends Number> ov,
         Number oldv, Number nv) -> {
       graphicsContext.setLineWidth(nv.doubleValue());
     });
-
-    Rectangle rectangle = new Rectangle(25, 25);
-    rectangle.setFill(Color.BLACK);
 
     HBox hBox = new HBox();
     hBox.setAlignment(Pos.CENTER);
@@ -133,7 +138,8 @@ public class Paint extends Application {
 
   // 初期化メソッド、startメソッドの呼び出され方とは異なる呼び出され方をする。必要ならば定義する
 
-  public void init() {
+  public void init(Rectangle rectangle, double red, double green, double blue, double transparency) {
+    rectangle.setFill(new Color(red, green, blue, transparency));
   }
 
   private void drawShapes(GraphicsContext graphicsContext) {
