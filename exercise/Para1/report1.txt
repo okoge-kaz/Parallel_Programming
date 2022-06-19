@@ -66,17 +66,24 @@ javafx.scene.control.TextField.setOnAction
 
 回答2.1 : 作成されたclassファイルのディレクトリ位置はそれぞれ次のとおり
 
+Para1/bin/para/paint/Paint.class
+Para1/bin/para/paint/Paint$1.class
 
-
-
-
-
+Para1/bin/para/calc/Calculator.class
+Para1/bin/para/calc/Executor.class
+Para1/bin/para/calc/Executor1.class
+Para1/bin/para/calc/ExecutorBase.class
 
 回答2.2 : 説明は次のとおり
 
 
+para.paint.Paint.java
+  package para.paintによりパッケージを宣言している。これはディレクトリ構造と一致させており、javacのコンパイルオプションにて指定した -d bin により Pra1/bin に package名が反映された para/paint/Paint.class が生成される。また、javaのオプションに与えられている -classpath bin により Para1/bin 以下を検索することになり、 para.calc.Paintが呼び出されるクラス名としてjava コマンドの最後に指定されているので、Paint.classが実行される。
 
 
+para.calc.Calculator.java
+  上記と同様にパッケージ名は -sourcepath により指定されたパスである src 配下の相対パスであり、Calculator.java, Executor.java, Executor1.java, ExecutorBase.java をまとめてパッケージ化
+  している。また同様に、javacのコンパイルオプションにて指定した -d bin によりPara1/bin に package名が反映された para/calc/Calculator.class, para/calc/Executor.class, para/calc/Executor1.class, para/calc/ExecutorBase.class が生成される。javaコマンドでは -classpath bin により Para1/bin 以下を検索することになり、para.calc.Calculatorが呼び出されるクラス名としてjava コマンドの最後に指定されているので、Calculator.classが実行される。
 
 
 
