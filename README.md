@@ -12,3 +12,16 @@ macOS 12.4 aarch64
 これで環境構築終了、あとはjavafx sdkを指定の方法でダウンロードして指定のディレクトリに配置するだけ
 
 
+## javac compile option
+
+[oracle reference](https://docs.oracle.com/javase/jp/7/technotes/tools/solaris/javac.html)
+
+- `-Xlint:<name>`: < `name` >の警告を出す。   
+課題のMakefileにある `-Xlint:deprecation -Xdiags:verbose -Xlint:unchecked`もこの一種
+
+
+
+## java run option
+
+
+## 
