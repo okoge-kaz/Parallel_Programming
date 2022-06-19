@@ -18,10 +18,6 @@ import javafx.stage.Stage;
 
 // JavaFX お絵描きアプリケーションのメインクラス
 public class Paint extends Application {
-  Canvas canvas;
-  GraphicsContext graphicsContext;
-  Button buttonClear;
-
   double oldX; // 直前のポインタのx座標
   double oldY; // 直前のポインタのy座標
   final int SIZE = 600; // 描画領域の大きさ
@@ -30,13 +26,13 @@ public class Paint extends Application {
   public void start(Stage stage) {
     Group group = new Group();
 
-    canvas = new Canvas(SIZE, SIZE);
+    Canvas canvas = new Canvas(SIZE, SIZE);
     canvas.setOnMousePressed(mouseEvent -> {
       oldX = mouseEvent.getX();
       oldY = mouseEvent.getY();
     });
 
-    graphicsContext = canvas.getGraphicsContext2D();
+    GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     drawShapes(graphicsContext);
 
     canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
@@ -47,7 +43,8 @@ public class Paint extends Application {
             oldY = ev.getY();
           }
         });
-    buttonClear = new Button("clear");
+
+    Button buttonClear = new Button("clear");
     buttonClear.setOnAction(e -> {
       graphicsContext.setFill(Color.WHITE);
       graphicsContext.fillRect(0, 0, SIZE, SIZE);
