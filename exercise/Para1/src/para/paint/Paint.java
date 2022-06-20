@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,7 +25,6 @@ public class Paint extends Application {
 
   // お絵描きプログラムの準備をして、ウィンドウを開きます
   public void start(Stage stage) {
-    Group group = new Group();
 
     Canvas canvas = new Canvas(SIZE, SIZE);
     canvas.setOnMousePressed(mouseEvent -> {
