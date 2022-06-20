@@ -1,7 +1,13 @@
 package para.paint;
 
+import java.io.File;
+import java.util.Date;
+
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,6 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -48,6 +55,18 @@ public class Paint extends Application {
     buttonClear.setOnAction(e -> {
       graphicsContext.setFill(Color.WHITE);
       graphicsContext.fillRect(0, 0, SIZE, SIZE);
+    });
+
+    Button buttonSaveImage = new Button("save image");
+    buttonSaveImage.setOnAction(e -> {
+      WritableImage writableImage = new WritableImage(SIZE, SIZE);
+      WritableImage snapshot = canvas.snapshot(null, writableImage);
+      File saveImageFile = new File("save" + new Date().getTime() + ".png");
+      try {
+        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", saveImageFile);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     });
 
     BorderPane borderPane = new BorderPane();
@@ -123,6 +142,7 @@ public class Paint extends Application {
     vBox.setAlignment(Pos.CENTER);
     vBox.getChildren().addAll(sliderRed, sliderGreen, sliderBlue, sliderTransparency, sliderLineWidth);
     vBox.getChildren().add(hBox);
+    vBox.getChildren().add(buttonSaveImage);
 
     borderPane.setTop(vBox);
     borderPane.setCenter(canvas);
