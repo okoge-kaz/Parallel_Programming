@@ -42,7 +42,7 @@ public class Calculator extends Application {
     Button[] buttons = new Button[16];
 
     Button buttonCalculationEqual = new Button("=");
-    Button buttonCalculationInequality = new Button("<");
+    Button buttonCalculationUndo = new Button("<");
 
     StackPane stack = new StackPane();
 
@@ -51,8 +51,8 @@ public class Calculator extends Application {
 
     buttonCalculationEqual.setPrefHeight(56);
     buttonCalculationEqual.setPrefWidth(28);
-    buttonCalculationInequality.setPrefHeight(56);
-    buttonCalculationInequality.setPrefWidth(28);
+    buttonCalculationUndo.setPrefHeight(56);
+    buttonCalculationUndo.setPrefWidth(28);
 
     stack.getChildren().add(new Rectangle(140, 30, Color.WHITE));
     stack.getChildren().add(inputLabel);
@@ -65,7 +65,7 @@ public class Calculator extends Application {
     }
 
     VBox vBox = new VBox();
-    vBox.getChildren().addAll(buttonCalculationEqual, buttonCalculationInequality);
+    vBox.getChildren().addAll(buttonCalculationUndo, buttonCalculationEqual);
 
     HBox hBox = new HBox();
     hBox.getChildren().addAll(grid, vBox);
@@ -86,8 +86,8 @@ public class Calculator extends Application {
       stringBuffer.setLength(0);
       inputLabel.setText("");
     });
-    buttonCalculationInequality.setOnAction(e -> {
-      stringBuffer.append(buttonCalculationInequality.getText());
+    buttonCalculationUndo.setOnAction(e -> {
+      stringBuffer.deleteCharAt(stringBuffer.length() - 1);
       inputLabel.setText(stringBuffer.toString());
     });
 
