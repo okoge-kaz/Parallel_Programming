@@ -78,7 +78,7 @@ public class Paint extends Application {
     Slider sliderRed = new Slider(0, 1, 0);
     Slider sliderGreen = new Slider(0, 1, 0);
     Slider sliderBlue = new Slider(0, 1, 1);
-    Slider sliderTransparency = new Slider(0, 1, 0.5);
+    Slider sliderTransparency = new Slider(0, 1, 1);
     Slider sliderLineWidth = new Slider(0, 10, 1);
 
     sliderRed.valueProperty().addListener((ObservableValue<? extends Number> ov,
