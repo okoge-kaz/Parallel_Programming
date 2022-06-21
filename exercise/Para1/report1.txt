@@ -50,18 +50,19 @@ javafx.scene.control.TextField.setOnAction
 回答1.4 : handle メソッドが呼ばれる時の引数のクラス含まれている情報は次のとおり
 
 
+ActionEvent クラスには Fieldとしては static filedとして ACTIONと ANY が存在する。
+また javadoc に
 
+> An Event representing some type of action. This event type is widely used to represent a variety of things, such as when a Button has been fired, when a KeyFrame has finished, and other such usages.
 
-
+とあるように、どのようなイベントが発生したかを表す情報が含まれている。
 
 
 回答1.5 : パッケージcalc内のクラス、インタフェースの継承、実装関係は次のとおり
 
+Calculator ->  Application
 
-
-
-
-
+Executor1 -> ExecutorBase, (implements Executor)
 
 
 回答2.1 : 作成されたclassファイルのディレクトリ位置はそれぞれ次のとおり
