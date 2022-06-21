@@ -16,38 +16,65 @@ import javafx.stage.Stage;
  * JavaFX 電卓アプリケーションのメインクラス
  */
 public class Calculator extends Application {
-  Label input;
-  Label output;
-  StringBuilder buff;
-  Executor ex;
+  Label inputLabel;
+  Label outputLabel;
+  StringBuilder stringBuffer;
+  Executor executor;
 
   public Calculator() {
-    input = new Label();
-    output = new Label();
-    buff = new StringBuilder();
-    ex = new Executor1();
+    inputLabel = new Label();
+    outputLabel = new Label();
+    stringBuffer = new StringBuilder();
+    executor = new Executor1();
   }
 
-  String[] buttonname = { "9", "8", "7", "+",
+  String[] buttonName = { "9", "8", "7", "+",
       "6", "5", "4", "-",
       "3", "2", "1", "*",
       "0", ".", ",", "/" };
 
   public void start(Stage stage) {
+
     VBox root = new VBox();
-    root.setAlignment(Pos.TOP_CENTER);
     GridPane grid = new GridPane();
     Scene scene = new Scene(root, 200, 300);
     Button[] buttons = new Button[16];
-    Button buttoncal = new Button("=");
-    buttoncal.setPrefHeight(56);
-    Button buttondel = new Button("<");
+
+    Button buttonCalculationEqual = new Button("=");
+    Button buttonCalculationInequality = new Button("<");
+
     StackPane stack = new StackPane();
+
+    root.setAlignment(Pos.TOP_CENTER);
+    root.getChildren().addAll(stack, outputLabel);
+
+    buttonCalculationEqual.setPrefHeight(56);
+    buttonCalculationEqual.setPrefWidth(28);
+    buttonCalculationInequality.setPrefHeight(56);
+    buttonCalculationInequality.setPrefWidth(28);
+
     stack.getChildren().add(new Rectangle(140, 30, Color.WHITE));
-    stack.getChildren().add(input);
-    root.getChildren().addAll(stack, output);
+    stack.getChildren().add(inputLabel);
+
     for (int i = 0; i < 16; i++) {
-      buttons[i] = new Button(buttonname[i]);
+      buttons[i] = new Button(buttonName[i]);
+      buttons[i].setPrefHeight(28);
+      buttons[i].setPrefWidth(28);
+      grid.add(buttons[i], i % 4, i / 4);
+    }
+
+    VBox vBox = new VBox();
+    vBox.getChildren().addAll(buttonCalculationEqual, buttonCalculationInequality);
+
+    grid.setAlignment(Pos.CENTER);
+
+    root.getChildren().add(grid);
+    for (int i = 0; i < 16; i++) {
+      Button targetButton = buttons[i];
+      targetButton.setOnAction(e -> {
+        stringBuffer.append(targetButton.getText());
+        inputLabel.setText(stringBuffer.toString());
+      });
     }
 
     stage.setWidth(200);
