@@ -82,8 +82,9 @@ public class Calculator extends Application {
     }
 
     buttonCalculationEqual.setOnAction(e -> {
-      stringBuffer.append(buttonCalculationEqual.getText());
-      inputLabel.setText(stringBuffer.toString());
+      outputLabel.setText(executor.operation(stringBuffer.toString()));
+      stringBuffer.setLength(0);
+      inputLabel.setText("");
     });
     buttonCalculationInequality.setOnAction(e -> {
       stringBuffer.append(buttonCalculationInequality.getText());
