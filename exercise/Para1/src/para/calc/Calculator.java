@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -66,9 +67,12 @@ public class Calculator extends Application {
     VBox vBox = new VBox();
     vBox.getChildren().addAll(buttonCalculationEqual, buttonCalculationInequality);
 
-    grid.setAlignment(Pos.CENTER);
+    HBox hBox = new HBox();
+    hBox.getChildren().addAll(grid, vBox);
+    hBox.setAlignment(Pos.CENTER);
 
-    root.getChildren().add(grid);
+    root.getChildren().add(hBox);
+
     for (int i = 0; i < 16; i++) {
       Button targetButton = buttons[i];
       targetButton.setOnAction(e -> {
@@ -76,6 +80,15 @@ public class Calculator extends Application {
         inputLabel.setText(stringBuffer.toString());
       });
     }
+
+    buttonCalculationEqual.setOnAction(e -> {
+      stringBuffer.append(buttonCalculationEqual.getText());
+      inputLabel.setText(stringBuffer.toString());
+    });
+    buttonCalculationInequality.setOnAction(e -> {
+      stringBuffer.append(buttonCalculationInequality.getText());
+      inputLabel.setText(stringBuffer.toString());
+    });
 
     stage.setWidth(200);
     stage.setHeight(200);
