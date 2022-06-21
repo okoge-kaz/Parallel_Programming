@@ -90,7 +90,7 @@ para.calc.Calculator.java
 
 回答2.3 : 説明は次のとおり
 
-
+今回の場合は、javaの標準ライブラリ以外は、 --module-path ../javafx-sdk-18.0.1/libで指定された javafx-sdk-18.0.1/lib/以下にある必要がある。
 
 
 回答3.1 : ソースコードの変更を次のように行った
