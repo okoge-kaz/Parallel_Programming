@@ -92,57 +92,164 @@ para.calc.Calculator.java
 
 
 
-
-
-
 回答3.1 : ソースコードの変更を次のように行った
 
+sliderRed, sliderGreen, sliderBlueにイベントハンドラを登録した。
 
+```
+    sliderRed.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setFill(Color.RED.deriveColor(0, 1, 1, nv.doubleValue()));
 
+      double green = sliderGreen.getValue();
+      double blue = sliderBlue.getValue();
+      double transparency = sliderTransparency.getValue();
 
+      graphicsContext.setStroke(new Color(nv.doubleValue(), green, blue, transparency));
+      updateRectangleColor(rectangle, nv.doubleValue(), green, blue, transparency);
+
+    });
+```
+
+sliderRedの例を上記に示す。
+（ただし、現在の色を表示する部分の処理なども上記のコードには混ざっている）
 
 
 回答3.2 : ソースコードの変更を次のように行った
 
+```
+    Slider sliderTransparency = new Slider(0, 1, 0.5);
+    Slider sliderLineWidth = new Slider(0, 10, 1);
+```
 
+上記のように透明度、描画線の線幅を調整するスライダーを追加した。
 
+さらに、sliderTransparency, sliderLineWidthにイベントハンドラを登録した。
 
+```
+    sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setFill(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
 
+      double red = sliderRed.getValue();
+      double green = sliderGreen.getValue();
+      double blue = sliderBlue.getValue();
+
+      graphicsContext.setStroke(new Color(red, green, blue, nv.doubleValue()));
+      updateRectangleColor(rectangle, red, green, blue, nv.doubleValue());
+    });
+
+    sliderLineWidth.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setLineWidth(nv.doubleValue());
+    });
+```
 
 回答3.3 : ソースコードの変更を次のように行った
 
+Rectangle rectangle = new Rectangle(25, 25);
+rectangle.setFill(Color.BLUE);
 
+HBox hBox = new HBox();
+hBox.setAlignment(Pos.CENTER);
+hBox.getChildren().addAll(buttonClear, rectangle);
 
+上記の実装により、まずclearの横に現在の色が表示されるようにした。
 
+また、描画色を変更するために各スライダーにイベントハンドラを登録した。
+sliderTransparencyの例を以下に示す。
 
+```
+    sliderTransparency.valueProperty().addListener((ObservableValue<? extends Number> ov,
+        Number oldv, Number nv) -> {
+      graphicsContext.setFill(Color.BLACK.deriveColor(0, 1, 1, nv.doubleValue()));
+
+      double red = sliderRed.getValue();
+      double green = sliderGreen.getValue();
+      double blue = sliderBlue.getValue();
+
+      graphicsContext.setStroke(new Color(red, green, blue, nv.doubleValue()));
+      updateRectangleColor(rectangle, red, green, blue, nv.doubleValue());
+    });
+```
 
 回答3.4 : 機能拡張を次のように行った
 
 追加機能その1
-　具体的な実装の説明
+ 具体的な実装の説明
 
+canvas上のイラストを画像として保存できるようにするボタンとその機能を追加した。
+buttonSaveImageにアクションを設定し、クリック時にcanvas上のイラストを画像として保存するようにしている。
+また、画像に一定の一意性を持たせるために、保存の際のpngファイル名には時刻を採用している。
+また、ファイルの読み書きの際にはtry-catchによる例外処理を行っている。
 
+具体的な実装は以下の通り
 
+```
+    Button buttonSaveImage = new Button("save image");
+    buttonSaveImage.setOnAction(e -> {
+      WritableImage writableImage = new WritableImage(SIZE, SIZE);
+      WritableImage snapshot = canvas.snapshot(null, writableImage);
+      File saveImageFile = new File("save" + new Date().getTime() + ".png");
+      try {
+        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", saveImageFile);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    });
+```
 
 追加機能その2
-　具体的な実装の説明
+ 具体的な実装の説明
 
-
+なし
 
 
 
 回答4.1 :
-　実装に工夫した点があれば説明
+ 実装に工夫した点があれば説明
 
-
+コードの可読性を向上させるために、変数宣言とGUIのサイズ変更などのコードを分離した。
+ただし、数字と演算子のGridPaneの実装に関しては回答4.2の理由から分離せず、むしろ１つにまとめた
 
 回答4.2 :
   (イベントハンドラの登録の実装をどう行ったかを説明
   工夫した点があれば、その説明)
 
+```
+    for (int i = 0; i < 16; i++) {
+      Button targetButton = buttons[i];
+      targetButton.setOnAction(e -> {
+        stringBuffer.append(targetButton.getText());
+        inputLabel.setText(stringBuffer.toString());
+      });
+    }
+```
+
+上記のように、targetButton(電卓の入力キー)に関しては宣言とイベントハンドラの登録を分離せず、まとめた。
+これは、それぞれのボタンに対して適切な変数をつけることが困難であったためである。
+
+また、これは本課題すべてに共通していることであるが、変数名は特段の理由がない限りキャメルケースで宣言している。
+また、変数が長くなりすぎない範囲で分かりやすい変数名をつけることを心がけた。
+
 
 回答4.3 :
 
+具体的な実装は以下の通り
 
+```
+    buttonCalculationEqual.setOnAction(e -> {
+      outputLabel.setText(executor.operation(stringBuffer.toString()));
+      stringBuffer.setLength(0);
+      inputLabel.setText("");
+    });
+    buttonCalculationUndo.setOnAction(e -> {
+      stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+      inputLabel.setText(stringBuffer.toString());
+    });
+```
 
+イコールの電卓のキーには、operationにstringBuffer.toString()をわたすことで演算を解釈してもらうようにしている。
+また、inputLabel(入力画面)はからになるようにしている。
 
+また、操作を一つ戻す buttonCalculationUndo には、stringBuffer.deleteCharAt(stringBuffer.length() - 1)とすることで直前に入力した文字を削除するようにしている。
