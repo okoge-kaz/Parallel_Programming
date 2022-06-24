@@ -50,4 +50,14 @@ public interface Target{
    *  @param attr 画像図形の属性
    */
   public void drawImage(int id, int x, int y, BufferedImage img, Attribute attr);
+  
+  public void drawTriangle(int id, int x, int y, int width, int height, Attribute attr);
+  /** 三角形を出力する．
+   * @param id 三角形の識別子
+   * @param x  三角形の底辺の中心のx座標
+   * @param y  三角形の底辺の中心のy座標
+   * @param width  三角形の底辺の幅
+   * @param height  三角形の底辺の高さ
+   * @param attr  三角形の属性
+   */
 }
