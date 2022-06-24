@@ -1,6 +1,6 @@
 package para.graphic.parser;
 
-import java.util.*;
+import java.util.Scanner;
 
 import para.graphic.shape.Attribute;
 

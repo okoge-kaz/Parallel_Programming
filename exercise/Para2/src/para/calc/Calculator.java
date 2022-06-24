@@ -93,11 +93,11 @@ public class Calculator extends Application {
 
     root.setOnKeyTyped(event -> {
       String inputKey = event.getCharacter();
-      if(inputKey.equals("=")) {
+      if (inputKey.equals("=")) {
         outputLabel.setText(executor.operation(stringBuffer.toString()));
         stringBuffer.setLength(0);
         inputLabel.setText("");
-      } else if(inputKey.equals("<")) {
+      } else if (inputKey.equals("<")) {
         stringBuffer.deleteCharAt(stringBuffer.length() - 1);
         inputLabel.setText(stringBuffer.toString());
       } else {
