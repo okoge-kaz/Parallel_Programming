@@ -12,27 +12,29 @@ import javafx.scene.control.*;
 /**
  * JavaFX 電卓アプリケーションのメインクラス
  */
-public class Calculator extends Application{
+public class Calculator extends Application {
   Label input;
   Label output;
   StringBuilder buff;
   Executor ex;
-  public Calculator(){
+
+  public Calculator() {
     input = new Label();
     output = new Label();
     buff = new StringBuilder();
     ex = new Executor1();
   }
-  String[] buttonname = {"9","8","7","+",
-                         "6","5","4","-",
-                         "3","2","1","*",
-                         "0",".",",","/"};
 
-  public void start(Stage stage){
+  String[] buttonname = { "9", "8", "7", "+",
+      "6", "5", "4", "-",
+      "3", "2", "1", "*",
+      "0", ".", ",", "/" };
+
+  public void start(Stage stage) {
     VBox root = new VBox();
     root.setAlignment(Pos.TOP_CENTER);
     GridPane grid = new GridPane();
-    Scene scene = new Scene(root, 200,200);
+    Scene scene = new Scene(root, 200, 200);
     Button[] buttons = new Button[16];
     Button buttoncal = new Button("=");
     double tmph = buttoncal.getHeight();
@@ -40,65 +42,20 @@ public class Calculator extends Application{
     Button buttondel = new Button("<");
     buttondel.setPrefHeight(56);
     StackPane stack = new StackPane();
-    stack.getChildren().add(new Rectangle(140,30,Color.WHITE));
+    stack.getChildren().add(new Rectangle(140, 30, Color.WHITE));
     stack.getChildren().add(input);
     root.getChildren().addAll(stack, output);
     root.getChildren().add(grid);
     grid.setAlignment(Pos.CENTER);
-    for(int i=0;i<16;i++){
+    for (int i = 0; i < 16; i++) {
       buttons[i] = new Button(buttonname[i]);
       buttons[i].setPrefHeight(26);
       buttons[i].setPrefWidth(26);
-      grid.add(buttons[i],i%4,i/4);
+      grid.add(buttons[i], i % 4, i / 4);
     }
-    grid.add(buttondel,4,0,1,2);
-    grid.add(buttoncal,4,2,1,2);
+    grid.add(buttondel, 4, 0, 1, 2);
+    grid.add(buttoncal, 4, 2, 1, 2);
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    
-
-
-
-
-
-
-
-    
     stage.setScene(scene);
     stage.setTitle("JavaFX Calc");
     stage.show();

@@ -1,4 +1,5 @@
 package para.graphic.shape;
+
 import java.util.*;
 import java.util.stream.*;
 import para.graphic.target.Target;
@@ -6,46 +7,54 @@ import para.graphic.target.Target;
 /**
  * 図形の集合
  */
-public class ShapeManager{
+public class ShapeManager {
   /** 図形のリスト */
   AbstractCollection<Shape> data;
 
-  /** 図形の集合を生成する（空集合）
+  /**
+   * 図形の集合を生成する（空集合）
    */
-  public ShapeManager(){
-    data = new ArrayList<Shape>(); 
+  public ShapeManager() {
+    data = new ArrayList<Shape>();
   }
 
-  /** 図形の集合を空集合にする
+  /**
+   * 図形の集合を空集合にする
    */
-  public synchronized void clear(){
+  public synchronized void clear() {
     data.clear();
   }
 
-  /** 図形の集合に図形を追加する
-   *  もし既に同じ識別子を持つ図形があれば置き換える
-   *  @param in 追加する図形
+  /**
+   * 図形の集合に図形を追加する
+   * もし既に同じ識別子を持つ図形があれば置き換える
+   * 
+   * @param in 追加する図形
    */
-  public synchronized void put(Shape in){
-    if(!replace(in)){
+  public synchronized void put(Shape in) {
+    if (!replace(in)) {
       add(in);
     }
   }
 
-  /** 図形の集合に図形を追加する
-   *  @param in 追加する図形
+  /**
+   * 図形の集合に図形を追加する
+   * 
+   * @param in 追加する図形
    */
-  public synchronized void add(Shape in){
+  public synchronized void add(Shape in) {
     data.add(in);
   }
 
-  /** 図形の集合中の図形を置き換える
-   *  @param in 置き換え先の図形
-   *  @return もともと図形がリスト中にあったら true, なければ false
+  /**
+   * 図形の集合中の図形を置き換える
+   * 
+   * @param in 置き換え先の図形
+   * @return もともと図形がリスト中にあったら true, なければ false
    */
-  public synchronized boolean replace(Shape in){
-    for(Shape s:data){
-      if(s.id == in.id){
+  public synchronized boolean replace(Shape in) {
+    for (Shape s : data) {
+      if (s.id == in.id) {
         data.remove(s);
         data.add(in);
         return true;
@@ -54,13 +63,15 @@ public class ShapeManager{
     return false;
   }
 
-  /** 図形の集合から図形を削除する
-   *  @param id 削除する図形の識別子
-   *  @return もともと図形がリスト中にあったら true, なければ false
+  /**
+   * 図形の集合から図形を削除する
+   * 
+   * @param id 削除する図形の識別子
+   * @return もともと図形がリスト中にあったら true, なければ false
    */
-  public synchronized boolean remove(int id){
-    for(Shape s:data){
-      if(s.id == id){
+  public synchronized boolean remove(int id) {
+    for (Shape s : data) {
+      if (s.id == id) {
         data.remove(s);
         return true;
       }
@@ -68,14 +79,16 @@ public class ShapeManager{
     return false;
   }
 
-  /** 図形の集合から図形を削除する
-   *  @param shape 削除する図形
-   *  @return 図形のidと一致する要素がリスト中にあれば true, なければ false
+  /**
+   * 図形の集合から図形を削除する
+   * 
+   * @param shape 削除する図形
+   * @return 図形のidと一致する要素がリスト中にあれば true, なければ false
    */
-  public synchronized boolean remove(Shape shape){
+  public synchronized boolean remove(Shape shape) {
     int id = shape.id;
-    for(Shape s:data){
-      if(s.id == id){
+    for (Shape s : data) {
+      if (s.id == id) {
         data.remove(s);
         return true;
       }
@@ -83,41 +96,43 @@ public class ShapeManager{
     return false;
   }
 
-  public synchronized void copy(ShapeManager in){
-    synchronized(in){
+  public synchronized void copy(ShapeManager in) {
+    synchronized (in) {
       data.clear();
-      for(Shape s: in.data){
+      for (Shape s : in.data) {
         data.add(s);
       }
     }
   }
 
-  public synchronized void merge(ShapeManager in){
-    synchronized(in){
-      for(Shape si:in.data){
+  public synchronized void merge(ShapeManager in) {
+    synchronized (in) {
+      for (Shape si : in.data) {
         put(si);
       }
     }
   }
 
-  public synchronized Shape[] getData(){
+  public synchronized Shape[] getData() {
     return data.toArray(new Shape[0]);
   }
 
-  public synchronized Stream<Shape> getStream(){
+  public synchronized Stream<Shape> getStream() {
     return data.stream();
-  } 
-  
-  public synchronized Stream<Shape> getParallelStream(){
+  }
+
+  public synchronized Stream<Shape> getParallelStream() {
     return data.parallelStream();
-  } 
-  
-  /** 集合内の図形を出力する．
-   *  @param target 出力装置
+  }
+
+  /**
+   * 集合内の図形を出力する．
+   * 
+   * @param target 出力装置
    */
-  public synchronized void draw(Target target){
-    for(Shape s:data){
-      s.draw(target); 
+  public synchronized void draw(Target target) {
+    for (Shape s : data) {
+      s.draw(target);
     }
   }
 }
