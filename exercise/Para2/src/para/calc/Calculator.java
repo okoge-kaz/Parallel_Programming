@@ -91,6 +91,21 @@ public class Calculator extends Application {
       inputLabel.setText(stringBuffer.toString());
     });
 
+    root.setOnKeyTyped(event -> {
+      String inputKey = event.getCharacter();
+      if(inputKey.equals("=")) {
+        outputLabel.setText(executor.operation(stringBuffer.toString()));
+        stringBuffer.setLength(0);
+        inputLabel.setText("");
+      } else if(inputKey.equals("<")) {
+        stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+        inputLabel.setText(stringBuffer.toString());
+      } else {
+        stringBuffer.append(inputKey);
+        inputLabel.setText(stringBuffer.toString());
+      }
+    });
+
     stage.setWidth(200);
     stage.setHeight(200);
     stage.setScene(scene);
