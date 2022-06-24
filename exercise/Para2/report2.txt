@@ -1,0 +1,68 @@
+--------------------------
+
+学籍番号 : 0000000
+氏名 :
+
+--------------------------
+
+回答1.2 : イベントハンドラを登録したオブジェクトは次のとおり
+
+
+
+
+
+イベントハンドラを上のように登録した理由は以下のとおり
+
+
+
+
+
+
+回答4 : package para.graphic.parserの動作の説明
+
+
+
+
+
+
+if-else文を並べた実装方法と比べた拡張性に関する利点はつぎのとおり
+
+
+
+
+
+
+
+
+回答5 : para.graphic.parserパッケージの各クラスのアクセス修飾を次のようにした
+AttributeParser       public ->
+CircleParser          public ->　　
+ImageParser           public ->　　
+MainParser            public ->
+MetaParser            public ->
+RectangleParser       public ->
+ShapeManagerParser    public ->
+ShapeParser           public ->
+TargetParser          public ->
+
+上記のようにアクセス修飾をした理由は次のとおり
+
+
+
+
+
+
+
+回答6 : para.graphic.parser.ImageParserの仕組みの説明
+
+
+
+
+
+
+
+
+
+
+工夫した点や感想：
+
