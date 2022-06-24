@@ -1,25 +1,41 @@
 --------------------------
 
-学籍番号 : 0000000
-氏名 :
+学籍番号 : 20B30790
+氏名 : 藤井一喜
 
 --------------------------
 
 回答1.2 : イベントハンドラを登録したオブジェクトは次のとおり
 
+以下のように root オブジェクトにイベントハンドラを設定した。
 
+```
+    root.setOnKeyTyped(event -> {
+      String inputKey = event.getCharacter();
+      if (inputKey.equals("=")) {
+        outputLabel.setText(executor.operation(stringBuffer.toString()));
+        stringBuffer.setLength(0);
+        inputLabel.setText("");
+      } else if (inputKey.equals("<")) {
+        stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+        inputLabel.setText(stringBuffer.toString());
+      } else {
+        stringBuffer.append(inputKey);
+        inputLabel.setText(stringBuffer.toString());
+      }
+    });
+```
 
 
 
 イベントハンドラを上のように登録した理由は以下のとおり
 
 
-
+理由としては、ユーザーとしてはどこのオブジェクトにフォーカスがあってもキーボードに入力をすれば電卓による計算ができることを望んでいると考えたためである。
 
 
 
 回答4 : package para.graphic.parserの動作の説明
-
 
 
 
