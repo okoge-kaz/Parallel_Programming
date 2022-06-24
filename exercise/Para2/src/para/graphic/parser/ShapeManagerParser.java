@@ -14,6 +14,7 @@ public class ShapeManagerParser implements MetaParser {
     map.put("Circle", new CircleParser());
     map.put("Image", new ImageParser());
     map.put("Rectangle", new RectangleParser());
+    map.put("Triangle", new TriangleParser());
   }
 
   @Override
