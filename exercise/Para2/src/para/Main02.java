@@ -1,11 +1,11 @@
 package para;
 
-import java.util.*;
+import java.util.Scanner;
 
 import para.graphic.parser.MainParser;
 import para.graphic.shape.ShapeManager;
-import para.graphic.target.Target;
 import para.graphic.target.JavaFXTarget;
+import para.graphic.target.Target;
 
 /** 円と画像図形を表示するデモ */
 public class Main02 {
@@ -17,11 +17,11 @@ public class Main02 {
   public static void main(String[] args) {
     String data = "reset\n" +
         "target clear\n" +
-        "shape 10 Circle 80 40 40 Attribute Color 100 40 60 Fill true\n" +
-        "shape 11 Circle 300 40 30 Attribute Color 100 70 30 Fill false\n" +
-        "shape 12 Circle 80 260 20 Attribute Color 100 120 10 Fill false\n" +
-        "shape 13 Circle 300 260 40 Attribute Color 100 140 60 Fill true\n" +
-        "shape 14 Circle 190 150 60 Attribute Color 200 200 100 Fill true\n" +
+        "shape 10 Triangle 80 40 40 40 Attribute Color 100 40 60 Fill true\n" +
+        "shape 11 Triangle 300 40 30 50 Attribute Color 100 70 30 Fill false\n" +
+        "shape 12 Triangle 80 260 20 60 Attribute Color 100 120 10 Fill false\n" +
+        "shape 13 Triangle 300 260 40 30 Attribute Color 100 140 60 Fill true\n" +
+        "shape 14 Triangle 190 150 60 40 Attribute Color 200 200 100 Fill true\n" +
         "shape 15 Image 180 140\n" +
         "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A\n" +
         "/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wDFwAUI6+PxSUAAAAZdEVYdENv\n" +
