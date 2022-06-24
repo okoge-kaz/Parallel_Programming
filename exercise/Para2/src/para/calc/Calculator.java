@@ -1,13 +1,17 @@
 package para.calc;
 
 import javafx.application.Application;
-import javafx.stage.*;
-import javafx.scene.*;
 import javafx.geometry.Pos;
-import javafx.scene.shape.*;
-import javafx.scene.paint.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 /**
  * JavaFX 電卓アプリケーションのメインクラス
@@ -15,13 +19,13 @@ import javafx.scene.control.*;
 public class Calculator extends Application {
   Label inputLabel;
   Label outputLabel;
-  StringBuilder buff;
+  StringBuilder stringBuffer;
   Executor executor;
 
   public Calculator() {
     inputLabel = new Label();
     outputLabel = new Label();
-    buff = new StringBuilder();
+    stringBuffer = new StringBuilder();
     executor = new Executor1();
   }
 
@@ -33,36 +37,62 @@ public class Calculator extends Application {
   public void start(Stage stage) {
 
     VBox root = new VBox();
-    root.setAlignment(Pos.TOP_CENTER);
-
     GridPane grid = new GridPane();
-    Scene scene = new Scene(root, 200, 200);
+    Scene scene = new Scene(root, 200, 300);
     Button[] buttons = new Button[16];
 
-    Button buttonCalculation = new Button("=");
-    double tmph = buttonCalculation.getHeight();
-    buttonCalculation.setPrefHeight(56);
-
-    Button buttonDelete = new Button("<");
-    buttonDelete.setPrefHeight(56);
+    Button buttonCalculationEqual = new Button("=");
+    Button buttonCalculationUndo = new Button("<");
 
     StackPane stack = new StackPane();
+
+    root.setAlignment(Pos.TOP_CENTER);
+    root.getChildren().addAll(stack, outputLabel);
+
+    buttonCalculationEqual.setPrefHeight(56);
+    buttonCalculationEqual.setPrefWidth(28);
+    buttonCalculationUndo.setPrefHeight(56);
+    buttonCalculationUndo.setPrefWidth(28);
+
     stack.getChildren().add(new Rectangle(140, 30, Color.WHITE));
     stack.getChildren().add(inputLabel);
-    root.getChildren().addAll(stack, outputLabel);
-    root.getChildren().add(grid);
-    grid.setAlignment(Pos.CENTER);
 
     for (int i = 0; i < 16; i++) {
       buttons[i] = new Button(buttonName[i]);
-      buttons[i].setPrefHeight(26);
-      buttons[i].setPrefWidth(26);
+      buttons[i].setPrefHeight(28);
+      buttons[i].setPrefWidth(28);
       grid.add(buttons[i], i % 4, i / 4);
     }
 
-    grid.add(buttonDelete, 4, 0, 1, 2);
-    grid.add(buttonCalculation, 4, 2, 1, 2);
+    VBox vBox = new VBox();
+    vBox.getChildren().addAll(buttonCalculationUndo, buttonCalculationEqual);
 
+    HBox hBox = new HBox();
+    hBox.getChildren().addAll(grid, vBox);
+    hBox.setAlignment(Pos.CENTER);
+
+    root.getChildren().add(hBox);
+
+    for (int i = 0; i < 16; i++) {
+      Button targetButton = buttons[i];
+      targetButton.setOnAction(e -> {
+        stringBuffer.append(targetButton.getText());
+        inputLabel.setText(stringBuffer.toString());
+      });
+    }
+
+    buttonCalculationEqual.setOnAction(e -> {
+      outputLabel.setText(executor.operation(stringBuffer.toString()));
+      stringBuffer.setLength(0);
+      inputLabel.setText("");
+    });
+    buttonCalculationUndo.setOnAction(e -> {
+      stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+      inputLabel.setText(stringBuffer.toString());
+    });
+
+    stage.setWidth(200);
+    stage.setHeight(200);
     stage.setScene(scene);
     stage.setTitle("JavaFX Calc");
     stage.show();
