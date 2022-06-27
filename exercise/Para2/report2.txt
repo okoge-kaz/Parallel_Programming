@@ -37,13 +37,47 @@
 
 回答4 : package para.graphic.parserの動作の説明
 
+MainParser はinterface MetaParserを継承して実装されている。
+MainParserは Target target, ShapeManager smの２つを引数として受け取り、privateなメンバ変数としてこれを保持する。
+また、keyがStringでvalueがMetaParser型である HashMap<String, MetaParser> をprotectedなメンバ変数として持つ。
+そして、このHashMapに 
 
+key: "shape",  value: new ShapeManagerParser(shapemanager)
+key: "target", value: new TargetParser(target, shapemanager)
+key: "reset",  value: new ResetParser()
 
+を追加する。
+
+ResetParserは、MainParserの内部クラスとして定義されており、保持しているデータをクリアする役割を担っている。
+clear()メソッドはShapeManagerのメソッドであり、ShapeManagerクラスのメンバ変数 AbstractCollection<Shape> data をclearする働きをしている。
+
+ShapeManagerParserもMetaParserを継承して実装されており、コンストラクタの引数であるShapeManager型のsmを、privateなメンバ変数として保持する。またprivateメンバ変数としてHashMap<String, MetaParser> 型のhashMapを持ち、Circle, Image, Rectangle, Triangleなど解釈することができる形のParserをkeyにそして対応するそれぞれのParserをvalueとして追加している。
+
+TargetParserもMetaParserを継承して実装されている。ShapeManagerParserと異なるのは、引数としてTarget tgtをとることであり、これによりdraw, flush, clearの各機能の対象となるものを覚えておくことが可能となっている。
+
+実際の処理が行われるのは、
+
+while (true) {
+      s = new Scanner(data);
+      mp.parse(s);
+    }
+の箇所の、mp.parse(s)の部分である。
+読み込まれたString型のデータはScannerによって取得され、MetaParserのparseメソッドに渡される。
+Scannerのnext()メソッドを使ってデータを1つずつ取得し、s.next()により取得したkeyに対応するParserがMetaParser mpに代入され対応するParserのparseメソッドを呼び出す。
+
+以上の方法で解析を行なっているが、dataの改行までの文字列のうち最初のshape, target, resetの文字により、ShapeParser, TargetParser, ResetParserのどれが 変数 mp に代入されるかが決められる。
+
+shapeの場合は、次の数字は id であり、その次の文字列によって Circle, Image, Rectangle, Triangle のどれが ShapeParser spに代入されるかを決めるキーであり、それ以降は座標、色を指定するものである。
+
+target の場合は、その次の文字が draw, flush, clearのどれなのかで DrawParser, FlushParser, ClearParserのどれが MetaParser mpに代入されるかが決められる。
 
 
 if-else文を並べた実装方法と比べた拡張性に関する利点はつぎのとおり
 
+if else文であると、これだけ多くの分岐を実現するためにはネストが深くなり、拡張性が低くなるという欠点がある。
+さらに、同一の処理を一定程度関数などとして括り出すことも可能ではあるが、interfaceを使って抽象化を行うことなどができない分、同一もしくは表示に似通った処理を書くことが避けられない。
 
+対して、オブジェクト指向的に書くことで、
 
 
 
