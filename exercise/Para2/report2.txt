@@ -77,28 +77,26 @@ if-else文を並べた実装方法と比べた拡張性に関する利点はつ�
 if else文であると、これだけ多くの分岐を実現するためにはネストが深くなり、拡張性が低くなるという欠点がある。
 さらに、同一の処理を一定程度関数などとして括り出すことも可能ではあるが、interfaceを使って抽象化を行うことなどができない分、同一もしくは表示に似通った処理を書くことが避けられない。
 
-対して、オブジェクト指向的に書くことで、
-
-
+対して、オブジェクト指向的に書くことで、ポリモーフィズムの特性を生かすことで、少ないコード量で異なる動作をする処理を書くことができる。
 
 
 
 
 回答5 : para.graphic.parserパッケージの各クラスのアクセス修飾を次のようにした
-AttributeParser       public ->
-CircleParser          public ->　　
-ImageParser           public ->　　
-MainParser            public ->
-MetaParser            public ->
-RectangleParser       public ->
-ShapeManagerParser    public ->
-ShapeParser           public ->
-TargetParser          public ->
+AttributeParser       public -> 無修飾
+CircleParser          public -> 無修飾
+ImageParser           public -> 無修飾
+MainParser            public -> public
+MetaParser            public -> 無修飾
+RectangleParser       public -> 無修飾
+ShapeManagerParser    public -> 無修飾
+ShapeParser           public -> 無修飾
+TargetParser          public -> 無修飾
 
 上記のようにアクセス修飾をした理由は次のとおり
 
-
-
+アクセス修飾子は、public > protected > 無修飾 > private の順で制約が厳しくなる。
+カプセル化の観点から、できるだけ外部からアクセスできないようにするために、MainParser以外はパッケージ外からアクセスされることがないことを考えると 無修飾 にすることで、現在のクラスと同じパッケージ内のクラスからのアクセスが可能となる状態にしておくことが最も望ましいと考えたため。
 
 
 
@@ -116,3 +114,5 @@ TargetParser          public ->
 
 工夫した点や感想：
 
+200番台のオブジェクト指向プログミングで学んだことのとても良い復習になった。
+講義外でコードを書く際にも、条件分岐ではなくポリモーフィズムをうまく使ってみることを意識するべきであると感じた。
