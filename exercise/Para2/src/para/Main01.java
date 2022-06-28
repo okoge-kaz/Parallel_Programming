@@ -1,10 +1,11 @@
 package para;
 
-import java.util.Scanner;
-
-import para.graphic.parser.*;
-import para.graphic.target.*;
-import para.graphic.shape.*;
+import para.graphic.shape.Attribute;
+import para.graphic.shape.Circle;
+import para.graphic.shape.Rectangle;
+import para.graphic.shape.Shape;
+import para.graphic.shape.ShapeManager;
+import para.graphic.target.JavaFXTarget;
 
 /**
  * かっこいい車が走り過ぎるデモ

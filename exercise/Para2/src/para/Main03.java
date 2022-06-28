@@ -1,14 +1,17 @@
 package para;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import para.graphic.shape.Attribute;
-import para.graphic.shape.Circle;
 import para.graphic.shape.Image;
 import para.graphic.shape.Shape;
 import para.graphic.shape.ShapeManager;
-import para.graphic.target.*;
-import javax.imageio.*;
-import java.io.*;
-import java.awt.image.*;
+import para.graphic.target.JavaFXTarget;
+import para.graphic.target.Target;
 
 /** 画像ファイルを画像図形に利用して表示するデモ */
 public class Main03 {

@@ -5,7 +5,7 @@ import java.util.Scanner;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Rectangle;
 
-public class RectangleParser implements ShapeParser {
+class RectangleParser implements ShapeParser {
   RectangleParser() {
   }
 

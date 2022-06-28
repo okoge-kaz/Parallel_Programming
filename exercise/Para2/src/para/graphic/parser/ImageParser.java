@@ -10,7 +10,7 @@ import java.util.Base64;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Image;
 
-public class ImageParser implements ShapeParser {
+class ImageParser implements ShapeParser {
   private static final Pattern pattern = Pattern.compile("[\\w\\+/=&]+");
   private static final int codeand = "&".hashCode();
   private byte[] bisdata;

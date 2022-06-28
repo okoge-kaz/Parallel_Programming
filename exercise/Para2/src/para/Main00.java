@@ -4,7 +4,8 @@ import para.graphic.shape.Attribute;
 import para.graphic.shape.Circle;
 import para.graphic.shape.Shape;
 import para.graphic.shape.ShapeManager;
-import para.graphic.target.*;
+import para.graphic.target.JavaFXTarget;
+import para.graphic.target.Target;
 
 /** 点滅する円を描画するデモ */
 public class Main00 {

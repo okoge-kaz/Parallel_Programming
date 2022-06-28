@@ -5,7 +5,7 @@ import java.util.Scanner;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Circle;
 
-public class CircleParser implements ShapeParser {
+class CircleParser implements ShapeParser {
   CircleParser() {
   }
 

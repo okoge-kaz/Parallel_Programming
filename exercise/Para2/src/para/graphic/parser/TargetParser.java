@@ -6,7 +6,7 @@ import java.util.HashMap;
 import para.graphic.shape.ShapeManager;
 import para.graphic.target.Target;
 
-public class TargetParser implements MetaParser {
+class TargetParser implements MetaParser {
   final Target target;
   final ShapeManager shapemanager;
   HashMap<String, MetaParser> map;

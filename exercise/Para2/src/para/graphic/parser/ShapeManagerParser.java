@@ -4,7 +4,7 @@ import java.util.*;
 
 import para.graphic.shape.ShapeManager;
 
-public class ShapeManagerParser implements MetaParser {
+class ShapeManagerParser implements MetaParser {
   private final ShapeManager shapemanager;
   private final HashMap<String, ShapeParser> map;
 

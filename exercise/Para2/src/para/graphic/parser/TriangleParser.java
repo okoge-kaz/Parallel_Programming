@@ -5,7 +5,7 @@ import java.util.Scanner;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Triangle;
 
-public class TriangleParser implements ShapeParser {
+class TriangleParser implements ShapeParser {
     TriangleParser() {
     }
 
