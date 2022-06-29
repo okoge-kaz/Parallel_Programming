@@ -1,3 +1,5 @@
+// 20B30790 藤井一喜
+
 package para.graphic.shape;
 
 import para.graphic.target.Target;

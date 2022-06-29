@@ -1,6 +1,6 @@
 package para.graphic.shape;
 
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
 import para.graphic.target.Target;
 
