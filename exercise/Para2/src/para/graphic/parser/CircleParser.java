@@ -14,13 +14,13 @@ class CircleParser implements ShapeParser {
     int x = s.nextInt();
     int y = s.nextInt();
     int r = s.nextInt();
-    Circle ret;
+    Circle circle;
     Attribute attr = null;
     if (s.hasNext("Attribute")) {
       attr = AttributeParser.parse(s);
     }
-    ret = new Circle(id, x, y, r, attr);
-    return ret;
+    circle = new Circle(id, x, y, r, attr);
+    return circle;
   }
 
 }
