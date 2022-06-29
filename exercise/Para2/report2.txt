@@ -37,47 +37,55 @@
 
 回答4 : package para.graphic.parserの動作の説明
 
-MainParser はinterface MetaParserを継承して実装されている。
-MainParserは Target target, ShapeManager smの２つを引数として受け取り、privateなメンバ変数としてこれを保持する。
-また、keyがStringでvalueがMetaParser型である HashMap<String, MetaParser> をprotectedなメンバ変数として持つ。
-そして、このHashMapに 
+全体説明:
 
-key: "shape",  value: new ShapeManagerParser(shapemanager)
-key: "target", value: new TargetParser(target, shapemanager)
-key: "reset",  value: new ResetParser()
+    MainParser はinterface MetaParserを継承して実装されている。
+    MainParserは Target target, ShapeManager smの２つを引数として受け取り、privateなメンバ変数としてこれを保持する。
+    また、keyがStringでvalueがMetaParser型である HashMap<String, MetaParser> をprotectedなメンバ変数として持つ。
+    そして、このHashMapに 
 
-を追加する。
+    key: "shape",  value: new ShapeManagerParser(shapemanager)
+    key: "target", value: new TargetParser(target, shapemanager)
+    key: "reset",  value: new ResetParser()
 
-ResetParserは、MainParserの内部クラスとして定義されており、保持しているデータをクリアする役割を担っている。
-clear()メソッドはShapeManagerのメソッドであり、ShapeManagerクラスのメンバ変数 AbstractCollection<Shape> data をclearする働きをしている。
+    を追加する。
 
-ShapeManagerParserもMetaParserを継承して実装されており、コンストラクタの引数であるShapeManager型のsmを、privateなメンバ変数として保持する。またprivateメンバ変数としてHashMap<String, MetaParser> 型のhashMapを持ち、Circle, Image, Rectangle, Triangleなど解釈することができる形のParserをkeyにそして対応するそれぞれのParserをvalueとして追加している。
+    ResetParserは、MainParserの内部クラスとして定義されており、保持しているデータをクリアする役割を担っている。
+    clear()メソッドはShapeManagerのメソッドであり、ShapeManagerクラスのメンバ変数 AbstractCollection<Shape> data をclearする働きをしている。
 
-TargetParserもMetaParserを継承して実装されている。ShapeManagerParserと異なるのは、引数としてTarget tgtをとることであり、これによりdraw, flush, clearの各機能の対象となるものを覚えておくことが可能となっている。
+    ShapeManagerParserもMetaParserを継承して実装されており、コンストラクタの引数であるShapeManager型のsmを、privateなメンバ変数として保持する。またprivateメンバ変数としてHashMap<String, MetaParser> 型のhashMapを持ち、Circle, Image, Rectangle, Triangleなど解釈することができる形をkeyに、そして対応するそれぞれのParserをvalueとして追加している。
 
-実際の処理が行われるのは、
+    TargetParserもMetaParserを継承して実装されている。ShapeManagerParserと異なるのは、引数としてTarget tgtをとることであり、これによりdraw, flush, clearの各機能の対象となるものを覚えておくことが可能となっている。
 
-while (true) {
-      s = new Scanner(data);
-      mp.parse(s);
-    }
-の箇所の、mp.parse(s)の部分である。
-読み込まれたString型のデータはScannerによって取得され、MetaParserのparseメソッドに渡される。
-Scannerのnext()メソッドを使ってデータを1つずつ取得し、s.next()により取得したkeyに対応するParserがMetaParser mpに代入され対応するParserのparseメソッドを呼び出す。
+    実際の処理が行われるのは、
 
-以上の方法で解析を行なっているが、dataの改行までの文字列のうち最初のshape, target, resetの文字により、ShapeParser, TargetParser, ResetParserのどれが 変数 mp に代入されるかが決められる。
+    while (true) {
+          s = new Scanner(data);
+          mp.parse(s);
+        }
+    の箇所の、mp.parse(s)の部分である。
+    読み込まれたString型のデータはScannerによって取得され、MetaParserのparseメソッドに渡される。
+    Scannerのnext()メソッドを使って文字列を1つずつ取得し、取得したkeyに対応するParserがMetaParser mpに代入され、対応するParserのparseメソッドを呼び出す。
 
-shapeの場合は、次の数字は id であり、その次の文字列によって Circle, Image, Rectangle, Triangle のどれが ShapeParser spに代入されるかを決めるキーであり、それ以降は座標、色を指定するものである。
+    以上の方法で解析を行なっているが、dataの改行までの文字列のうち最初のshape, target, resetの文字により、ShapeParser, TargetParser, ResetParserのどれが 変数 mp に代入されるかが決められる。
 
-target の場合は、その次の文字が draw, flush, clearのどれなのかで DrawParser, FlushParser, ClearParserのどれが MetaParser mpに代入されるかが決められる。
+    shapeの場合は、次の数字は id であり、その次の文字列によって Circle, Image, Rectangle, Triangle のどれが ShapeParser spに代入されるかを決めるキーであり、それ以降は座標、色を指定するものである。
 
+    target の場合は、その次の文字が draw, flush, clearのどれなのかで DrawParser, FlushParser, ClearParserのどれが MetaParser mpに代入されるかが決められる。
+
+dataを用いた説明
+    まず、Scannerによって渡される最初の文字列であるshapeをみて、MainParserはHashMapのkeyに"shape"を指定してShapeManagerParserを変数mpに代入する。そしてnext()により次の文字列を取得する。0が取得されるが、idとして解釈される。そして次のCircleを受けとり、keyとして"Circle"が指定されるので、CircleParserが変数spに代入される。Scanner sとint idを引数として呼び出されたCircleParserのparseメソッドは。、10 10 40 を解釈し、それぞれ x, y, rに代入する。さらに Attributeというpatternを検出し、attrにColor 100 40 60 Fill trueという情報を格納する。こうして得られた情報をCircleクラスに渡すことで、Circleを生成する。
+
+    次に、targetというキーワードを読む。これにより、次はHashMapよりTargetParserを変数mpに代入される。TargetParserは、引数としてTarget tgtとShapeManager smを受けとる。このShapeManagerは、先にCircleを生成したデータを保持しており、これを用いて次の文字列である draw によって決定される動作を実現する。 draw をkeyとするのは DrawParserであるため、DrawParserがmpに代入される。呼び出されるのは、target.draw(shapemanager)であり、対象に保持している図形を描画する。
+
+    target flushの場合は、drawをflushに変えただけで同様である。
 
 if-else文を並べた実装方法と比べた拡張性に関する利点はつぎのとおり
 
-if else文であると、これだけ多くの分岐を実現するためにはネストが深くなり、拡張性が低くなるという欠点がある。
-さらに、同一の処理を一定程度関数などとして括り出すことも可能ではあるが、interfaceを使って抽象化を行うことなどができない分、同一もしくは表示に似通った処理を書くことが避けられない。
+    if else文であると、これだけ多くの分岐を実現するためにはネストが深くなり、拡張性が低くなるという欠点がある。
+    さらに、同一の処理を一定程度関数などとして括り出すことも可能ではあるが、interfaceを使って抽象化を行うことなどができない分、同一もしくは表示に似通った処理を書くことが避けられない。
 
-対して、オブジェクト指向的に書くことで、ポリモーフィズムの特性を生かすことで、少ないコード量で異なる動作をする処理を書くことができる。
+    対して、オブジェクト指向的に書くことで、ポリモーフィズムの特性を生かすことで、少ないコード量で異なる動作をする処理を書くことができる。
 
 
 
