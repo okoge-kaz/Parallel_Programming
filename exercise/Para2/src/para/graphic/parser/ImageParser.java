@@ -1,11 +1,13 @@
 package para.graphic.parser;
 
-import java.util.Scanner;
-import java.util.regex.*;
-import java.io.*;
-import javax.imageio.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Base64;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
 
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Image;
