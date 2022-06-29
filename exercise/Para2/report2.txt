@@ -104,11 +104,16 @@ TargetParser          public -> 無修飾
 回答6 : para.graphic.parser.ImageParserの仕組みの説明
 
 
+まずコンストラクタは、privateなメンバ変数であるbisdataにImageの最大幅と最大高さに比例する大きさのバイト配列を格納する。
+また、bisにbisdataをByteArrayInputStreamに渡して、bisに格納されたバイト配列を読み込むためのInputStreamを生成する。
+decoderはBase64によりエンコードされた文字列をデコードするためのDecoderである。
+
+scanImageはScanner sを引数に取り、scanImageメソッド内で例外が発生した場合はIOExceptionをスローするメソッドである。
+Scannerで読み取ったsからdecodeするときの単位であるパターンにマッチする箇所を抜き出し、それを System.arraycopy niyori
+bisdataにコピーしていく。最終的にはその結果がbisに格納されているので、decoderに渡してデコードされたバイト配列を取得し、それをImageIOのreadメソッドに渡してImageオブジェクトを生成する。
 
 
-
-
-
+parseはInterface Shapeから継承した抽象メソッドparseをOverrideしている。対応する文字列は shape 15 Image 180 140\n のような形のものを、読み取り 座標x, yに 180, 140を代入し、scanImageを呼び出し、scanImageメソッド内で例外が発生しなかった場合には、imgに結果のImageオブジェクトを代入する。そして、さらに Attributeがあるかどうかを読む。 Attributeは最初はnullが代入されているが、Attributeがある場合は、AttributeParserを呼び出し、AttributeParserのparseメソッドを呼び出す。これにより得られた情報から Image オブジェクトに属性を設定し new Imageにより新しいImageオブジェクトを生成する。
 
 
 
