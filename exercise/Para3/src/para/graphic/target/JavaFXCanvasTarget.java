@@ -1,4 +1,5 @@
 package para.graphic.target;
+
 import para.graphic.shape.Attribute;
 import para.graphic.shape.ShapeManager;
 
@@ -26,9 +27,9 @@ import javax.imageio.*;
 import java.io.*;
 
 /**
- *  JavaFXの Canvas を出力装置とするTargetの実装
+ * JavaFXの Canvas を出力装置とするTargetの実装
  */
-public class JavaFXCanvasTarget extends Canvas implements Target{
+public class JavaFXCanvasTarget extends Canvas implements Target {
   final int WIDTH;
   final int HEIGHT;
   Canvas canvas;
@@ -37,17 +38,18 @@ public class JavaFXCanvasTarget extends Canvas implements Target{
   Graphics graphics;
   Group group;
   WritableImage image;
-  
-  public JavaFXCanvasTarget(){
+
+  public JavaFXCanvasTarget() {
     this(320, 240);
   }
-  
+
   /**
-   *  JavaFXCanvasTarget のインスタンスを作成
-   *  @param width 　幅
-   *  @param height　高さ
+   * JavaFXCanvasTarget のインスタンスを作成
+   * 
+   * @param width  幅
+   * @param height 高さ
    */
-  public JavaFXCanvasTarget(int width, int height){
+  public JavaFXCanvasTarget(int width, int height) {
     super(width, height);
     WIDTH = width;
     HEIGHT = height;
@@ -57,208 +59,209 @@ public class JavaFXCanvasTarget extends Canvas implements Target{
     graphics = buffer.getGraphics();
     graphics.setColor(Color.BLACK);
   }
-  
-  public synchronized void clear(){
+
+  public synchronized void clear() {
     Color c = graphics.getColor();
-    graphics.setColor(new Color(255,255,255,255));
+    graphics.setColor(new Color(255, 255, 255, 255));
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
     graphics.setColor(c);
   }
 
-  public synchronized void draw(final ShapeManager sm){
-  /* What is happened, when ``synchronized'' is not used */ 
+  public synchronized void draw(final ShapeManager sm) {
+    /* What is happened, when ``synchronized'' is not used */
     predraw();
     sm.draw(this);
     postdraw();
   }
 
-  public synchronized void draw(final Target t, final ShapeManager sm){
+  public synchronized void draw(final Target t, final ShapeManager sm) {
     predraw();
     t.drawCore(sm);
     postdraw();
   }
 
-  public void drawCore(final ShapeManager sm){
+  public void drawCore(final ShapeManager sm) {
     draw(sm);
   }
 
-  private void predraw(){
+  private void predraw() {
     /*
-    Paint p = gc.getFill();
-    gc.setColor(Color.WHITE);
-    gc.fillRect(0, 0, WIDTH, HEIGHT);
-    gc.setFill(p);
-    */
+     * Paint p = gc.getFill();
+     * gc.setColor(Color.WHITE);
+     * gc.fillRect(0, 0, WIDTH, HEIGHT);
+     * gc.setFill(p);
+     */
     /*
-    Color c = graphics.getColor();
-    graphics.setColor(new Color(255,255,255,255));
-    graphics.fillRect(0, 0, WIDTH, HEIGHT);
-    graphics.setColor(c);
-    */
+     * Color c = graphics.getColor();
+     * graphics.setColor(new Color(255,255,255,255));
+     * graphics.fillRect(0, 0, WIDTH, HEIGHT);
+     * graphics.setColor(c);
+     */
   }
 
-  private void postdraw(){
+  private void postdraw() {
   }
 
-  public BufferedImage getBufferedImage(){
+  public BufferedImage getBufferedImage() {
     return buffer;
   }
 
-  public synchronized BufferedImage copyBufferedImage(){
+  public synchronized BufferedImage copyBufferedImage() {
     return new BufferedImage(buffer.getColorModel(),
-                             (WritableRaster)buffer.getData(),
-                             buffer.isAlphaPremultiplied(),null);
+        (WritableRaster) buffer.getData(),
+        buffer.isAlphaPremultiplied(), null);
   }
 
   @Override
-  public synchronized BufferedImage copyBufferedImage3Channel(){
+  public synchronized BufferedImage copyBufferedImage3Channel() {
     BufferedImage image = new BufferedImage(WIDTH, HEIGHT,
-                                            BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage.TYPE_3BYTE_BGR);
     Graphics graphics = image.getGraphics();
-    graphics.drawImage(this.buffer,0,0,null);  
+    graphics.drawImage(this.buffer, 0, 0, null);
     return image;
   }
 
-  public void init(){
+  public void init() {
   }
 
-  public void addKeyPressHandler(EventHandler<? super KeyEvent> hander){
+  public void addKeyPressHandler(EventHandler<? super KeyEvent> hander) {
     setFocusTraversable(true);
     addEventHandler(KeyEvent.KEY_PRESSED, hander);
   }
 
-  public void addKeyReleasedHandler(EventHandler<? super KeyEvent> hander){
+  public void addKeyReleasedHandler(EventHandler<? super KeyEvent> hander) {
     setFocusTraversable(true);
     addEventHandler(KeyEvent.KEY_RELEASED, hander);
   }
-  
-  public void finish(){
+
+  public void finish() {
   }
 
-  public void flush(){
+  public void flush() {
     SwingFXUtils.toFXImage(buffer, image);
-    Platform.runLater(()->{
-        gc.drawImage(image,0,0);
-      });
+    Platform.runLater(() -> {
+      gc.drawImage(image, 0, 0);
+    });
   }
 
-  private void setColor(Attribute attr){
-    if(attr!=null){
-      int c[]=attr.getColor();
-      graphics.setColor(new java.awt.Color(c[0],c[1],c[2]));
+  private void setColor(Attribute attr) {
+    if (attr != null) {
+      int c[] = attr.getColor();
+      graphics.setColor(new java.awt.Color(c[0], c[1], c[2]));
     }
   }
 
-  /** 
-   *  円を描画する
+  /**
+   * 円を描画する
    */
   @Override
-  public void drawCircle(int id,int x, int y, int r, Attribute attr){
+  public void drawCircle(int id, int x, int y, int r, Attribute attr) {
     setColor(attr);
-    if(attr!=null && attr.getFill()){
-      graphics.fillArc(x-r,y-r,r*2,r*2,0,360);
-    }else{
-      graphics.drawArc(x-r,y-r,r*2,r*2,0,360);
+    if (attr != null && attr.getFill()) {
+      graphics.fillArc(x - r, y - r, r * 2, r * 2, 0, 360);
+    } else {
+      graphics.drawArc(x - r, y - r, r * 2, r * 2, 0, 360);
     }
   }
-  /** 
-   *  矩形を描画する
+
+  /**
+   * 矩形を描画する
    */
   @Override
-  public void drawRectangle(int id, int x, int y, int w, int h, 
-                            Attribute attr){
+  public void drawRectangle(int id, int x, int y, int w, int h,
+      Attribute attr) {
     setColor(attr);
-    if(attr!=null && attr.getFill()){
-      graphics.fillRect(x, y, w, h); 
-    }else{
+    if (attr != null && attr.getFill()) {
+      graphics.fillRect(x, y, w, h);
+    } else {
       graphics.drawRect(x, y, w, h);
     }
   }
 
-  /** 
-   *  画像図形を描画する
+  /**
+   * 画像図形を描画する
    */
   @Override
-  public void drawImage(int id, int x, int y, BufferedImage img, 
-                        Attribute attr){
+  public void drawImage(int id, int x, int y, BufferedImage img,
+      Attribute attr) {
     setColor(attr);
-    if(attr != null){
-      if(attr.getFill()){
-        graphics.fillRect(x, y, img.getWidth(), img.getHeight()); 
-        graphics.drawImage(img,x,y,null);
-        graphics.drawRect(x, y, img.getWidth(), img.getHeight()); 
-      }else{
-        graphics.drawImage(img,x,y,null);
-        graphics.drawRect(x, y, img.getWidth(), img.getHeight()); 
+    if (attr != null) {
+      if (attr.getFill()) {
+        graphics.fillRect(x, y, img.getWidth(), img.getHeight());
+        graphics.drawImage(img, x, y, null);
+        graphics.drawRect(x, y, img.getWidth(), img.getHeight());
+      } else {
+        graphics.drawImage(img, x, y, null);
+        graphics.drawRect(x, y, img.getWidth(), img.getHeight());
       }
-    }else{
-      graphics.drawImage(img,x,y,null);
-    } 
+    } else {
+      graphics.drawImage(img, x, y, null);
+    }
   }
 
-  /** 
-   *  数字を描画する
+  /**
+   * 数字を描画する
    */
-  public void drawDigit(int id, int x, int y, int r, int number,Attribute attr){
+  public void drawDigit(int id, int x, int y, int r, int number, Attribute attr) {
 
     setColor(attr);
-    switch(number){
-    case 0:
-      drawDigit(x,y,r,true,true,true,false,true,true,true);
-      break;
-    case 1:
-      drawDigit(x,y,r,false,false,true,false,false,true,false);
-      break;
-    case 2:
-      drawDigit(x,y,r,true,false,true,true,true,false,true);
-      break;
-    case 3:
-      drawDigit(x,y,r,true,false,true,true,false,true,true);
-      break;
-    case 4:
-      drawDigit(x,y,r,false,true,true,true,false,true,false);
-      break;
-    case 5:
-      drawDigit(x,y,r,true,true,false,true,false,true,true);
-      break;
-    case 6:
-      drawDigit(x,y,r,true,true,false,true,true,true,true);
-      break;
-    case 7:
-      drawDigit(x,y,r,true,false,true,false,false,true,false);
-      break;
-    case 8:
-      drawDigit(x,y,r,true,true,true,true,true,true,true);
-      break;
-    case 9:
-      drawDigit(x,y,r,true,true,true,true,false,true,false);
-      break;
+    switch (number) {
+      case 0:
+        drawDigit(x, y, r, true, true, true, false, true, true, true);
+        break;
+      case 1:
+        drawDigit(x, y, r, false, false, true, false, false, true, false);
+        break;
+      case 2:
+        drawDigit(x, y, r, true, false, true, true, true, false, true);
+        break;
+      case 3:
+        drawDigit(x, y, r, true, false, true, true, false, true, true);
+        break;
+      case 4:
+        drawDigit(x, y, r, false, true, true, true, false, true, false);
+        break;
+      case 5:
+        drawDigit(x, y, r, true, true, false, true, false, true, true);
+        break;
+      case 6:
+        drawDigit(x, y, r, true, true, false, true, true, true, true);
+        break;
+      case 7:
+        drawDigit(x, y, r, true, false, true, false, false, true, false);
+        break;
+      case 8:
+        drawDigit(x, y, r, true, true, true, true, true, true, true);
+        break;
+      case 9:
+        drawDigit(x, y, r, true, true, true, true, false, true, false);
+        break;
     }
   }
 
   private void drawDigit(int x, int y, int r, boolean top, boolean upperleft,
-                         boolean upperright, boolean center, boolean lowerleft,
-                         boolean lowerright, boolean bottom){
-    if(top){
-      graphics.fillRect(x-r, y-r, 2*r, r/4+1);//top
+      boolean upperright, boolean center, boolean lowerleft,
+      boolean lowerright, boolean bottom) {
+    if (top) {
+      graphics.fillRect(x - r, y - r, 2 * r, r / 4 + 1);// top
     }
-    if(upperleft){
-      graphics.fillRect(x-r, y-r, r/4+1, r);//upper left
+    if (upperleft) {
+      graphics.fillRect(x - r, y - r, r / 4 + 1, r);// upper left
     }
-    if(upperright){
-      graphics.fillRect(x+r-r/3-1, y-r, r/3+1, r);//upper right
+    if (upperright) {
+      graphics.fillRect(x + r - r / 3 - 1, y - r, r / 3 + 1, r);// upper right
     }
-    if(center){
-      graphics.fillRect(x-r, y-r/8-1, 2*r, r/4+1);//center
+    if (center) {
+      graphics.fillRect(x - r, y - r / 8 - 1, 2 * r, r / 4 + 1);// center
     }
-    if(lowerleft){
-      graphics.fillRect(x-r, y, r/4+1, r);//lower left
+    if (lowerleft) {
+      graphics.fillRect(x - r, y, r / 4 + 1, r);// lower left
     }
-    if(lowerright){
-      graphics.fillRect(x+r-r/3-1, y, r/3+1, r);//lower right
+    if (lowerright) {
+      graphics.fillRect(x + r - r / 3 - 1, y, r / 3 + 1, r);// lower right
     }
-    if(bottom){
-      graphics.fillRect(x-r, y+r-r/3-1, 2*r, r/3+1);//bottom
+    if (bottom) {
+      graphics.fillRect(x - r, y + r - r / 3 - 1, 2 * r, r / 3 + 1);// bottom
     }
   }
 }
