@@ -4,6 +4,7 @@ import para.graphic.shape.Attribute;
 import para.graphic.shape.Circle;
 import para.graphic.shape.Shape;
 import para.graphic.shape.ShapeManager;
+import para.graphic.shape.OrderedShapeManager;
 import para.graphic.target.JavaFXTarget;
 import para.graphic.target.Target;
 
@@ -15,8 +16,8 @@ public class Main04 {
    * @param args このプログラムでは値は使用されません
    */
   public static void main(String[] args) {
-    ShapeManager sm = new ShapeManager();
-    // ShapeManager sm = new OrderedShapeManager();
+    // ShapeManager sm = new ShapeManager();
+    ShapeManager sm = new OrderedShapeManager();
     Target target;
     target = new JavaFXTarget("OrderedDisplay");
     // target = new TextTarget(System.out);
