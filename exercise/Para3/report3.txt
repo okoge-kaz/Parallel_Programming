@@ -9,7 +9,9 @@
 1.1) OrderedShapeManagerの実装についての説明
 利用したクラスについてや、最小限の実装行で済ませる工夫などを説明して下さい。
 
+親クラスのShapeManagerにて dataが内部的にidでsortされた状態を保持することを実現したいため、AbstractCollection型の派生クラスであるTreeSetを用いてsortを実現している。その際、コンストラクタ public ShapeManager() { data = new ArrayList<Shape>(); } に着目して、superによりこれを new TreeSet<Shape>() に変更することで目的を最低限の実装行で実現している。
 
+また、sortの際にComparatorが必要であるため、これを @Overrideを用いて id sortができるように実装している。
 
 
 
