@@ -1,19 +1,14 @@
+// 20B30790 藤井一喜
 package para;
 
 import javafx.application.Application;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Slider;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.Group;
-
-import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
 import javafx.beans.value.ObservableValue;
-
-import para.graphic.target.*;
-import para.graphic.shape.*;
-import para.graphic.parser.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import para.graphic.shape.ShapeManager;
+import para.graphic.target.JavaFXCanvasTarget;
 
 /**
  * スライダにより表示図形が入れ替わるデモ
@@ -32,7 +27,7 @@ public class Main05 extends Application {
       public void run() {
         int j = 0;
         while (true) {
-          // System.out.println(Thread.currentThread().getName());
+          System.out.println(Thread.currentThread().getName());
           Garden.setMole(100, 100, 100, value, sm);
           jfc.clear();
           jfc.draw(sm);
