@@ -101,10 +101,13 @@ public class Game01 extends GameFrame {
     }
     for (int i = 0; i < MCOUNT; i++) {
       if (0 < slot[i]) {
-        osm.put(new Circle(10 + i * 10, (i % XCOUNT) * 130 + 60, (i / XCOUNT) * 130 + 60,
-            slot[i] / 25, mogattr));
+        int delegateid = 10 + i * 10;
+        int x = (i % XCOUNT) * 130 + 60;
+        int y = (i / XCOUNT) * 130 + 60;
+        int level = slot[i] / 25;
+        Garden.setMole(delegateid, x, y, level, osm);
       } else {
-        osm.remove(10 + i * 10);
+        Garden.removeMole(10 + i * 10, osm);
       }
     }
     inputside.draw(osm);
