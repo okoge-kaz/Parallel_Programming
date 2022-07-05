@@ -1,11 +1,17 @@
 package para;
 
-import java.util.Scanner;
 import java.util.Random;
-import para.graphic.target.*;
-import para.graphic.shape.*;
-import para.graphic.parser.*;
-import para.game.*;
+
+import para.game.GameFrame;
+import para.game.SynchronizedPoint;
+import para.graphic.shape.Attribute;
+import para.graphic.shape.Circle;
+import para.graphic.shape.InsideChecker;
+import para.graphic.shape.Shape;
+import para.graphic.shape.ShapeManager;
+import para.graphic.shape.Vec2;
+import para.graphic.target.JavaFXCanvasTarget;
+import para.graphic.target.Target;
 
 /**
  * モグラたたきゲームの雛形
@@ -17,7 +23,9 @@ public class Game01 extends GameFrame {
   final int XCOUNT = 3;
   Target inputside;
   Target outputside;
+
   Thread thread;
+
   ShapeManager osm;
   ShapeManager ism;
   private long prev;
@@ -29,9 +37,11 @@ public class Game01 extends GameFrame {
   public Game01() {
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     canvas.init();
+
     title = "Mole";
     outputside = canvas;
     inputside = canvas;
+
     osm = new ShapeManager();
     ism = new ShapeManager();
     rand = new Random(System.currentTimeMillis());
@@ -39,6 +49,7 @@ public class Game01 extends GameFrame {
     mogattr = new Attribute(158, 118, 38);
   }
 
+  @Override
   public void gamestart(int v) {
     if (thread != null) {
       return;
@@ -46,6 +57,7 @@ public class Game01 extends GameFrame {
     thread = new Thread(() -> {
       Attribute attr = new Attribute(250, 80, 80);
       while (true) {
+
         try {
           Thread.sleep(80);
         } catch (InterruptedException ex) {
@@ -74,6 +86,7 @@ public class Game01 extends GameFrame {
   }
 
   private void mole() {
+
     int appear = rand.nextInt(40);
     if (30 < appear) {
       int head = rand.nextInt(MCOUNT - 1) + 1;
