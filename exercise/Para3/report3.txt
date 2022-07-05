@@ -76,26 +76,27 @@ duplicateの実装をみると Para3/src/para/graphic/shape/ShapeManager.java内
 ２つのスレッド
 １つ目のスレッドとその役割は次のとおり
 
-
-
+JavaFX Application Thread
+JavaFX Applicationのstartからstopまでevent処理やGUIの描画などの役割を担う。
 
 ２つ目のスレッドとその役割は次のとおり
 
-
-
+Thread-4
+public 
 
 4.2)
 para.game.GameFrameのメンバ変数xyについてsynchronizedメソッドによる同
 期を行わなかった場合に生じる不正確なデータの処理の例は次のとおり
 
+GameFrameのメンバ変数 protected final SynchronizedPoint xyにおいてsynchronizedメソッドによる同期を行わないと、SynchronizedPointクラスのメンバ変数 private final float[] xy;の値を copy()メソッドによりディープコピーしたり、getXY()メソッドによりxyの値を取得したり、set()メソッドによりxy, timeの値を変更することができるため、スレッドセーフになっていない。（非共有原則も満たしておらず、値はmutableであり、同期もとられていないため）
 
+そのため、getXYにより値の取得を試みている際に、setメソッドによる変更が行われるなどの割り込み問題が発生することが想定され、適切なデータ処理が行えなくなる。
 
 
 
 volatile修飾では不十分であることの理由
 
-
-
+volatile修飾では、あくまでも非同期に値が変更される変数について、どのスレッドからアクセスしても最新の値を提供することを保証するものであって、排他制御は行われない。また、volatile修飾はその変数の最新性は保証するが、そのメンバ変数の最新性を保証するものではないため、意図せぬ動作をすることが考えられる。
 
 
 
@@ -103,8 +104,11 @@ volatile修飾では不十分であることの理由
 para.game.GameFrameのメンバ変数leftonやrightonにvolatile修飾を付けるこ
 とでマルチスレッドに対応できることの説明
 
+  protected volatile int lefton = 0;
+  protected volatile int righton = 0;
 
-
+この２つメンバ変数は、値をsetされることや、getされることはあるが、現在のlefton、rightonの値によってlefton, rightonに影響を及ぼすことはないため、スレッドセーフである。
+また、4-2との決定的な違いは、lefton, rightonはprimitive型であるためにvolatile修飾子により最新の値が保証されることである。これがオブジェクト型にvolatile修飾をつけた場合について議論している4-2の例と違いである。
 
 
 
