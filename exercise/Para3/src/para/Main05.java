@@ -25,9 +25,8 @@ public class Main05 extends Application {
     jfc.init();
     thread = new Thread(new Runnable() {
       public void run() {
-        int j = 0;
         while (true) {
-          System.out.println(Thread.currentThread().getName());
+          // System.out.println(Thread.currentThread().getName());
           Garden.setMole(100, 100, 100, value, sm);
           jfc.clear();
           jfc.draw(sm);
