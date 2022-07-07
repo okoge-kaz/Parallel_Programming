@@ -82,7 +82,7 @@ JavaFX Applicationのstartからstopまでevent処理やGUIの描画などの役
 ２つ目のスレッドとその役割は次のとおり
 
 Thread-4
-public 
+ユーザーがクリックした際に、その位置がモグラの位置の内側かどうかをチェックするためのスレッド。
 
 4.2)
 para.game.GameFrameのメンバ変数xyについてsynchronizedメソッドによる同
