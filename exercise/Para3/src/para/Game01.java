@@ -6,11 +6,13 @@ import para.game.GameFrame;
 import para.game.SynchronizedPoint;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Circle;
+import para.graphic.shape.Digit;
 import para.graphic.shape.InsideChecker;
 import para.graphic.shape.Shape;
 import para.graphic.shape.ShapeManager;
 import para.graphic.shape.Vec2;
 import para.graphic.target.JavaFXCanvasTarget;
+import para.graphic.target.JavaFXTarget;
 import para.graphic.target.Target;
 
 /**
@@ -25,6 +27,7 @@ public class Game01 extends GameFrame {
   Target outputside;
 
   Thread thread;
+  Thread thread2;
 
   ShapeManager osm;
   ShapeManager ism;
@@ -33,6 +36,11 @@ public class Game01 extends GameFrame {
   private int last;
   private int[] slot;
   Attribute mogattr;
+
+  private volatile int currentPoint = 0;
+
+  private final JavaFXTarget javaFxTarget = new JavaFXTarget("score board", 320, 240);
+  private final ShapeManager shapeProject = new ShapeManager();
 
   public Game01() {
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
@@ -47,15 +55,27 @@ public class Game01 extends GameFrame {
     rand = new Random(System.currentTimeMillis());
     slot = new int[MCOUNT];
     mogattr = new Attribute(158, 118, 38);
+
   }
 
   @Override
   public void gamestart(int v) {
+    javaFxTarget.init();
+
     if (thread != null) {
       return;
     }
     thread = new Thread(() -> {
       Attribute attr = new Attribute(250, 80, 80);
+      this.shapeProject.put(new Digit(100, 230, 120, 30, this.currentPoint % 10, new Attribute(200, 200, 200)));
+      this.shapeProject
+          .put(new Digit(101, 160, 120, 30, (this.currentPoint % 100) / 10, new Attribute(200, 200, 200)));
+      this.shapeProject.put(new Digit(102, 90, 120, 30, this.currentPoint / 100, new Attribute(200, 200, 200)));
+
+      javaFxTarget.clear();
+      javaFxTarget.draw(shapeProject);
+      javaFxTarget.flush();
+      
       while (true) {
 
         try {
@@ -72,6 +92,20 @@ public class Game01 extends GameFrame {
           if (s != null) {
             slot[(s.getID() - 10) / 10] = 0;
             System.out.println(p.getXY()[0] + " " + p.getXY()[1] + " " + p.getTime());
+
+            this.addValue(10);
+            this.shapeProject.put(new Digit(100, 230, 120, 30, this.currentPoint % 10, new Attribute(200, 200, 200)));
+            this.shapeProject
+                .put(new Digit(101, 160, 120, 30, (this.currentPoint % 100) / 10, new Attribute(200, 200, 200)));
+            this.shapeProject.put(new Digit(102, 90, 120, 30, this.currentPoint / 100, new Attribute(200, 200, 200)));
+
+            javaFxTarget.clear();
+            javaFxTarget.draw(shapeProject);
+            javaFxTarget.flush();
+            try {
+              Thread.sleep(70);
+            } catch (InterruptedException ex) {
+            }
           }
         } else if (300 < System.currentTimeMillis() - prev) {
           ism.remove(v);
@@ -83,6 +117,8 @@ public class Game01 extends GameFrame {
       }
     });
     thread.start();
+    thread2.start();
+
   }
 
   private void mole() {
@@ -111,5 +147,9 @@ public class Game01 extends GameFrame {
       }
     }
     inputside.draw(osm);
+  }
+
+  private synchronized void addValue(long v) {
+    this.currentPoint += v;
   }
 }
