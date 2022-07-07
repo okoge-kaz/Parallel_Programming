@@ -2,17 +2,16 @@
 package para.game;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.Stage;
 import javafx.geometry.Pos;
-import javafx.scene.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import java.util.Scanner;
-
-import para.graphic.target.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import para.graphic.target.JavaFXCanvasTarget;
 
 /**
  * 簡単なゲームを簡便に作成するための基底クラス。

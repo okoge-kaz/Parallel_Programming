@@ -1,3 +1,4 @@
+// 20B30790 藤井一喜
 package para;
 
 import java.util.Random;
@@ -75,7 +76,7 @@ public class Game01 extends GameFrame {
       javaFxTarget.clear();
       javaFxTarget.draw(shapeProject);
       javaFxTarget.flush();
-      
+
       while (true) {
 
         try {
@@ -151,5 +152,9 @@ public class Game01 extends GameFrame {
 
   private synchronized void addValue(long v) {
     this.currentPoint += v;
+    if (this.currentPoint > 100) {
+      this.thread2.interrupt();
+      this.thread.interrupt();
+    }
   }
 }
