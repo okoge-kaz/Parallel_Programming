@@ -81,6 +81,9 @@ Main09:
 Calculator:
 	$(MAKE) src/para/calc/$@
 
+Camera_test:
+	$(MAKE) src/para/$@
+
 bin:
 	$(MKDIR) bin
 
