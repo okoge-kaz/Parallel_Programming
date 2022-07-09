@@ -1,16 +1,19 @@
 --------------------------
 
-学籍番号 : 0000000
-氏名 :
+学籍番号 : 20B30790
+氏名 : 藤井一喜
 
 --------------------------
 
 回答1 :
 1.1) 途中結果が表示されなかった理由の説明
 
+Executor2において writeStateメソッド, operationメソッドを呼び出しているスレッドは以下のようになっている。
 
+operation: JavaFX Application Thread
+writeSate: JavaFX Application Thread
 
-
+そのため、synchronizedブロックにより operation メソッドが実行されている際は ブロックされてしまう。
 
 
 
