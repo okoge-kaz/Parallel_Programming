@@ -25,18 +25,37 @@ setText スレッドを別のスレッドに切り替えることで、演算結
 
 1.3) 発生したエラー文は次のとおり
 
-
+setText Thread: JavaFX Application Thread
+Exception in thread "Thread-4" java.lang.IllegalStateException: Not on FX application thread; currentThread = Thread-4
+at javafx.graphics@18.0.1/com.sun.javafx.tk.Toolkit.checkFxUserThread(Toolkit.java:297)
+at javafx.graphics@18.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.checkFxUserThread(QuantumToolkit.java:458)
+at javafx.graphics@18.0.1/javafx.scene.Parent$3.onProposedChange(Parent.java:474)
+at javafx.base@18.0.1/com.sun.javafx.collections.VetoableListDecorator.setAll(VetoableListDecorator.java:113)
+at javafx.base@18.0.1/com.sun.javafx.collections.VetoableListDecorator.setAll(VetoableListDecorator.java:108)
+at javafx.controls@18.0.1/javafx.scene.control.skin.LabeledSkinBase.updateChildren(LabeledSkinBase.java:282)
+at javafx.controls@18.0.1/javafx.scene.control.skin.LabeledSkinBase.lambda$new$11(LabeledSkinBase.java:219)
+at javafx.controls@18.0.1/com.sun.javafx.scene.control.LambdaMultiplePropertyChangeListenerHandler.lambda$new$1(LambdaMultiplePropertyChangeListenerHandler.java:88)
+at javafx.base@18.0.1/javafx.beans.value.WeakChangeListener.changed(WeakChangeListener.java:86)
+at javafx.base@18.0.1/com.sun.javafx.binding.ExpressionHelper$SingleChange.fireValueChangedEvent(ExpressionHelper.java:181)
+at javafx.base@18.0.1/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:80)
+at javafx.base@18.0.1/javafx.beans.property.StringPropertyBase.fireValueChangedEvent(StringPropertyBase.java:104)
+at javafx.base@18.0.1/javafx.beans.property.StringPropertyBase.markInvalid(StringPropertyBase.java:111)
+at javafx.base@18.0.1/javafx.beans.property.StringPropertyBase.set(StringPropertyBase.java:145)
+at javafx.base@18.0.1/javafx.beans.property.StringPropertyBase.set(StringPropertyBase.java:50)
+at javafx.base@18.0.1/javafx.beans.property.StringProperty.setValue(StringProperty.java:71)
+at javafx.controls@18.0.1/javafx.scene.control.Labeled.setText(Labeled.java:147)
+at para.calc.Executor2$MyThread.run(Executor2.java:61)
 
 
 
 runLater()の処理内容について
 
-
+任意のスレッドから JavaFX Application Thread に対して runLater() 内部に書かれた処理を転送して、JavaFX Application Thread に実行させる。
 
 
 runLater()がjavafxに用意されている理由
 
-
+描画処理と、描画に必要な処理（今回は数式の解釈処理）の２つ以上のスレッドが存在する際に、JavaFX Application Threadでないスレッドの特定の動作の後に、JavaFX Application Threadに対して処理を依頼したくなることが想定される。しかし、 runLater のような仕組みがないと 共通の変数等をフラグにするなど、少々面倒な処理を挟まないと別スレッドに対して、ある処理が完了していてかつ、まだそのスレッドは存続させたいような場合に上記のような動作を実現する手段がない。そのため runLater メソッドが用意されている。
 
 
 
