@@ -23,8 +23,8 @@ public class Executor2 extends ExecutorBase implements Executor{
     init(data);
     result = null;
     boolean isSuccess=true;
-    while(isSuccess && s.hasNext()){
-      isSuccess = onestep();
+    while(isSuccess && scanner.hasNext()){
+      isSuccess = oneStep();
     }
     return result;
   }

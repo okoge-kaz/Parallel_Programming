@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * 逆ポーランド記法の数式文字列に対して数値計算をするための基本処理が定義されているクラス
  */
 abstract public class ExecutorBase {
-  protected Scanner s;
+  protected Scanner scanner;
   private Stack<Float> stack;
   protected String result;
   private String state;
@@ -25,8 +25,8 @@ abstract public class ExecutorBase {
    * @param data 処理対象文字列
    */
   protected void init(String data) {
-    s = new Scanner(data);
-    s.useDelimiter(",");
+    scanner = new Scanner(data);
+    scanner.useDelimiter(",");
     stack = new Stack<Float>();
     state = "";
   }
@@ -36,45 +36,48 @@ abstract public class ExecutorBase {
    * 
    * @return 1ステップが処理できれば true 処理対象の文字列の文法誤りで処理できなればfalse
    */
-  protected boolean onestep() {// throws InterruptedException{
-    if (s.hasNext("\\-?+\\d++\\.?+\\d*")) {
-      float ret = Float.parseFloat(s.next("\\-?+\\d++\\.?+\\d*"));
+  protected boolean oneStep() {// throws InterruptedException{
+    if (scanner.hasNext("\\-?+\\d++\\.?+\\d*")) {
+      float ret = Float.parseFloat(scanner.next("\\-?+\\d++\\.?+\\d*"));
       stack.push(ret);
       result = Float.toString(ret);
       showProgress();
       return true;
-    } else if (s.hasNext("[\\+\\-\\*/]")) {
-      String op = s.next("[\\+\\-\\*/]");
-      showProgress(op);
+    } else if (scanner.hasNext("[\\+\\-\\*/]")) {
+      String operator = scanner.next("[\\+\\-\\*/]");
+      showProgress(operator);
       if (stack.empty()) {
         return false;
       }
-      float b = stack.pop();
+
+      float rightOperand = stack.pop();
       if (stack.empty()) {
         return false;
       }
-      float a = stack.pop();
+      float leftOperand = stack.pop();
+
       float res = 0;
-      switch (op) {
+      switch (operator) {
         case "+":
-          res = a + b;
+          res = leftOperand + rightOperand;
           break;
         case "-":
-          res = a - b;
+          res = leftOperand - rightOperand;
           break;
         case "*":
-          res = a * b;
+          res = leftOperand * rightOperand;
           break;
         case "/":
-          res = a / b;
+          res = leftOperand / rightOperand;
           break;
       }
+      
       stack.push(res);
       result = Float.toString(res);
       showProgress();
       return true;
     } else {
-      s.next();
+      scanner.next();
       return false;
     }
   }
