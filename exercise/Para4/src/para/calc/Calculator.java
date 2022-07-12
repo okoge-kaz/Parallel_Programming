@@ -25,10 +25,6 @@ public class Calculator extends Application {
   final StringBuilder buff;
   /** 数式解釈器 */
   final Executor interpreter;
-  /** 数式解釈器のスレッド */
-  private Thread arithmeticExpressionInterpretationThread;
-  /** 数式解釈器の途中経過 */
-  private volatile String intermediateResult;
 
   /**
    * 電卓の状態を保持するデータ領域、逆ポーランド記法解釈器の準備といった初期化行う.
@@ -86,22 +82,8 @@ public class Calculator extends Application {
     // = ボタンを押すことで計算を実行する
     calculationStartButton.setOnAction(ev -> {
       System.out.println("[[" + buff.toString() + "]]");
+      String intermediateResult = interpreter.operation(buff.toString());
 
-      arithmeticExpressionInterpretationThread = new Thread(() -> {
-
-        // for debug start
-        System.err.println("operation method is called on: " + Thread.currentThread().getName());
-        // debug end
-
-        intermediateResult = interpreter.operation(buff.toString());
-      });
-
-      if (arithmeticExpressionInterpretationThread.isAlive()) {
-        System.out.println("already running");
-      } else {
-        arithmeticExpressionInterpretationThread.start();
-      }
-      
       System.out.println("[[" + intermediateResult + "]]");
       outputLabel.setText(intermediateResult);
     });
