@@ -38,27 +38,34 @@ public class Calculator extends Application {
   }
 
   /** ボタンのラベル */
-  final String[] buttonname = { "9", "8", "7", "+",
+  final String[] buttonNames = { "9", "8", "7", "+",
       "6", "5", "4", "-",
       "3", "2", "1", "*",
       "0", ".", ",", "/" };
 
   public void start(Stage stage) {
+
+    // 大枠の作成
     VBox root = new VBox();
     root.setAlignment(Pos.TOP_CENTER);
     GridPane grid = new GridPane();
     Scene scene = new Scene(root, 200, 300);
+
+    // ボタンを定義
     Button[] buttons = new Button[16];
-    Button buttoncal = new Button("=");
-    double tmph = buttoncal.getHeight();
-    buttoncal.setPrefHeight(56);
-    Button buttondel = new Button("<");
-    buttondel.setPrefHeight(56);
+    Button calculationStartButton = new Button("=");
+    Button oneFormerInputDeleteButton = new Button("<");
+
+    calculationStartButton.setPrefHeight(56);
+    oneFormerInputDeleteButton.setPrefHeight(56);
+
+    // 見た目の調整
     StackPane stack = new StackPane();
     stack.getChildren().add(new Rectangle(140, 30, Color.WHITE));
     stack.getChildren().add(inputLabel);
+
     for (int i = 0; i < 16; i++) {
-      buttons[i] = new Button(buttonname[i]);
+      buttons[i] = new Button(buttonNames[i]);
       buttons[i].setPrefHeight(26);
       if (i % 4 == 3) {
         buttons[i].setOnAction(ev -> {
@@ -72,27 +79,32 @@ public class Calculator extends Application {
         });
       }
     }
-    buttoncal.setOnAction(ev -> {
+    // = ボタンを押すことで計算を実行する
+    calculationStartButton.setOnAction(ev -> {
       System.out.println("[[" + buff.toString() + "]]");
       String mid;
       mid = interpreter.operation(buff.toString());
       outputLabel.setText(mid);
       buff.delete(0, buff.length());
     });
-    buttondel.setOnAction(ev -> {
+    // 1つ前の入力を削除するボタン
+    oneFormerInputDeleteButton.setOnAction(ev -> {
       if (buff.length() != 0) {
         buff.deleteCharAt(buff.length() - 1);
       }
       inputLabel.setText(buff.toString());
     });
+
+    // 出力ラベルとボタンを配置
     root.getChildren().addAll(stack, outputLabel);
     root.getChildren().add(grid);
     grid.setAlignment(Pos.CENTER);
     for (int i = 0; i < 16; i++) {
       grid.add(buttons[i], i % 4, i / 4);
     }
-    grid.add(buttondel, 4, 0, 1, 2);
-    grid.add(buttoncal, 4, 2, 1, 2);
+    grid.add(oneFormerInputDeleteButton, 4, 0, 1, 2);
+    grid.add(calculationStartButton, 4, 2, 1, 2);
+
     stage.setWidth(200);
     stage.setHeight(200);
     stage.setScene(scene);
