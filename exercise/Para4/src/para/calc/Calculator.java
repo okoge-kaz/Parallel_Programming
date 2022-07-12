@@ -1,3 +1,4 @@
+// 藤井一喜 20B30790
 package para.calc;
 
 import javafx.application.Application;
