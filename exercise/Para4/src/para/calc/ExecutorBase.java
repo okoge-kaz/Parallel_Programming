@@ -71,7 +71,7 @@ abstract public class ExecutorBase {
           res = leftOperand / rightOperand;
           break;
       }
-      
+
       stack.push(res);
       result = Float.toString(res);
       showProgress();
@@ -92,6 +92,9 @@ abstract public class ExecutorBase {
     });
     ps.print(op + ")");
     state = bos.toString();
+    // for debug start
+    System.err.println("writeState method is called on: " + Thread.currentThread().getName());
+    // debug end
     writeState(state);
     try {
       Thread.sleep(2000);
