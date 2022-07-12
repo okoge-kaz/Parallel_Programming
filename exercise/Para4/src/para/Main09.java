@@ -20,6 +20,7 @@ import para.graphic.target.JavaFXTarget;
 import para.graphic.target.Target;
 import para.graphic.target.TranslateTarget;
 import para.graphic.target.TranslationRule;
+import para.graphic.target.TextTarget;
 
 /**
  * クライアントからの通信を受けて描画するサーバプログラム。
@@ -28,7 +29,8 @@ import para.graphic.target.TranslationRule;
 public class Main09 {
   final public int PORT_NUMBER = 30000;
   final int MAX_CONNECTION = 3;
-  final Target target;
+  final Target javaFXTarget;
+  final Target textTarget;
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
   ExecutorService executorService;
@@ -39,8 +41,8 @@ public class Main09 {
    * を行う
    */
   public Main09() {
-    target = new JavaFXTarget("Server", 320 * MAX_CONNECTION, 240);
-    // target = new TextTarget(System.out);
+    javaFXTarget = new JavaFXTarget("Server", 320 * MAX_CONNECTION, 240);
+    textTarget = new TextTarget(System.out);
     ServerSocket tmp = null;
     executorService = Executors.newFixedThreadPool(MAX_CONNECTION);
     try {
@@ -60,18 +62,18 @@ public class Main09 {
    * 受け付けたデータを表示するウィンドウの初期化とそこに受信データを表示するスレッドの開始
    */
   public void init() {
-    target.init();
-    target.clear();
-    target.flush();
+    javaFXTarget.init();
+    javaFXTarget.clear();
+    javaFXTarget.flush();
     new Thread(() -> {
       while (true) {
-        target.clear();
+        javaFXTarget.clear();
         for (ShapeManager sm : shapeManagerArray) {
           synchronized (sm) {
-            target.draw(sm);
+            javaFXTarget.draw(sm);
           }
         }
-        target.flush();
+        javaFXTarget.flush();
         try {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
@@ -122,6 +124,7 @@ public class Main09 {
             new TranslationRule(10000 * threadIndex, new Vec2(320 * threadIndex, 0))),
             dummy);
         parser.parse(new Scanner(r));
+        
 
       } catch (IOException ex) {
         System.err.print(ex);
