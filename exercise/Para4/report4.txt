@@ -13,15 +13,13 @@ Executor2において writeStateメソッド, operationメソッドを呼び出�
 operation: JavaFX Application Thread
 writeSate: JavaFX Application Thread
 
-そのため、synchronizedブロックにより operation メソッドが実行されている際は ブロックされてしまう。
-
-
+ここで、期待したような動作をしない原因となっているのは Platform.runLaterメソッド内のlabel.setTextもJavaFX Application Threadで実行されているため、operationによる数式の解釈と演算結果が定まるまで、同一スレッド内の実行ができないためである。
 
 
 1.2) 改良方針の説明
 
 
-
+setText スレッドを別のスレッドに切り替えることで、演算結果が逐次表示されるようになるので、operationメソッド内で新しいスレッドを生成する。この際、題意を満たすためには、すでに生成されているスレッドを破棄して、新しいスレッドを生成するようにしなければならないため、 lastThread != null という条件判定を行う。過去のスレッドが存在していた場合は join によりこれを修了させる。
 
 
 
