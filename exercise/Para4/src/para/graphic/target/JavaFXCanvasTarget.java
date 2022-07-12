@@ -27,9 +27,9 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
   final GraphicsContext gc;
   final BufferedImage buffer;
   final Graphics graphics;
-  final WritableImage image;
-  SingleCamera camdev;
-  BufferedImage camimage;
+  final WritableImage writableImage;
+  SingleCamera cameraDevice;
+  BufferedImage cameraImage;
 
   public JavaFXCanvasTarget() {
     this(320, 240);
@@ -42,12 +42,15 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
    * @param height 高さ
    */
   public JavaFXCanvasTarget(int width, int height) {
-    super(width, height);
+    super(width, height);// 描画対象のCanvasの設定
+
     WIDTH = width;
     HEIGHT = height;
-    camdev = SingleCamera.create(Camera.WIDTH, Camera.HEIGHT);
-    camimage = camdev.createBufferedImage();
-    image = new WritableImage(width, height);
+
+    cameraDevice = SingleCamera.create(Camera.WIDTH, Camera.HEIGHT);
+    cameraImage = cameraDevice.createBufferedImage();
+
+    writableImage = new WritableImage(width, height);
     gc = getGraphicsContext2D();
     buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     graphics = buffer.getGraphics();
@@ -111,12 +114,12 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
   }
 
   public synchronized void flush() {
-    synchronized (image) {
-      SwingFXUtils.toFXImage(buffer, image);
+    synchronized (writableImage) {
+      SwingFXUtils.toFXImage(buffer, writableImage);
     }
     Platform.runLater(() -> {
-      synchronized (image) {
-        gc.drawImage(image, 0, 0);
+      synchronized (writableImage) {
+        gc.drawImage(writableImage, 0, 0);
       }
     });
   }
@@ -180,8 +183,8 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
    * カメラの画像図形を描画する
    */
   public synchronized void drawCamera(int id, int x, int y, Attribute attr) {
-    camdev.get(camimage);
-    drawImage(id, x, y, camimage, attr);
+    cameraDevice.get(cameraImage);
+    drawImage(id, x, y, cameraImage, attr);
   }
 
   /**
@@ -224,25 +227,25 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
     }
   }
 
-  private void drawDigit(int x, int y, int r, boolean top, boolean upperleft,
-      boolean upperright, boolean center, boolean lowerleft,
-      boolean lowerright, boolean bottom) {
+  private void drawDigit(int x, int y, int r, boolean top, boolean upperLeft,
+      boolean upperRight, boolean center, boolean lowerLeft,
+      boolean lowerRight, boolean bottom) {
     if (top) {
       graphics.fillRect(x - r, y - r, 2 * r, r / 4 + 1);// top
     }
-    if (upperleft) {
+    if (upperLeft) {
       graphics.fillRect(x - r, y - r, r / 4 + 1, r);// upper left
     }
-    if (upperright) {
+    if (upperRight) {
       graphics.fillRect(x + r - r / 3 - 1, y - r, r / 3 + 1, r);// upper right
     }
     if (center) {
       graphics.fillRect(x - r, y - r / 8 - 1, 2 * r, r / 4 + 1);// center
     }
-    if (lowerleft) {
+    if (lowerLeft) {
       graphics.fillRect(x - r, y, r / 4 + 1, r);// lower left
     }
-    if (lowerright) {
+    if (lowerRight) {
       graphics.fillRect(x + r - r / 3 - 1, y, r / 3 + 1, r);// lower right
     }
     if (bottom) {
