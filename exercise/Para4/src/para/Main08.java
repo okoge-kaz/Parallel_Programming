@@ -19,23 +19,30 @@ public class Main08 {
    * @param args args[0]は相手先のホスト
    */
   public static void main(String[] args) {
-    final int PORTNO = 30000;
-    ShapeManager sm = new ShapeManager();
-    sm.put(new Camera(0, 0, 0));
-    try (Socket s = new Socket(args[0], PORTNO)) {
-      PrintStream ps = new PrintStream(s.getOutputStream());
-      Target target = new TextTarget(ps);
+    final int PORT_NUMBER = 30000;
+
+    ShapeManager shapeManager = new ShapeManager();
+    shapeManager.put(new Camera(0, 0, 0));
+
+    try (Socket socket = new Socket(args[0], PORT_NUMBER)) {
+
+      PrintStream printStream = new PrintStream(socket.getOutputStream());
+      Target target = new TextTarget(printStream);
       // Target target = new TextTarget(System.out);
+
       target.init();
       target.clear();
+
       while (true) {
-        target.draw(sm);
+        // 描画
+        target.draw(shapeManager);
         target.flush();
         try {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
         }
-        if (ps.checkError()) {
+        
+        if (printStream.checkError()) {
           break;
         }
       }
