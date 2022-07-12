@@ -63,7 +63,7 @@ runLater()がjavafxに用意されている理由
 2.2)2つのスレッドのそれぞれの処理内容について
 1つ目のスレッド
 
-JavaFX Application Thread
+JavaFX Application Thread (mainではない？？)
 
 GUIの描画処理を行う。
 
@@ -76,12 +76,12 @@ Thread 3
 
 2.3)同期についての考えられている配慮
 
-不十分である
+十分である
 
 
-不十分であると考える場合の問題となる具体的状況
+十分であると考える場合のその理由
 
-final Target target については不変性があるため、スレッド間で共有される際に問題は生じないが、shapeManagerArray についてはshapeManagerArray[i] の中身のオブジェクトである OrderedShapeManager については不変性が存在せず、スレッド間で共有される際にvolatileがついていないことより最新の値である保証が存在しないため、古いShapeManagerを参照してしまう可能性がある。
+final Target target については不変性があるため、スレッド間で共有される際に問題は生じない。またshapeManagerArray についてはshapeManagerArray[i] の中身のオブジェクトである OrderedShapeManager については不変性が存在しないが、synchronized により同期が取れているため、スレッド間で共有される際に問題は生じない。
 
 
 
@@ -89,7 +89,8 @@ final Target target については不変性があるため、スレッド間で
 各クライアントからのデータの表示位置の割り振りについてどのように実現したかなど
 
 
-
+threadIndex という変数を用いて 最大接続数である3を超えない 0〜2の値により描画位置を管理している。
+ユーザーの直感的操作にあうように、左から順に 0, 1, 2と数字が割り振られており、public void start が開始してから終了時まで、新たにacceptするたびに、threadIndexをインクリメントしていく。(ただし、threadIndexは0〜2のみに限定される mod 3)
 
 
 回答3 :
