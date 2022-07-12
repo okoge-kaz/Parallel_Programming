@@ -84,13 +84,13 @@ public class Main07 {
    * 受信の処理をする
    */
   public void start() {
-    int i = 0;
+    int threadIndex = 0;
     while (true) {
       while (true) {
         try {
-          Socket s = serverSocket.accept();
-          executorService.execute(new MyThread(s, shapeManagerArray[i], i));
-          i = (i + 1) % MAX_CONNECTION;
+          Socket socket = serverSocket.accept();
+          executorService.execute(new MyThread(socket, shapeManagerArray[threadIndex], threadIndex));
+          threadIndex = (threadIndex + 1) % MAX_CONNECTION;
         } catch (IOException ex) {
           System.err.print(ex);
         }
@@ -99,27 +99,30 @@ public class Main07 {
   }
 
   class MyThread extends Thread {
-    final Socket s;
-    ShapeManager sm;
-    int i;
+    final Socket socket;
+    ShapeManager shapeManager;
+    int threadIndex;
 
-    public MyThread(Socket s, ShapeManager sm, int i) {
-      this.s = s;
-      this.sm = sm;
-      this.i = i;
+    public MyThread(Socket socket, ShapeManager shapeManager, int index) {
+      this.socket = socket;
+      this.shapeManager = shapeManager;
+      this.threadIndex = index;
     }
 
     public void run() {
       try {
-        BufferedReader r = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ShapeManager dummy = new ShapeManager();
-        sm.clear();
-        sm.put(new Rectangle(10000 * i, 320 * i, 0, 320, 240,
+
+        shapeManager.clear();
+        shapeManager.put(new Rectangle(10000 * threadIndex, 320 * threadIndex, 0, 320, 240,
             new Attribute(0, 0, 0, true)));
-        MainParser parser = new MainParser(new TranslateTarget(sm,
-            new TranslationRule(10000 * i, new Vec2(320 * i, 0))),
+
+        MainParser parser = new MainParser(new TranslateTarget(shapeManager,
+            new TranslationRule(10000 * threadIndex, new Vec2(320 * threadIndex, 0))),
             dummy);
         parser.parse(new Scanner(r));
+
       } catch (IOException ex) {
         System.err.print(ex);
       }
