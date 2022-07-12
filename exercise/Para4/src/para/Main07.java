@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import para.graphic.parser.MainParser;
 import para.graphic.shape.Attribute;
@@ -29,6 +31,8 @@ public class Main07 {
   final Target target;
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
+  ExecutorService executorService;
+  // Executor executorService;
 
   /**
    * 受け付け用ソケットを開くこと、受信データの格納場所を用意すること
@@ -38,6 +42,7 @@ public class Main07 {
     target = new JavaFXTarget("Server", 320 * MAX_CONNECTION, 240);
     // target = new TextTarget(System.out);
     ServerSocket tmp = null;
+    executorService = Executors.newFixedThreadPool(MAX_CONNECTION);
     try {
       tmp = new ServerSocket(PORT_NUMBER);
     } catch (IOException ex) {
@@ -81,20 +86,43 @@ public class Main07 {
   public void start() {
     int i = 0;
     while (true) {
-      try (Socket s = serverSocket.accept()) {
+      while (true) {
+        try {
+          Socket s = serverSocket.accept();
+          executorService.execute(new MyThread(s, shapeManagerArray[i], i));
+          i = (i + 1) % MAX_CONNECTION;
+        } catch (IOException ex) {
+          System.err.print(ex);
+        }
+      }
+    }
+  }
+
+  class MyThread extends Thread {
+    final Socket s;
+    ShapeManager sm;
+    int i;
+
+    public MyThread(Socket s, ShapeManager sm, int i) {
+      this.s = s;
+      this.sm = sm;
+      this.i = i;
+    }
+
+    public void run() {
+      try {
         BufferedReader r = new BufferedReader(new InputStreamReader(s.getInputStream()));
         ShapeManager dummy = new ShapeManager();
-        shapeManagerArray[i].clear();
-        shapeManagerArray[i].put(new Rectangle(10000 * i, 320 * i, 0, 320, 240,
+        sm.clear();
+        sm.put(new Rectangle(10000 * i, 320 * i, 0, 320, 240,
             new Attribute(0, 0, 0, true)));
-        MainParser parser = new MainParser(new TranslateTarget(shapeManagerArray[i],
+        MainParser parser = new MainParser(new TranslateTarget(sm,
             new TranslationRule(10000 * i, new Vec2(320 * i, 0))),
             dummy);
         parser.parse(new Scanner(r));
       } catch (IOException ex) {
         System.err.print(ex);
       }
-      i = (i + 1) % MAX_CONNECTION;
     }
   }
 
