@@ -100,14 +100,14 @@ public class JavaFXCanvasTarget extends Canvas implements Target {
   public void init() {
   }
 
-  public void addKeyPressHandler(EventHandler<? super KeyEvent> hander) {
+  public void addKeyPressHandler(EventHandler<? super KeyEvent> handler) {
     setFocusTraversable(true);
-    addEventHandler(KeyEvent.KEY_PRESSED, hander);
+    addEventHandler(KeyEvent.KEY_PRESSED, handler);
   }
 
-  public void addKeyReleasedHandler(EventHandler<? super KeyEvent> hander) {
+  public void addKeyReleasedHandler(EventHandler<? super KeyEvent> handler) {
     setFocusTraversable(true);
-    addEventHandler(KeyEvent.KEY_RELEASED, hander);
+    addEventHandler(KeyEvent.KEY_RELEASED, handler);
   }
 
   public void finish() {

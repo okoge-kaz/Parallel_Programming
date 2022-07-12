@@ -9,7 +9,7 @@ import para.graphic.camera.CameraJavaCV;
 
 /** 撮影装置のインスタンスを複数のターゲットで共有するためのクラス */
 class SingleCamera {
-  static private CameraDevice cameradev = null;
+  static private CameraDevice cameraDevice = null;
 
   private SingleCamera() {
   };
@@ -24,8 +24,8 @@ class SingleCamera {
    * @return 作成されたインスタンス
    */
   static synchronized SingleCamera create(int width, int height) {
-    if (cameradev == null) {
-      cameradev = new CameraJavaCV(width, height);
+    if (cameraDevice == null) {
+      cameraDevice = new CameraJavaCV(width, height);
     }
     return new SingleCamera();
   }
@@ -42,7 +42,7 @@ class SingleCamera {
       }
       isStarted = true;
     }
-    return cameradev.start();
+    return cameraDevice.start();
   }
 
   /**
@@ -58,7 +58,7 @@ class SingleCamera {
       }
       isStarted = false;
     }
-    return cameradev.stop();
+    return cameraDevice.stop();
   }
 
   /**
@@ -67,7 +67,7 @@ class SingleCamera {
    * @return 幅
    */
   public int getWidth() {
-    return cameradev.getWidth();
+    return cameraDevice.getWidth();
   }
 
   /**
@@ -76,7 +76,7 @@ class SingleCamera {
    * @return 高さ
    */
   public int getHeight() {
-    return cameradev.getHeight();
+    return cameraDevice.getHeight();
   }
 
   /**
@@ -86,7 +86,7 @@ class SingleCamera {
    * @return 新たに用意された{@link BufferedImage}
    */
   public BufferedImage createBufferedImage() {
-    return cameradev.createBufferedImage();
+    return cameraDevice.createBufferedImage();
   }
 
   /**
@@ -98,7 +98,7 @@ class SingleCamera {
    */
   public void get(BufferedImage img) {
     start();
-    cameradev.getBufferedImage(img);
+    cameraDevice.getBufferedImage(img);
   }
 
   /**
@@ -108,7 +108,7 @@ class SingleCamera {
    */
   public void get(ByteBuffer buffer) {
     start();
-    cameradev.getByteBuffer(buffer);
+    cameraDevice.getByteBuffer(buffer);
   }
 
   /**
@@ -119,6 +119,6 @@ class SingleCamera {
    */
   public ByteBuffer get() {
     start();
-    return cameradev.getRawByteBuffer();
+    return cameraDevice.getRawByteBuffer();
   }
 }
