@@ -150,6 +150,11 @@ public class Main09 {
     }
 
     public void run() {
+      /*
+       * Java は Thread.start() メソッドを呼び出すと、自動的に run() メソッドが呼び出される。
+       * Thread.start() では、新しく開始したスレッド上で run() メソッドが呼び出される。
+       * 逆に Thread.run()としてしまうと、新規にされたスレッドではなく、呼び出し元のスレッド上で run() メソッドが呼び出される。
+       */
       try {
         BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ShapeManager dummy = new ShapeManager();
