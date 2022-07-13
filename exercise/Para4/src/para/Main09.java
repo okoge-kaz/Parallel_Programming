@@ -18,9 +18,9 @@ import para.graphic.shape.ShapeManager;
 import para.graphic.shape.Vec2;
 import para.graphic.target.JavaFXTarget;
 import para.graphic.target.Target;
+import para.graphic.target.TextTarget;
 import para.graphic.target.TranslateTarget;
 import para.graphic.target.TranslationRule;
-import para.graphic.target.TextTarget;
 
 /**
  * クライアントからの通信を受けて描画するサーバプログラム。
@@ -41,22 +41,29 @@ public class Main09 {
    * を行う
    */
   public Main09() {
+    // target declaration
     javaFXTarget = new JavaFXTarget("Server", 320 * MAX_CONNECTION, 240);
     textTarget = new TextTarget(System.out);
-    
+
+    // server socket declaration
     ServerSocket tmp = null;
-    executorService = Executors.newFixedThreadPool(MAX_CONNECTION);
     try {
+      // server socket を新しく作成する
       tmp = new ServerSocket(PORT_NUMBER);
     } catch (IOException ex) {
+      // server socket の作成に失敗したときは、エラーを出力して終了する
       System.err.println(ex);
       System.exit(1);
     }
     serverSocket = tmp;
+
+    // shape manager array declaration
+    // クライアントからアクセスされた際に描画が行われる MAX_CONNECTION 個の ShapeManager を作成する
     shapeManagerArray = new ShapeManager[MAX_CONNECTION];
     for (int i = 0; i < MAX_CONNECTION; i++) {
       shapeManagerArray[i] = new OrderedShapeManager();
     }
+
   }
 
   /**
@@ -131,7 +138,6 @@ public class Main09 {
             new TranslationRule(10000 * threadIndex, new Vec2(320 * threadIndex, 0))),
             dummy);
         parser.parse(new Scanner(r));
-        
 
       } catch (IOException ex) {
         System.err.print(ex);
