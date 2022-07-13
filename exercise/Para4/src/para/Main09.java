@@ -149,6 +149,7 @@ public class Main09 {
       this.shapeManagerIndex = index;
     }
 
+    @Override
     public void run() {
       /*
        * Java は Thread.start() メソッドを呼び出すと、自動的に run() メソッドが呼び出される。
