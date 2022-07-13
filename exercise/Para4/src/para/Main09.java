@@ -65,6 +65,11 @@ public class Main09 {
     javaFXTarget.init();
     javaFXTarget.clear();
     javaFXTarget.flush();
+
+    textTarget.init();
+    textTarget.clear();
+    textTarget.flush();
+
     new Thread(() -> {
       while (true) {
         javaFXTarget.clear();
