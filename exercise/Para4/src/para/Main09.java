@@ -63,10 +63,11 @@ public class Main09 {
    * 受け付けたデータを表示するウィンドウの初期化とそこに受信データを表示するスレッドの開始
    */
   public void init() {
+    // 描画する JavaFX のターゲットを初期化
     javaFXTarget.init();
     javaFXTarget.clear();
     javaFXTarget.flush();
-
+    // クライアントに送るデータのターゲットを初期化
     textTarget.init();
     textTarget.clear();
     textTarget.flush();
