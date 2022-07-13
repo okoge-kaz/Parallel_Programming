@@ -146,7 +146,7 @@ public class Main09 {
   }
 
   public static void main(String[] args) {
-    Main07 m = new Main07();
+    Main09 m = new Main09();
     m.init();
     m.start();
   }
