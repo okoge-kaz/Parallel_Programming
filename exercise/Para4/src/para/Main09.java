@@ -4,6 +4,7 @@ package para;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -30,10 +31,12 @@ public class Main09 {
   final public int PORT_NUMBER = 30000;
   final int MAX_CONNECTION = 3;
   final Target javaFXTarget;
-  final Target textTarget;
+  final TextTarget textTarget;
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
   ExecutorService threadPool;
+  final BufferedReader[] bufferedReaderArray;
+  final PrintWriter[] printWriterArray;
 
   /**
    * 受け付け用ソケットを開くこと、受信データの格納場所を用意すること
@@ -61,6 +64,20 @@ public class Main09 {
     shapeManagerArray = new ShapeManager[MAX_CONNECTION];
     for (int i = 0; i < MAX_CONNECTION; i++) {
       shapeManagerArray[i] = new OrderedShapeManager();
+    }
+
+    // buffered reader array declaration
+    // クライアントからのデータを受け取るためのバッファを用意する
+    bufferedReaderArray = new BufferedReader[MAX_CONNECTION];
+    for (int i = 0; i < MAX_CONNECTION; i++) {
+      bufferedReaderArray[i] = null;
+    }
+
+    // print writer array declaration
+    // クライアントにデータを送るためのバッファを用意する
+    printWriterArray = new PrintWriter[MAX_CONNECTION];
+    for (int i = 0; i < MAX_CONNECTION; i++) {
+      printWriterArray[i] = null;
     }
 
     // スレッドプールの作成
@@ -101,6 +118,23 @@ public class Main09 {
           }
         }
         javaFXTarget.flush();
+
+        for (int i = 0; i < MAX_CONNECTION; i++) {
+          if (bufferedReaderArray[i] != null) {
+            // クライアントからのデータを受け取る
+            String line = null;
+            try {
+              line = bufferedReaderArray[i].readLine();
+            } catch (IOException ex) {
+              // クライアントからのデータの受け取りに失敗したときは、エラーを出力して終了する
+              System.err.println(ex);
+              System.exit(1);
+            }
+            // クライアントからのデータを表示する
+            printWriterArray[i].println(line);
+          }
+        }
+
         try {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
@@ -132,6 +166,7 @@ public class Main09 {
     }
   }
 
+
   class MyThread extends Thread {
     private final Socket socket;
     private ShapeManager shapeManager;
@@ -157,17 +192,24 @@ public class Main09 {
        * 逆に Thread.run()としてしまうと、新規にされたスレッドではなく、呼び出し元のスレッド上で run() メソッドが呼び出される。
        */
       try {
-        BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        /*
+         * 1. socket.getInputStream() により クライアントデータを受け取るためのストリームを取得する。
+         */
+        final BufferedReader bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        bufferedReaderArray[shapeManagerIndex] = bufferReader;
+        final PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+        printWriterArray[shapeManagerIndex] = printWriter;
+
         ShapeManager dummy = new ShapeManager();
 
-        shapeManager.clear();
-        shapeManager.put(new Rectangle(10000 * shapeManagerIndex, 320 * shapeManagerIndex, 0, 320, 240,
+        this.shapeManager.clear();
+        this.shapeManager.put(new Rectangle(10000 * shapeManagerIndex, 320 * shapeManagerIndex, 0, 320, 240,
             new Attribute(0, 0, 0, true)));
 
         MainParser parser = new MainParser(new TranslateTarget(shapeManager,
             new TranslationRule(10000 * shapeManagerIndex, new Vec2(320 * shapeManagerIndex, 0))),
             dummy);
-        parser.parse(new Scanner(r));
+        parser.parse(new Scanner(bufferReader));
 
       } catch (IOException ex) {
         System.err.print(ex);
