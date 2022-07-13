@@ -123,8 +123,8 @@ public class Main09 {
       while (true) {
         try {
           Socket socket = serverSocket.accept();
-          threadPool.execute(new MyThread(socket, shapeManagerArray[threadIndex], threadIndex));
-          threadIndex = (threadIndex + 1) % MAX_CONNECTION;
+          threadPool.execute(new MyThread(socket, shapeManagerArray[shapeManagerIndex], shapeManagerIndex));
+          shapeManagerIndex = (shapeManagerIndex + 1) % MAX_CONNECTION;
         } catch (IOException ex) {
           System.err.print(ex);
         }
