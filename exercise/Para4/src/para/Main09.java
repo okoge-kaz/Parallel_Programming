@@ -43,6 +43,7 @@ public class Main09 {
   public Main09() {
     javaFXTarget = new JavaFXTarget("Server", 320 * MAX_CONNECTION, 240);
     textTarget = new TextTarget(System.out);
+    
     ServerSocket tmp = null;
     executorService = Executors.newFixedThreadPool(MAX_CONNECTION);
     try {
