@@ -70,6 +70,11 @@ public class Main09 {
    * 受け付けたデータを表示するウィンドウの初期化とそこに受信データを表示するスレッドの開始
    */
   public void init() {
+    /*
+     * Main09 が実行された時に、クライアントからのデータを受け取るためのスレッドを起動する
+     * new Thread() start によって開始される無名のスレッドがこの役割を担う
+     */
+
     // 描画する JavaFX のターゲットを初期化
     javaFXTarget.init();
     javaFXTarget.clear();
