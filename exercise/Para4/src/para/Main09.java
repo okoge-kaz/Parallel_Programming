@@ -146,7 +146,7 @@ public class Main09 {
     public MyThread(Socket socket, ShapeManager shapeManager, int index) {
       this.socket = socket;
       this.shapeManager = shapeManager;
-      this.threadIndex = index;
+      this.shapeManagerIndex = index;
     }
 
     public void run() {
@@ -155,11 +155,11 @@ public class Main09 {
         ShapeManager dummy = new ShapeManager();
 
         shapeManager.clear();
-        shapeManager.put(new Rectangle(10000 * threadIndex, 320 * threadIndex, 0, 320, 240,
+        shapeManager.put(new Rectangle(10000 * shapeManagerIndex, 320 * shapeManagerIndex, 0, 320, 240,
             new Attribute(0, 0, 0, true)));
 
         MainParser parser = new MainParser(new TranslateTarget(shapeManager,
-            new TranslationRule(10000 * threadIndex, new Vec2(320 * threadIndex, 0))),
+            new TranslationRule(10000 * shapeManagerIndex, new Vec2(320 * shapeManagerIndex, 0))),
             dummy);
         parser.parse(new Scanner(r));
 
