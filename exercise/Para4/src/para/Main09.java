@@ -113,7 +113,12 @@ public class Main09 {
    * 受信の処理をする
    */
   public void start() {
-    int threadIndex = 0;
+    /*
+     * init() でクライアントからのデータを受け取る準備が完了した。
+     * また、init() で起動したスレッドは一定間隔で shapeManagerArray の中身を再描画する処理を行う。
+     * start() では スレッドがデータを socket より受け取ることができるようにする処理を行う。
+     */
+    int shapeManagerIndex = 0;
     while (true) {
       while (true) {
         try {
