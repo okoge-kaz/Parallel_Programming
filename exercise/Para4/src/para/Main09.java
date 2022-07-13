@@ -33,8 +33,7 @@ public class Main09 {
   final Target textTarget;
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
-  ExecutorService executorService;
-  // Executor executorService;
+  ExecutorService threadPool;
 
   /**
    * 受け付け用ソケットを開くこと、受信データの格納場所を用意すること
@@ -64,6 +63,8 @@ public class Main09 {
       shapeManagerArray[i] = new OrderedShapeManager();
     }
 
+    // スレッドプールの作成
+    threadPool = Executors.newFixedThreadPool(MAX_CONNECTION);
   }
 
   /**
@@ -117,7 +118,7 @@ public class Main09 {
       while (true) {
         try {
           Socket socket = serverSocket.accept();
-          executorService.execute(new MyThread(socket, shapeManagerArray[threadIndex], threadIndex));
+          threadPool.execute(new MyThread(socket, shapeManagerArray[threadIndex], threadIndex));
           threadIndex = (threadIndex + 1) % MAX_CONNECTION;
         } catch (IOException ex) {
           System.err.print(ex);
