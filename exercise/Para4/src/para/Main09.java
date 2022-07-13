@@ -133,9 +133,15 @@ public class Main09 {
   }
 
   class MyThread extends Thread {
-    final Socket socket;
-    ShapeManager shapeManager;
-    int threadIndex;
+    private final Socket socket;
+    private ShapeManager shapeManager;
+    private int shapeManagerIndex;
+
+    /*
+     * socket: このスレッドが通信するソケット すでに connect されている
+     * shapeManager: このスレッドが描画する対象の ShapeManager
+     * threadIndex: このスレッドが描画する対象の shapeManager の index
+     */
 
     public MyThread(Socket socket, ShapeManager shapeManager, int index) {
       this.socket = socket;
