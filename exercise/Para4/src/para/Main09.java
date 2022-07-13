@@ -88,6 +88,13 @@ public class Main09 {
       while (true) {
         javaFXTarget.clear();
         for (ShapeManager sm : shapeManagerArray) {
+          /*
+           * 1. 描画対象をclearする
+           * 2. MAX_CONNECTION 個の ShapeManager の配列から順番に shapeManager を取り出す
+           * 3. synchronized で shapeManager の lock を取得する
+           * 4. shapeManager の shape の描画準備を行う
+           * 5. flush で shape の描画を行う
+           */
           synchronized (sm) {
             javaFXTarget.draw(sm);
           }
