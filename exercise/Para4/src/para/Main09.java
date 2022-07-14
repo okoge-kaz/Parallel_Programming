@@ -130,8 +130,19 @@ public class Main09 {
 
         synchronized (bufferedReaderArray) {
           for (int i = 0; i < MAX_CONNECTION; i++) {
-            if (bufferedReaderArray[i] == null) {
-              System.out.println("bufferedReaderArray[" + i + "] is null");
+            String line = null;
+            try {
+              while (!(line = bufferedReaderArray[i].readLine()).equals("")) {
+                for (int j = 0; j < MAX_CONNECTION; j++) {
+
+                  printWriterArray[j].println(line);
+                  printWriterArray[j].flush();
+
+                }
+              }
+            } catch (IOException ex) {
+              System.err.println(ex);
+              System.exit(1);
             }
           }
         }
