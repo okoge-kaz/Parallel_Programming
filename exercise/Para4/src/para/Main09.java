@@ -4,6 +4,7 @@ package para;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,11 +32,11 @@ public class Main09 {
   final public int PORT_NUMBER = 30000;
   final int MAX_CONNECTION = 3;
   final Target javaFXTarget;
-  final TextTarget textTarget;
+  TextTarget textTarget;
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
   ExecutorService threadPool;
-  final PrintWriter[] printWriterArray;
+  final PrintStream[] printStreamArray;
 
   /**
    * 受け付け用ソケットを開くこと、受信データの格納場所を用意すること
@@ -65,11 +66,10 @@ public class Main09 {
       shapeManagerArray[i] = new OrderedShapeManager();
     }
 
-    // print writer array declaration
-    // クライアントにデータを送るためのバッファを用意する
-    printWriterArray = new PrintWriter[MAX_CONNECTION];
+    // print stream array declaration
+    printStreamArray = new PrintStream[MAX_CONNECTION];
     for (int i = 0; i < MAX_CONNECTION; i++) {
-      printWriterArray[i] = null;
+      printStreamArray[i] = null;
     }
 
     // スレッドプールの作成
@@ -121,19 +121,21 @@ public class Main09 {
     // 送信用スレッド
     new Thread(() -> {
       while (true) {
-        textTarget.clear();
+
         for (int i = 0; i < MAX_CONNECTION; i++) {
-          if (printWriterArray[i] != null) {
+          if (printStreamArray[i] != null) {
             // printWriterArray[i] にはクライアントからのデータを送るためのバッファが格納されている
             // null の場合は、クライアントが接続していないため、データを送らない
-            synchronized(shapeManagerArray[i]) {
+            textTarget = new TextTarget(printStreamArray[i]);
+            textTarget.clear();
+            synchronized (shapeManagerArray[i]) {
               // shapeManagerArray[i] の lock を取得する
               // shapeManagerArray[i] の shape の描画準備を行う
               textTarget.draw(shapeManagerArray[i]);
             }
+            textTarget.flush();
           }
         }
-        textTarget.flush();
         try {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
@@ -207,8 +209,8 @@ public class Main09 {
         parser.parse(new Scanner(bufferReader));
 
         // 受信したデータをまとめてクライアントへ再送信するために準備を行う。実際にデータを送信するのは 送信用スレッドである。
-        final PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-        printWriterArray[shapeManagerIndex] = printWriter;
+        PrintStream printStream = new PrintStream(socket.getOutputStream());
+        printStreamArray[shapeManagerIndex] = printStream;
 
       } catch (IOException ex) {
         System.err.print(ex);
