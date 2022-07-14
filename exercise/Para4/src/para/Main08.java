@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import para.graphic.parser.MainParser;
 import para.graphic.shape.Attribute;
@@ -27,8 +29,17 @@ public class Main08 {
    * 
    * @param args args[0]は相手先のホスト
    */
+  ExecutorService threadPool;
+  final int MAX_CONNECTION = 3;
+  Socket socket;
 
-  public Main08(String[] args) {
+  public Main08() {
+
+    // スレッドプールの作成
+    threadPool = Executors.newFixedThreadPool(MAX_CONNECTION);
+  }
+
+  public void start(String[] args) {
     final int PORT_NUMBER = 30000;
 
     ShapeManager shapeManager = new ShapeManager();
@@ -40,53 +51,59 @@ public class Main08 {
       Target target = new TextTarget(printStream);
       // Target target = new TextTarget(System.out);
 
+      new SendThread(socket, shapeManager, printStream, target).start();
+
       target.init();
       target.clear();
-
-      while (true) {
-        // 描画
-        target.draw(shapeManager);
-        target.flush();
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException ex) {
+      new Thread(() -> {
+        while (true) {
+          // 描画
+          target.draw(shapeManager);
+          target.flush();
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException ex) {
+          }
+          // error handling
+          if (printStream.checkError()) {
+            break;
+          }
         }
-        // error handling
-        if (printStream.checkError()) {
-          break;
-        }
-      }
+      }).start();
     } catch (IOException ex) {
       System.err.println(ex);
     }
   }
 
-  public static void main(String[] args) {
-    new Main08(args);
-  }
-
-  class SendingThread extends Thread {
+  class SendThread extends Thread {
     final Socket socket;
-    ShapeManager shapeManager;
-    int threadIndex;
+    final ShapeManager shapeManager;
+    final PrintStream printStream;
+    final Target target;
 
-    public SendingThread(Socket socket, ShapeManager shapeManager, int threadIndex) {
+    public SendThread(Socket socket, ShapeManager shapeManager, PrintStream printStream, Target target) {
       this.socket = socket;
       this.shapeManager = shapeManager;
-      this.threadIndex = threadIndex;
+      this.printStream = printStream;
+      this.target = target;
     }
 
     @Override
     public void run() {
       try (Socket socket = this.socket) {
-        PrintStream printStream = new PrintStream(socket.getOutputStream());
+        target.init();
+        target.clear();
+
         while (true) {
-          synchronized (shapeManager) {
-            printStream.println(shapeManager.toString());
-          }
+          target.draw(shapeManager);
+          target.flush();
           try {
             Thread.sleep(100);
           } catch (InterruptedException ex) {
+          }
+          if (printStream.checkError()) {
+            System.err.println("print steam check error");
+            break;
           }
         }
       } catch (IOException ex) {
@@ -95,14 +112,17 @@ public class Main08 {
     }
   }
 
-  class RecievingThread extends Thread {
+  class ReceiveThread extends Thread {
+    /*
+     * curl -v telnet://localhost:30000 で接続することで shapeManager を更新することができる。
+     */
     final Socket socket;
-    ShapeManager[] shapeManagerArray;
+    ShapeManager shapeManager;
     int threadIndex;
 
-    public RecievingThread(Socket socket, ShapeManager[] shapeManagerArray, int threadIndex) {
+    public ReceiveThread(Socket socket, ShapeManager shapeManager, int threadIndex) {
       this.socket = socket;
-      this.shapeManagerArray = shapeManagerArray;
+      this.shapeManager = shapeManager;
       this.threadIndex = threadIndex;
     }
 
@@ -113,11 +133,11 @@ public class Main08 {
           BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
           ShapeManager dummy = new ShapeManager();
 
-          this.shapeManagerArray[threadIndex].clear();
-          this.shapeManagerArray[threadIndex].put(new Rectangle(10000 * threadIndex, 320 * threadIndex, 0, 320, 240,
+          this.shapeManager.clear();
+          this.shapeManager.put(new Rectangle(10000 * threadIndex, 320 * threadIndex, 0, 320, 240,
               new Attribute(0, 0, 0, true)));
 
-          MainParser parser = new MainParser(new TranslateTarget(shapeManagerArray[threadIndex],
+          MainParser parser = new MainParser(new TranslateTarget(shapeManager,
               new TranslationRule(10000 * threadIndex, new Vec2(320 * threadIndex, 0))),
               dummy);
           parser.parse(new Scanner(r));
@@ -126,5 +146,10 @@ public class Main08 {
         System.err.println(ex);
       }
     }
+  }
+
+  public static void main(String[] args) {
+    Main08 m = new Main08();
+    m.start(args);
   }
 }
