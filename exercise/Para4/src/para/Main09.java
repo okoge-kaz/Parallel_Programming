@@ -35,7 +35,6 @@ public class Main09 {
   final ShapeManager[] shapeManagerArray;
   final ServerSocket serverSocket;
   ExecutorService threadPool;
-  final BufferedReader[] bufferedReaderArray;
   final PrintWriter[] printWriterArray;
 
   /**
@@ -64,13 +63,6 @@ public class Main09 {
     shapeManagerArray = new ShapeManager[MAX_CONNECTION];
     for (int i = 0; i < MAX_CONNECTION; i++) {
       shapeManagerArray[i] = new OrderedShapeManager();
-    }
-
-    // buffered reader array declaration
-    // クライアントからのデータを受け取るためのバッファを用意する
-    bufferedReaderArray = new BufferedReader[MAX_CONNECTION];
-    for (int i = 0; i < MAX_CONNECTION; i++) {
-      bufferedReaderArray[i] = null;
     }
 
     // print writer array declaration
@@ -102,6 +94,7 @@ public class Main09 {
     textTarget.clear();
     textTarget.flush();
 
+    // 受信用スレッド
     new Thread(() -> {
       while (true) {
         javaFXTarget.clear();
@@ -118,33 +111,29 @@ public class Main09 {
           }
         }
         javaFXTarget.flush();
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }
+      }
+    }).start();
 
+    // 送信用スレッド
+    new Thread(() -> {
+      while (true) {
+        textTarget.clear();
         for (int i = 0; i < MAX_CONNECTION; i++) {
-          if (bufferedReaderArray[i] != null) {
-            // クライアントからのデータを受け取る
-            synchronized (bufferedReaderArray[i]) {
-              try {
-                String line = null;
-
-                while (!(line = bufferedReaderArray[i].readLine()).equals("")) {
-                  // クライアントからのデータを受け取ったら、そのデータを全クライアントに表示する
-                  for (int j = 0; j < MAX_CONNECTION; j++) {
-                    if (printWriterArray[j] != null) {
-                      printWriterArray[j].println(line);
-                      printWriterArray[j].flush();
-                    }
-                  }
-                }
-
-              } catch (IOException ex) {
-                System.err.println(ex);
-                System.exit(1);
-              }
+          if (printWriterArray[i] != null) {
+            // printWriterArray[i] にはクライアントからのデータを送るためのバッファが格納されている
+            // null の場合は、クライアントが接続していないため、データを送らない
+            synchronized(shapeManagerArray[i]) {
+              // shapeManagerArray[i] の lock を取得する
+              // shapeManagerArray[i] の shape の描画準備を行う
+              textTarget.draw(shapeManagerArray[i]);
             }
-
           }
         }
-
+        textTarget.flush();
         try {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
@@ -205,13 +194,9 @@ public class Main09 {
          * 1. socket.getInputStream() により クライアントデータを受け取るためのストリームを取得する。
          */
         final BufferedReader bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        bufferedReaderArray[shapeManagerIndex] = bufferReader;
-        
-        final PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-        printWriterArray[shapeManagerIndex] = printWriter;
 
+        // 受信したデータを描画する準備のためにshapeManagerに受け取ったデータを解釈後追加する
         ShapeManager dummy = new ShapeManager();
-
         this.shapeManager.clear();
         this.shapeManager.put(new Rectangle(10000 * shapeManagerIndex, 320 * shapeManagerIndex, 0, 320, 240,
             new Attribute(0, 0, 0, true)));
@@ -220,6 +205,10 @@ public class Main09 {
             new TranslationRule(10000 * shapeManagerIndex, new Vec2(320 * shapeManagerIndex, 0))),
             dummy);
         parser.parse(new Scanner(bufferReader));
+
+        // 受信したデータをまとめてクライアントへ再送信するために準備を行う。実際にデータを送信するのは 送信用スレッドである。
+        final PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+        printWriterArray[shapeManagerIndex] = printWriter;
 
       } catch (IOException ex) {
         System.err.print(ex);
