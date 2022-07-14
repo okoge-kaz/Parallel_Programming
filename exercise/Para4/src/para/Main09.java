@@ -122,16 +122,26 @@ public class Main09 {
         for (int i = 0; i < MAX_CONNECTION; i++) {
           if (bufferedReaderArray[i] != null) {
             // クライアントからのデータを受け取る
-            String line = null;
-            try {
-              line = bufferedReaderArray[i].readLine();
-            } catch (IOException ex) {
-              // クライアントからのデータの受け取りに失敗したときは、エラーを出力して終了する
-              System.err.println(ex);
-              System.exit(1);
+            synchronized (bufferedReaderArray[i]) {
+              try {
+                String line = null;
+
+                while (!(line = bufferedReaderArray[i].readLine()).equals("")) {
+                  // クライアントからのデータを受け取ったら、そのデータを全クライアントに表示する
+                  for (int j = 0; j < MAX_CONNECTION; j++) {
+                    if (printWriterArray[j] != null) {
+                      printWriterArray[j].println(line);
+                      printWriterArray[j].flush();
+                    }
+                  }
+                }
+
+              } catch (IOException ex) {
+                System.err.println(ex);
+                System.exit(1);
+              }
             }
-            // クライアントからのデータを表示する
-            printWriterArray[i].println(line);
+
           }
         }
 
@@ -166,7 +176,6 @@ public class Main09 {
     }
   }
 
-
   class MyThread extends Thread {
     private final Socket socket;
     private ShapeManager shapeManager;
@@ -197,6 +206,7 @@ public class Main09 {
          */
         final BufferedReader bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedReaderArray[shapeManagerIndex] = bufferReader;
+        
         final PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
         printWriterArray[shapeManagerIndex] = printWriter;
 
