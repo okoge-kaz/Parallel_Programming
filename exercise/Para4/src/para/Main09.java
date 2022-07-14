@@ -130,19 +130,11 @@ public class Main09 {
 
         synchronized (bufferedReaderArray) {
           for (int i = 0; i < MAX_CONNECTION; i++) {
-            String line = null;
-            try {
-              while (!(line = bufferedReaderArray[i].readLine()).equals("")) {
-                for (int j = 0; j < MAX_CONNECTION; j++) {
-
-                  printWriterArray[j].println(line);
-                  printWriterArray[j].flush();
-
-                }
+            for (ShapeManager sm : shapeManagerArray) {
+              synchronized (sm) {
+                printWriterArray[i].println(sm.toString());
+                printWriterArray[i].flush();
               }
-            } catch (IOException ex) {
-              System.err.println(ex);
-              System.exit(1);
             }
           }
         }
