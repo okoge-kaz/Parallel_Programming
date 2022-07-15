@@ -131,6 +131,9 @@ public class Main11 {
             Vec2 tmpwvel = new Vec2(velocity);
             Shape s = collisionChecker.check(shapeManager, tmpspos, tmpsvel, stime);
             Shape w = collisionChecker.check(wall, tmpwpos, tmpwvel, wtime);
+            /*
+             * 2-3ではこのあたりと、shapeManager removeの挙動を修正する??
+             */
             if (s != null) {
               shapeManager.remove(s);
               position = tmpspos;
