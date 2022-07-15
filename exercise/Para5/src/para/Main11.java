@@ -79,6 +79,7 @@ public class Main11 {
       default:
         collisionChecker = new CollisionCheckerParallel2(false);
     }
+
     thread = new Thread(new Runnable() {
       public void run() {
         int j = 0;
@@ -87,6 +88,7 @@ public class Main11 {
         float[] wtime = new float[] { 1.0f };
         long startTimeMS = System.currentTimeMillis();
         long count = -1;
+
         while (true) {
           count++;
           if (count == 100) {
@@ -126,6 +128,7 @@ public class Main11 {
             }
           }
         }
+
       }
     });
     thread.start();
