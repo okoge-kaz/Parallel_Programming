@@ -42,6 +42,9 @@ public class Main11 {
     parser = new MainParser(javaFXTarget, shapeManager);
     parser.parse(new Scanner(data));
     Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
+    /*
+     * 壁を描画するために必要な Attributeを追加する。
+     */
     wall.add(new Rectangle(0, 0, 0, 1840, 20, wallAttribute));
     wall.add(new Rectangle(1, 0, 0, 20, 960, wallAttribute));
     wall.add(new Rectangle(2, 1820, 0, 20, 960, wallAttribute));
