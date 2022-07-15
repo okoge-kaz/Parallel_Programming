@@ -1,19 +1,10 @@
 package para;
 
-import javafx.application.Application;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Slider;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.Group;
-
-import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-import javafx.beans.value.ObservableValue;
-
-import para.graphic.target.*;
-import para.graphic.shape.*;
-import para.graphic.parser.*;
+import para.graphic.shape.Camera;
+import para.graphic.shape.OrderedShapeManager;
+import para.graphic.shape.ShapeManager;
+import para.graphic.target.JavaFXTarget;
+import para.graphic.target.Target;
 
 public class Main10 {
   public static void main(String[] args) {
