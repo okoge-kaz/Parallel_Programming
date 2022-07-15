@@ -28,7 +28,7 @@ public class Main11 {
       "shape 12 Circle 80 900 20 Attribute Color 225 105 0 Fill true\n" +
       "shape 13 Circle 1760 900 20 Attribute Color 225 105 0 Fill true\n";
 
-  Vec2 pos;
+  Vec2 position;
   Vec2 vel;
 
   volatile int bpos;
@@ -47,7 +47,7 @@ public class Main11 {
     wall.add(new Rectangle(2, 1820, 0, 20, 960, wallattr));
     wall.add(new Rectangle(3, 0, 940, 1840, 20, wallattr));
     bpos = 150;
-    pos = new Vec2(200, 250);
+    position = new Vec2(200, 250);
     vel = new Vec2(16 * 10, 61 * 10);
     // vel = new Vec2(4, 61/4.0f);
   }
@@ -104,7 +104,7 @@ public class Main11 {
           j = (j + 2) % 120;
 
           javaFXTarget.clear();
-          javaFXTarget.drawCircle(1000, (int) pos.data[0], (int) pos.data[1], 5,
+          javaFXTarget.drawCircle(1000, (int) position.data[0], (int) position.data[1], 5,
               new Attribute(0, 0, 0, true, 0, 0, 0));
           javaFXTarget.draw(shapeManager);
           javaFXTarget.draw(wall);
@@ -114,23 +114,23 @@ public class Main11 {
           while (0 < time) {
             stime[0] = time;
             wtime[0] = time;
-            Vec2 tmpspos = new Vec2(pos);
+            Vec2 tmpspos = new Vec2(position);
             Vec2 tmpsvel = new Vec2(vel);
-            Vec2 tmpwpos = new Vec2(pos);
+            Vec2 tmpwpos = new Vec2(position);
             Vec2 tmpwvel = new Vec2(vel);
             Shape s = collisionChecker.check(shapeManager, tmpspos, tmpsvel, stime);
             Shape w = collisionChecker.check(wall, tmpwpos, tmpwvel, wtime);
             if (s != null) {
               shapeManager.remove(s);
-              pos = tmpspos;
+              position = tmpspos;
               vel = tmpsvel;
               time = stime[0];
             } else if (w != null) {
-              pos = tmpwpos;
+              position = tmpwpos;
               vel = tmpwvel;
               time = wtime[0];
             } else {
-              pos = MathUtil.plus(pos, MathUtil.times(vel, time));
+              position = MathUtil.plus(position, MathUtil.times(vel, time));
               time = 0;
             }
           }
