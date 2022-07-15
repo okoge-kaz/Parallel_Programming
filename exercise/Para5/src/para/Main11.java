@@ -120,6 +120,9 @@ public class Main11 {
 
           time = 1.0f;
           while (0 < time) {
+            /*
+             * 残り時間があるならば、whileを続ける。
+             */
             stime[0] = time;
             wtime[0] = time;
             Vec2 tmpspos = new Vec2(position);
