@@ -18,8 +18,8 @@ import para.graphic.target.JavaFXTarget;
 
 public class Main11 {
   final JavaFXTarget javaFXTarget;
-  final MainParser ps;
-  final ShapeManager sm, wall;
+  final MainParser parser;
+  final ShapeManager shapeManager, wall;
   Thread thread;
   final static String data = "shape 10 Circle 80 60 20 Attribute Color 225 105 0 Fill true\n" +
       "shape 11 Circle 1760 60 20 Attribute Color 225 105 0 Fill true\n" +
@@ -32,11 +32,11 @@ public class Main11 {
 
   public Main11(String selector) {
     this.selector = selector;
-    sm = new OrderedShapeManager();
+    shapeManager = new OrderedShapeManager();
     wall = new OrderedShapeManager();
     javaFXTarget = new JavaFXTarget("Main11", 1840, 960);
-    ps = new MainParser(javaFXTarget, sm);
-    ps.parse(new Scanner(data));
+    parser = new MainParser(javaFXTarget, shapeManager);
+    parser.parse(new Scanner(data));
     Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
     wall.add(new Rectangle(0, 0, 0, 1840, 20, wallattr));
     wall.add(new Rectangle(1, 0, 0, 20, 960, wallattr));
@@ -52,7 +52,7 @@ public class Main11 {
     IntStream.range(0, 445 * 225).forEach(n -> {
       int x = n % 445;
       int y = n / 445;
-      sm.add(new Rectangle(20 + n, 30 + x * 4, 30 + y * 4, 3, 3,
+      shapeManager.add(new Rectangle(20 + n, 30 + x * 4, 30 + y * 4, 3, 3,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
     javaFXTarget.init();
@@ -89,7 +89,7 @@ public class Main11 {
           javaFXTarget.clear();
           javaFXTarget.drawCircle(1000, (int) pos.data[0], (int) pos.data[1], 5,
               new Attribute(0, 0, 0, true, 0, 0, 0));
-          javaFXTarget.draw(sm);
+          javaFXTarget.draw(shapeManager);
           javaFXTarget.draw(wall);
           javaFXTarget.flush();
           time = 1.0f;
@@ -100,10 +100,10 @@ public class Main11 {
             Vec2 tmpsvel = new Vec2(vel);
             Vec2 tmpwpos = new Vec2(pos);
             Vec2 tmpwvel = new Vec2(vel);
-            Shape s = ccp.check(sm, tmpspos, tmpsvel, stime);
+            Shape s = ccp.check(shapeManager, tmpspos, tmpsvel, stime);
             Shape w = ccp.check(wall, tmpwpos, tmpwvel, wtime);
             if (s != null) {
-              sm.remove(s);
+              shapeManager.remove(s);
               pos = tmpspos;
               vel = tmpsvel;
               time = stime[0];
