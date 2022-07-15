@@ -21,6 +21,7 @@ public class Main10 {
     // Target target = new JavaFXTarget("color filter", 320,240);
     Target target = new TargetColorFilter2(new JavaFXTarget("color filter",
         320, 240), 4);
+
     target.init();
     sm.put(new Camera(0, 0, 0));
 
