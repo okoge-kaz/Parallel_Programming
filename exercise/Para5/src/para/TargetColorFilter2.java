@@ -51,7 +51,10 @@ public class TargetColorFilter2 extends TargetColorFilter {
               min = dp;
             }
           }
-          ave.get(label).add(inimage[n]);
+          averageRGBArray.get(label).add(inimage[n]);
+          /*
+           * add のあたりで問題が起きている。共有しているので??
+           */
         });
     // 2番目のStream処理
     IntStream.range(0, SCOUNT3).forEach(n -> {
