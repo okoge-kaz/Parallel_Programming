@@ -20,13 +20,17 @@ public class Main11 {
   final JavaFXTarget javaFXTarget;
   final MainParser parser;
   final ShapeManager shapeManager, wall;
+
   Thread thread;
+
   final static String data = "shape 10 Circle 80 60 20 Attribute Color 225 105 0 Fill true\n" +
       "shape 11 Circle 1760 60 20 Attribute Color 225 105 0 Fill true\n" +
       "shape 12 Circle 80 900 20 Attribute Color 225 105 0 Fill true\n" +
       "shape 13 Circle 1760 900 20 Attribute Color 225 105 0 Fill true\n";
+
   Vec2 pos;
   Vec2 vel;
+
   volatile int bpos;
   final String selector;
 
