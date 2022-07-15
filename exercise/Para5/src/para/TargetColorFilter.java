@@ -68,11 +68,11 @@ public class TargetColorFilter extends TargetFilter {
     return outbuffer;
   }
 
-  protected int distancepow(int a, int b) {
-    int disr = ((a & 0xff0000) >> 16) - ((b & 0xff0000) >> 16);
-    int disg = ((a & 0x00ff00) >> 8) - ((b & 0x00ff00) >> 8);
-    int disb = ((a & 0x0000ff)) - ((b & 0x0000ff));
-    return disr * disr + disg * disg + disb * disb;
+  protected int distancePow(int a, int b) {
+    int distanceRed = ((a & 0xff0000) >> 16) - ((b & 0xff0000) >> 16);
+    int distanceGreen = ((a & 0x00ff00) >> 8) - ((b & 0x00ff00) >> 8);
+    int distanceBlue = ((a & 0x0000ff)) - ((b & 0x0000ff));
+    return distanceRed * distanceRed + distanceGreen * distanceGreen + distanceBlue * distanceBlue;
   }
 
   protected int[] initSample2x2x2() {
