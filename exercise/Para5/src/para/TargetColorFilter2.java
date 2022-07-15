@@ -119,6 +119,8 @@ public class TargetColorFilter2 extends TargetColorFilter {
       r += ((color & 0xff0000) >> 16);
       g += ((color & 0x00ff00) >> 8);
       b += ((color & 0x0000ff));
+
+      // * synchronized block で囲むとうの処理が必要??
     }
 
     /**
