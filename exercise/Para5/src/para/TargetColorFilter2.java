@@ -35,9 +35,9 @@ public class TargetColorFilter2 extends TargetColorFilter {
       input.get(tmp, 0, 3);
       inimage[i] = ((tmp[2] & 0xff) << 16) | ((tmp[1] & 0xff) << 8) | (tmp[0] & 0xff);
     }
-    ArrayList<RGB> ave = new ArrayList<RGB>(SCOUNT3);
+    ArrayList<RGB> averageRGBArray = new ArrayList<RGB>(SCOUNT3);
     for (int i = 0; i < SCOUNT3; i++) {
-      ave.add(new RGB());
+      averageRGBArray.add(new RGB());
     }
     // 1番目のStream処理
     IntStream.range(0, Camera.WIDTH * Camera.HEIGHT)
@@ -58,7 +58,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
         });
     // 2番目のStream処理
     IntStream.range(0, SCOUNT3).forEach(n -> {
-      RGB rgb = ave.get(n);
+      RGB rgb = averageRGBArray.get(n);
       sample[n] = rgb.get();
     });
 
