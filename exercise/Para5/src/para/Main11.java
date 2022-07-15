@@ -53,6 +53,9 @@ public class Main11 {
   }
 
   public void start() {
+    /*
+     * コンストラクタの後にすぐに実行される。
+     */
     IntStream.range(0, 445 * 225).forEach(n -> {
       int x = n % 445;
       int y = n / 445;
