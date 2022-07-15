@@ -19,11 +19,11 @@ public class TargetColorFilter2 extends TargetColorFilter {
 
   /**
    * @param target        装飾対象のTargetクラス
-   * @param quantizecount 3原色の1色当たりの量子化数
+   * @param quantizeCount 3原色の1色当たりの量子化数
    */
-  public TargetColorFilter2(Target target, int quantizecount) {
-    super(target, quantizecount);
-    SCOUNT1 = quantizecount;
+  public TargetColorFilter2(Target target, int quantizeCount) {
+    super(target, quantizeCount);
+    SCOUNT1 = quantizeCount;
     SCOUNT3 = SCOUNT1 * SCOUNT1 * SCOUNT1;
   }
 
