@@ -15,21 +15,21 @@ import para.graphic.target.*;
 import para.graphic.shape.*;
 import para.graphic.parser.*;
 
-public class Main10{
-  public static void main(String[] args){
+public class Main10 {
+  public static void main(String[] args) {
     ShapeManager sm = new OrderedShapeManager();
-    //Target target = new JavaFXTarget("color filter", 320,240);
+    // Target target = new JavaFXTarget("color filter", 320,240);
     Target target = new TargetColorFilter2(new JavaFXTarget("color filter",
-                                                             320,240), 4);
+        320, 240), 4);
     target.init();
     sm.put(new Camera(0, 0, 0));
-    while(true){
+    while (true) {
       target.clear();
       target.draw(sm);
       target.flush();
-      try{
+      try {
         Thread.sleep(80);
-      }catch(InterruptedException e){
+      } catch (InterruptedException e) {
       }
     }
   }
