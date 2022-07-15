@@ -54,6 +54,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
           averageRGBArray.get(label).add(inimage[n]);
           /*
            * add のあたりで問題が起きている。共有しているので??
+           * スレッドセーフ、同期をとるようにするなど...
            */
         });
     // 2番目のStream処理
