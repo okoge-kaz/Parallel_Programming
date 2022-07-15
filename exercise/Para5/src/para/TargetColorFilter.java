@@ -20,12 +20,12 @@ public class TargetColorFilter extends TargetFilter {
 
   /**
    * @param target        装飾対象のTargetクラス
-   * @param quantizecount 3原色の1色当たりの量子化数
+   * @param quantizeCount 3原色の1色当たりの量子化数
    */
-  public TargetColorFilter(Target target, int quantizecount) {
+  public TargetColorFilter(Target target, int quantizeCount) {
     super(target);
-    // prepare quantizecount^3 color samples
-    sample = initSample(quantizecount);
+    // prepare quantizeCount^3 color samples
+    sample = initSample(quantizeCount);
   }
 
   protected ByteBuffer process(ByteBuffer input) {
@@ -89,14 +89,14 @@ public class TargetColorFilter extends TargetFilter {
   }
 
   protected int[] initSample(int n) {
-    int qcount = n;
-    int count = qcount * qcount * qcount;
+    int quantizeCount = n;
+    int count = quantizeCount * quantizeCount * quantizeCount;
     int step = 256 / (n - 1);
     int[] sample = new int[count];
     for (int i = 0; i < count; i++) {
-      sample[i] = (Math.max((step * (i / (qcount * qcount)) - 1), 0) << 16) |
-          (Math.max(step * ((i / qcount) % qcount) - 1, 0) << 8) |
-          Math.max(step * (i % qcount) - 1, 0);
+      sample[i] = (Math.max((step * (i / (quantizeCount * quantizeCount)) - 1), 0) << 16) |
+          (Math.max(step * ((i / quantizeCount) % quantizeCount) - 1, 0) << 8) |
+          Math.max(step * (i % quantizeCount) - 1, 0);
     }
     /* print color coordinate */
     for (int i = 0; i < sample.length; i++) {
