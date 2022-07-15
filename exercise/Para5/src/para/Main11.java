@@ -62,7 +62,9 @@ public class Main11 {
       shapeManager.add(new Rectangle(20 + n, 30 + x * 4, 30 + y * 4, 3, 3,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
+
     javaFXTarget.init();
+
     CollisionChecker ccp;
     switch (selector) {
       case "SINGLE":
