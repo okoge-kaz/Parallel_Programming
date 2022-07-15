@@ -36,11 +36,15 @@ public class Main11 {
 
   public Main11(String selector) {
     this.selector = selector;
+
     shapeManager = new OrderedShapeManager();
     wall = new OrderedShapeManager();
+
     javaFXTarget = new JavaFXTarget("Main11", 1840, 960);
+
     parser = new MainParser(javaFXTarget, shapeManager);
     parser.parse(new Scanner(data));
+
     Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
     /*
      * 壁を描画するために必要な Attributeを追加する。
@@ -49,6 +53,7 @@ public class Main11 {
     wall.add(new Rectangle(1, 0, 0, 20, 960, wallAttribute));
     wall.add(new Rectangle(2, 1820, 0, 20, 960, wallAttribute));
     wall.add(new Rectangle(3, 0, 940, 1840, 20, wallAttribute));
+
     bpos = 150;
     position = new Vec2(200, 250);
     velocity = new Vec2(16 * 10, 61 * 10);
