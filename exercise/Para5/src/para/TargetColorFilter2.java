@@ -33,7 +33,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
     input.rewind();
     for (int i = 0; i < input.limit() / 3; i++) {
       input.get(tmp, 0, 3);
-      inimage[i] = ((tmp[2] & 0xff) << 16) | ((tmp[1] & 0xff) << 8) | (tmp[0] & 0xff);
+      inImage[i] = ((tmp[2] & 0xff) << 16) | ((tmp[1] & 0xff) << 8) | (tmp[0] & 0xff);
     }
     ArrayList<RGB> averageRGBArray = new ArrayList<RGB>(SCOUNT3);
     for (int i = 0; i < SCOUNT3; i++) {
@@ -45,13 +45,13 @@ public class TargetColorFilter2 extends TargetColorFilter {
           int min = 600000;
           int label = 0;
           for (int j = 0; j < sample.length; j++) {
-            int dp = distancePow(inimage[n], sample[j]);
+            int dp = distancePow(inImage[n], sample[j]);
             if (dp < min) {
               label = j;
               min = dp;
             }
           }
-          averageRGBArray.get(label).add(inimage[n]);
+          averageRGBArray.get(label).add(inImage[n]);
           /*
            * add のあたりで問題が起きている。共有しているので??
            * スレッドセーフ、同期をとるようにするなど...
@@ -71,7 +71,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
               int min = 600000;
               int label = 0;
               for (int j = 0; j < sample.length; j++) {
-                int dp = distancePow(inimage[n], sample[j]);
+                int dp = distancePow(inImage[n], sample[j]);
                 if (dp < min) {
                   label = j;
                   min = dp;
@@ -81,17 +81,17 @@ public class TargetColorFilter2 extends TargetColorFilter {
             }));
 
     classified.forEach((k, v) -> {
-      outimage[k * 4 + 0] = (byte) 0xff;
-      outimage[k * 4 + 1] = (byte) ((sample[v] >> 16) & 0xff);
-      outimage[k * 4 + 2] = (byte) ((sample[v] >> 8) & 0xff);
-      outimage[k * 4 + 3] = (byte) (sample[v] & 0xff);
+      outImage[k * 4 + 0] = (byte) 0xff;
+      outImage[k * 4 + 1] = (byte) ((sample[v] >> 16) & 0xff);
+      outImage[k * 4 + 2] = (byte) ((sample[v] >> 8) & 0xff);
+      outImage[k * 4 + 3] = (byte) (sample[v] & 0xff);
     });
     /*
      * do no filtering, just through output
-     * classified.forEach((k,v)->{outimage[k*4+0]=(byte)0xff;
-     * outimage[k*4+1]=(byte)((inimage[k]>>16)&0xff);
-     * outimage[k*4+2]=(byte)((inimage[k]>>8)&0xff);
-     * outimage[k*4+3]=(byte)(inimage[k]&0xff);});
+     * classified.forEach((k,v)->{outImage[k*4+0]=(byte)0xff;
+     * outImage[k*4+1]=(byte)((inImage[k]>>16)&0xff);
+     * outImage[k*4+2]=(byte)((inImage[k]>>8)&0xff);
+     * outImage[k*4+3]=(byte)(inImage[k]&0xff);});
      */
     input.rewind();
     outbuffer.rewind();
