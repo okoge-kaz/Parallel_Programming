@@ -91,6 +91,7 @@ public class Main11 {
 
         while (true) {
           count++;
+
           if (count == 100) {
             /*
              * 100単位時間で終了するので、経過時間を計算する。
@@ -99,13 +100,16 @@ public class Main11 {
             System.out.println((endTimeMS - startTimeMS) + "msec");
             System.exit(0);
           }
+
           j = (j + 2) % 120;
+
           javaFXTarget.clear();
           javaFXTarget.drawCircle(1000, (int) pos.data[0], (int) pos.data[1], 5,
               new Attribute(0, 0, 0, true, 0, 0, 0));
           javaFXTarget.draw(shapeManager);
           javaFXTarget.draw(wall);
           javaFXTarget.flush();
+
           time = 1.0f;
           while (0 < time) {
             stime[0] = time;
