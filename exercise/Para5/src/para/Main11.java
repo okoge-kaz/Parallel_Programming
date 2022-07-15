@@ -92,6 +92,9 @@ public class Main11 {
         while (true) {
           count++;
           if (count == 100) {
+            /*
+             * 100単位時間で終了するので、経過時間を計算する。
+             */
             long endTimeMS = System.currentTimeMillis();
             System.out.println((endTimeMS - startTimeMS) + "msec");
             System.exit(0);
