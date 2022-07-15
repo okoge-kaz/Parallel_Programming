@@ -90,14 +90,16 @@ public class TargetColorFilter extends TargetFilter {
 
   protected int[] initSample(int n) {
     int quantizeCount = n;
-    int count = quantizeCount * quantizeCount * quantizeCount;
+    int quantizedColorCount = quantizeCount * quantizeCount * quantizeCount;
     int step = 256 / (n - 1);
-    int[] sample = new int[count];
-    for (int i = 0; i < count; i++) {
+    int[] sample = new int[quantizedColorCount];
+
+    for (int i = 0; i < quantizedColorCount; i++) {
       sample[i] = (Math.max((step * (i / (quantizeCount * quantizeCount)) - 1), 0) << 16) |
           (Math.max(step * ((i / quantizeCount) % quantizeCount) - 1, 0) << 8) |
           Math.max(step * (i % quantizeCount) - 1, 0);
     }
+
     /* print color coordinate */
     for (int i = 0; i < sample.length; i++) {
       int c1 = ((sample[i] & 0xff0000) >> 16);
