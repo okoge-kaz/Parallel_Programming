@@ -17,7 +17,7 @@ import para.graphic.shape.Vec2;
 import para.graphic.target.JavaFXTarget;
 
 public class Main11 {
-  final JavaFXTarget jf;
+  final JavaFXTarget javaFXTarget;
   final MainParser ps;
   final ShapeManager sm, wall;
   Thread thread;
@@ -34,8 +34,8 @@ public class Main11 {
     this.selector = selector;
     sm = new OrderedShapeManager();
     wall = new OrderedShapeManager();
-    jf = new JavaFXTarget("Main11", 1840, 960);
-    ps = new MainParser(jf, sm);
+    javaFXTarget = new JavaFXTarget("Main11", 1840, 960);
+    ps = new MainParser(javaFXTarget, sm);
     ps.parse(new Scanner(data));
     Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
     wall.add(new Rectangle(0, 0, 0, 1840, 20, wallattr));
@@ -55,7 +55,7 @@ public class Main11 {
       sm.add(new Rectangle(20 + n, 30 + x * 4, 30 + y * 4, 3, 3,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
-    jf.init();
+    javaFXTarget.init();
     CollisionChecker ccp;
     switch (selector) {
       case "SINGLE":
@@ -86,12 +86,12 @@ public class Main11 {
             System.exit(0);
           }
           j = (j + 2) % 120;
-          jf.clear();
-          jf.drawCircle(1000, (int) pos.data[0], (int) pos.data[1], 5,
+          javaFXTarget.clear();
+          javaFXTarget.drawCircle(1000, (int) pos.data[0], (int) pos.data[1], 5,
               new Attribute(0, 0, 0, true, 0, 0, 0));
-          jf.draw(sm);
-          jf.draw(wall);
-          jf.flush();
+          javaFXTarget.draw(sm);
+          javaFXTarget.draw(wall);
+          javaFXTarget.flush();
           time = 1.0f;
           while (0 < time) {
             stime[0] = time;
