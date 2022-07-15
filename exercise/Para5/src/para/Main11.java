@@ -65,19 +65,19 @@ public class Main11 {
 
     javaFXTarget.init();
 
-    CollisionChecker ccp;
+    CollisionChecker collisionChecker;
     switch (selector) {
       case "SINGLE":
-        ccp = new CollisionCheckerParallel2(false);
+        collisionChecker = new CollisionCheckerParallel2(false);
         break;
       case "PARALLEL":
-        ccp = new CollisionCheckerParallel2(true);
+        collisionChecker = new CollisionCheckerParallel2(true);
         break;
       case "POOL":
-        ccp = new CollisionCheckerParallel3(20);
+        collisionChecker = new CollisionCheckerParallel3(20);
         break;
       default:
-        ccp = new CollisionCheckerParallel2(false);
+        collisionChecker = new CollisionCheckerParallel2(false);
     }
     thread = new Thread(new Runnable() {
       public void run() {
@@ -109,8 +109,8 @@ public class Main11 {
             Vec2 tmpsvel = new Vec2(vel);
             Vec2 tmpwpos = new Vec2(pos);
             Vec2 tmpwvel = new Vec2(vel);
-            Shape s = ccp.check(shapeManager, tmpspos, tmpsvel, stime);
-            Shape w = ccp.check(wall, tmpwpos, tmpwvel, wtime);
+            Shape s = collisionChecker.check(shapeManager, tmpspos, tmpsvel, stime);
+            Shape w = collisionChecker.check(wall, tmpwpos, tmpwvel, wtime);
             if (s != null) {
               shapeManager.remove(s);
               pos = tmpspos;
