@@ -125,10 +125,12 @@ public class Main11 {
              */
             stime[0] = time;
             wtime[0] = time;
+
             Vec2 tmpspos = new Vec2(position);
             Vec2 tmpsvel = new Vec2(velocity);
             Vec2 tmpwpos = new Vec2(position);
             Vec2 tmpwvel = new Vec2(velocity);
+
             Shape s = collisionChecker.check(shapeManager, tmpspos, tmpsvel, stime);
             Shape w = collisionChecker.check(wall, tmpwpos, tmpwvel, wtime);
             /*
@@ -144,6 +146,9 @@ public class Main11 {
               velocity = tmpwvel;
               time = wtime[0];
             } else {
+              /*
+               * 壁と衝突しなかった場合
+               */
               position = MathUtil.plus(position, MathUtil.times(velocity, time));
               time = 0;
             }
