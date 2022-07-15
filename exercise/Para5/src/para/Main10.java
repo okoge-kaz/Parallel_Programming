@@ -23,6 +23,10 @@ public class Main10 {
         320, 240), 4);
     target.init();
     sm.put(new Camera(0, 0, 0));
+
+    /*
+     * 80 ms ごとの再レンダリング
+     */
     while (true) {
       target.clear();
       target.draw(sm);
