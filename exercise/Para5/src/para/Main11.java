@@ -29,7 +29,7 @@ public class Main11 {
       "shape 13 Circle 1760 900 20 Attribute Color 225 105 0 Fill true\n";
 
   Vec2 position;
-  Vec2 vel;
+  Vec2 velocity;
 
   volatile int bpos;
   final String selector;
@@ -48,8 +48,8 @@ public class Main11 {
     wall.add(new Rectangle(3, 0, 940, 1840, 20, wallattr));
     bpos = 150;
     position = new Vec2(200, 250);
-    vel = new Vec2(16 * 10, 61 * 10);
-    // vel = new Vec2(4, 61/4.0f);
+    velocity = new Vec2(16 * 10, 61 * 10);
+    // velocity = new Vec2(4, 61/4.0f);
   }
 
   public void start() {
@@ -115,22 +115,22 @@ public class Main11 {
             stime[0] = time;
             wtime[0] = time;
             Vec2 tmpspos = new Vec2(position);
-            Vec2 tmpsvel = new Vec2(vel);
+            Vec2 tmpsvel = new Vec2(velocity);
             Vec2 tmpwpos = new Vec2(position);
-            Vec2 tmpwvel = new Vec2(vel);
+            Vec2 tmpwvel = new Vec2(velocity);
             Shape s = collisionChecker.check(shapeManager, tmpspos, tmpsvel, stime);
             Shape w = collisionChecker.check(wall, tmpwpos, tmpwvel, wtime);
             if (s != null) {
               shapeManager.remove(s);
               position = tmpspos;
-              vel = tmpsvel;
+              velocity = tmpsvel;
               time = stime[0];
             } else if (w != null) {
               position = tmpwpos;
-              vel = tmpwvel;
+              velocity = tmpwvel;
               time = wtime[0];
             } else {
-              position = MathUtil.plus(position, MathUtil.times(vel, time));
+              position = MathUtil.plus(position, MathUtil.times(velocity, time));
               time = 0;
             }
           }
