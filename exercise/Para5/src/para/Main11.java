@@ -41,11 +41,11 @@ public class Main11 {
     javaFXTarget = new JavaFXTarget("Main11", 1840, 960);
     parser = new MainParser(javaFXTarget, shapeManager);
     parser.parse(new Scanner(data));
-    Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
-    wall.add(new Rectangle(0, 0, 0, 1840, 20, wallattr));
-    wall.add(new Rectangle(1, 0, 0, 20, 960, wallattr));
-    wall.add(new Rectangle(2, 1820, 0, 20, 960, wallattr));
-    wall.add(new Rectangle(3, 0, 940, 1840, 20, wallattr));
+    Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
+    wall.add(new Rectangle(0, 0, 0, 1840, 20, wallAttribute));
+    wall.add(new Rectangle(1, 0, 0, 20, 960, wallAttribute));
+    wall.add(new Rectangle(2, 1820, 0, 20, 960, wallAttribute));
+    wall.add(new Rectangle(3, 0, 940, 1840, 20, wallAttribute));
     bpos = 150;
     position = new Vec2(200, 250);
     velocity = new Vec2(16 * 10, 61 * 10);
