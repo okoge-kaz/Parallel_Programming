@@ -27,6 +27,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
     SCOUNT3 = SCOUNT1 * SCOUNT1 * SCOUNT1;
   }
 
+  @Override
   protected ByteBuffer process(ByteBuffer input) {
     byte[] tmp = new byte[3];
     input.rewind();
