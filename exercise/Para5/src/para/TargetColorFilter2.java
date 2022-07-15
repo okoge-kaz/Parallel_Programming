@@ -44,7 +44,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
           int min = 600000;
           int label = 0;
           for (int j = 0; j < sample.length; j++) {
-            int dp = distancepow(inimage[n], sample[j]);
+            int dp = distancePow(inimage[n], sample[j]);
             if (dp < min) {
               label = j;
               min = dp;
@@ -66,7 +66,7 @@ public class TargetColorFilter2 extends TargetColorFilter {
               int min = 600000;
               int label = 0;
               for (int j = 0; j < sample.length; j++) {
-                int dp = distancepow(inimage[n], sample[j]);
+                int dp = distancePow(inimage[n], sample[j]);
                 if (dp < min) {
                   label = j;
                   min = dp;
