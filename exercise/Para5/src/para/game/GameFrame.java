@@ -82,6 +82,9 @@ public class GameFrame extends Application {
           Thread.sleep(100);
         } catch (InterruptedException ex) {
         }
+        // volatile なので 常に最新の値 を取得する。
+        // lefton, righton 共に canvas の可変棒の位置を表すキーである
+        // ただし、gamestartはGame03側で override されているのでここを見てもあまり意味がない。
         if (lefton == 1) {
           i = i - 1;
           System.out.print(i + " ");
