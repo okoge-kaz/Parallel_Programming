@@ -38,7 +38,7 @@ public class Game03 extends GameFrame {
      *  壁を描画するための shapeManager
      * 
      * boardShapeManager:
-     *   ボードを描画するための shapeManager
+     *   どこからどこまでを描画しているのかわかっていない
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
