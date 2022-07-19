@@ -76,8 +76,10 @@ public class Game03 extends GameFrame {
      * Thread
      */
     thread = new Thread(() -> {
+
       pos = new Vec2(200, 130);
       vel = new Vec2(2, 8);
+
       bpos = 150;
 
       /*
