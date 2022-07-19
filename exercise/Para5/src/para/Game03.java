@@ -32,6 +32,13 @@ public class Game03 extends GameFrame {
      * 1. 描画対象のキャンバスのサイズ指定を行う
      * 2. キャンバスのタイトルを指定
      * 
+     * shapeManager: 
+     * 
+     * wallShapeManager:
+     *  壁を描画するための shapeManager
+     * 
+     * boardShapeManager:
+     *   ボードを描画するための shapeManager
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
