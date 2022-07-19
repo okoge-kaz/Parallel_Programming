@@ -38,16 +38,16 @@ public class Game03 extends GameFrame {
     shapeManager = new OrderedShapeManager();
     wallShapeManager = new OrderedShapeManager();
     boardShapeManager = new ShapeManager();
-    Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
+    Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
     /*
-     * 壁を描画するために必要な Attributeを追加する。
+     * 壁を描画するために必要な長方形たちを追加する
      */
-    wallShapeManager.add(new Rectangle(0, 0, 0, 320, 20, wallattr));
-    wallShapeManager.add(new Rectangle(1, 0, 0, 20, 300, wallattr));
-    wallShapeManager.add(new Rectangle(2, 300, 0, 20, 300, wallattr));
-    wallShapeManager.add(new Rectangle(3, 0, 281, 320, 20, wallattr));
-    // wall.add(new Rectangle(3, 0,281, 120, 20, wallattr));
-    // wall.add(new Rectangle(4, 200,281, 120, 20, wallattr));
+    wallShapeManager.add(new Rectangle(0, 0, 0, 320, 20, wallAttribute));
+    wallShapeManager.add(new Rectangle(1, 0, 0, 20, 300, wallAttribute));
+    wallShapeManager.add(new Rectangle(2, 300, 0, 20, 300, wallAttribute));
+    wallShapeManager.add(new Rectangle(3, 0, 281, 320, 20, wallAttribute));
+    // wall.add(new Rectangle(3, 0,281, 120, 20, wallAttribute));
+    // wall.add(new Rectangle(4, 200,281, 120, 20, wallAttribute));
   }
 
   public void gamestart(int v) {
