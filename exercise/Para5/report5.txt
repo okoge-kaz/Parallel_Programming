@@ -74,13 +74,12 @@ PARALLEL: 2771 msec
 2.3)
 発見された改善対象のコード部分
 
-
-
-
+collisionChecker により、ピンク色の箇所と衝突していることがわかった箇所を removeする処理の部分
 
 改良方針
 
-
+ShapeManager の removeメソッドの synchronized の位置を変更する。
+既存のコードでは、 id が一致しない場合にも synchronized メソッドであることから排他処理が入ってしまっているので、これを idが一致した場合の時だけ synchronized するように変更する。
 
 
 

@@ -97,11 +97,13 @@ public class ShapeManager {
    * @param shape 削除する図形
    * @return 図形のidと一致する要素がリスト中にあれば true, なければ false
    */
-  public synchronized boolean remove(Shape shape) {
+  public boolean remove(Shape shape) {
     int id = shape.id;
     for (Shape s : data) {
       if (s.id == id) {
-        data.remove(s);
+        synchronized (data) {
+          data.remove(s);
+        }
         return true;
       }
     }
