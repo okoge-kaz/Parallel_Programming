@@ -71,6 +71,10 @@ public class Game03 extends GameFrame {
       shapeManager.add(new Rectangle(10 + n, 30 + x * 4, 50 + y * 4, 3, 3,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
+
+    /*
+     * Thread
+     */
     thread = new Thread(() -> {
       pos = new Vec2(200, 130);
       vel = new Vec2(2, 8);
