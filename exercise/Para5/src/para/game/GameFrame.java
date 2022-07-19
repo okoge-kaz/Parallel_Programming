@@ -138,6 +138,7 @@ public class GameFrame extends Application {
     Scene scene = new Scene(root);
     Button button = new Button("Start");
     HBox low = new HBox();
+    // spinner: 難易度調節のやつ
     Spinner<Integer> spinner = new Spinner<Integer>(1, 4, 1);
     stage.setOnCloseRequest(ev -> {
       System.exit(0);
@@ -174,18 +175,26 @@ public class GameFrame extends Application {
     canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, ev -> {
       xy.set((float) ev.getX(), (float) ev.getY(), System.currentTimeMillis());
     });
-    
+
     canvas.setFocusTraversable(true);
+
     button.setPrefHeight(30);
     button.setPrefWidth(100);
     spinner.setPrefHeight(30);
+
     button.setOnAction(ev -> {
+      // 難易度の値を取得してからゲームを開始する
       gamestart(spinner.getValue());
     });
+
+    // 画面下部の部分が low
     low.getChildren().add(spinner);
     low.getChildren().add(button);
+
+    // root に canvas と low を追加する
     root.getChildren().add(canvas);
     root.getChildren().add(low);
+
     canvas.init();
     canvas.clear();
     canvas.flush();
