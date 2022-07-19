@@ -38,7 +38,7 @@ public class Game03 extends GameFrame {
     shapeManager = new OrderedShapeManager();
     wallShapeManager = new OrderedShapeManager();
     boardShapeManager = new ShapeManager();
-    Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
+    final Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
     /*
      * 壁を描画するために必要な長方形たちを追加する
      */
