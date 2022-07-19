@@ -16,25 +16,36 @@ import para.graphic.shape.Vec2;
 import para.graphic.target.JavaFXCanvasTarget;
 
 public class Game03 extends GameFrame {
+
   volatile Thread thread;
-  final ShapeManager sm, wall, board;
+  final ShapeManager shapeManager, wallShapeManager, boardShapeManager;
+
   Vec2 pos;
   Vec2 vel;
+
   int bpos;
   static final int WIDTH = 320;
   static final int HEIGHT = 660;
 
   public Game03() {
+    /*
+     * 1. 描画対象のキャンバスのサイズ指定を行う
+     * 2. キャンバスのタイトルを指定
+     * 
+     */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
-    title = "BreakOut";
-    sm = new OrderedShapeManager();
-    wall = new OrderedShapeManager();
-    board = new ShapeManager();
+    this.title = "Break Out";
+    shapeManager = new OrderedShapeManager();
+    wallShapeManager = new OrderedShapeManager();
+    boardShapeManager = new ShapeManager();
     Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
-    wall.add(new Rectangle(0, 0, 0, 320, 20, wallattr));
-    wall.add(new Rectangle(1, 0, 0, 20, 300, wallattr));
-    wall.add(new Rectangle(2, 300, 0, 20, 300, wallattr));
-    wall.add(new Rectangle(3, 0, 281, 320, 20, wallattr));
+    /*
+     * 壁を描画するために必要な Attributeを追加する。
+     */
+    wallShapeManager.add(new Rectangle(0, 0, 0, 320, 20, wallattr));
+    wallShapeManager.add(new Rectangle(1, 0, 0, 20, 300, wallattr));
+    wallShapeManager.add(new Rectangle(2, 300, 0, 20, 300, wallattr));
+    wallShapeManager.add(new Rectangle(3, 0, 281, 320, 20, wallattr));
     // wall.add(new Rectangle(3, 0,281, 120, 20, wallattr));
     // wall.add(new Rectangle(4, 200,281, 120, 20, wallattr));
   }
@@ -43,11 +54,11 @@ public class Game03 extends GameFrame {
     if (thread != null) {
       return;
     }
-    sm.clear();
+    shapeManager.clear();
     IntStream.range(0, 65 * 30).forEach(n -> {
       int x = n % 65;
       int y = n / 65;
-      sm.add(new Rectangle(10 + n, 30 + x * 4, 50 + y * 4, 3, 3,
+      shapeManager.add(new Rectangle(10 + n, 30 + x * 4, 50 + y * 4, 3, 3,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
     thread = new Thread(() -> {
@@ -55,10 +66,10 @@ public class Game03 extends GameFrame {
       vel = new Vec2(2, 8);
       bpos = 150;
       Attribute attr = new Attribute(150, 150, 150, true);
-      board.put(new Camera(0, 0, 320, attr));
-      board.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
-      canvas.draw(board);
-      canvas.draw(sm);
+      boardShapeManager.put(new Camera(0, 0, 320, attr));
+      boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
+      canvas.draw(boardShapeManager);
+      canvas.draw(shapeManager);
       float time;
       float[] btime = new float[] { 1.0f };
       float[] stime = new float[] { 1.0f };
@@ -76,15 +87,15 @@ public class Game03 extends GameFrame {
           } else if (285 < bpos) {
             bpos = 285;
           }
-          board.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
+          boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
         }
         CollisionChecker ccp = new CollisionCheckerParallel2(true);
         canvas.clear();
-        canvas.draw(board);
+        canvas.draw(boardShapeManager);
         canvas.drawCircle(10000, (int) pos.data[0], (int) pos.data[1], 5,
             new Attribute(0, 0, 0, true, 0, 0, 0));
-        canvas.draw(sm);
-        canvas.draw(wall);
+        canvas.draw(shapeManager);
+        canvas.draw(wallShapeManager);
         canvas.flush();
         time = 1.0f;
         while (0 < time) {
@@ -97,9 +108,9 @@ public class Game03 extends GameFrame {
           Vec2 tmpsvel = new Vec2(vel);
           Vec2 tmpwpos = new Vec2(pos);
           Vec2 tmpwvel = new Vec2(vel);
-          Shape b = ccp.check(board, tmpbpos, tmpbvel, btime);
-          Shape s = ccp.check(sm, tmpspos, tmpsvel, stime);
-          Shape w = ccp.check(wall, tmpwpos, tmpwvel, wtime);
+          Shape b = ccp.check(boardShapeManager, tmpbpos, tmpbvel, btime);
+          Shape s = ccp.check(shapeManager, tmpspos, tmpsvel, stime);
+          Shape w = ccp.check(wallShapeManager, tmpwpos, tmpwvel, wtime);
           if (b != null &&
               (s == null || stime[0] < btime[0]) &&
               (w == null || wtime[0] < btime[0])) {
@@ -107,7 +118,7 @@ public class Game03 extends GameFrame {
             vel = tmpbvel;
             time = btime[0];
           } else if (s != null) {
-            sm.remove(s);
+            shapeManager.remove(s);
             pos = tmpspos;
             vel = tmpsvel;
             time = stime[0];
