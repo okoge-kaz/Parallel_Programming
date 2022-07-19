@@ -18,7 +18,7 @@ import para.graphic.target.JavaFXCanvasTarget;
 public class Game03 extends GameFrame {
 
   volatile Thread thread;
-  final ShapeManager shapeManager, wallShapeManager, boardShapeManager;
+  final ShapeManager shapeManager, wallShapeManager, boardShapeManager, scoreBoardShapeManager;
 
   Vec2 pos;
   Vec2 vel;
@@ -42,9 +42,12 @@ public class Game03 extends GameFrame {
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
+    
     shapeManager = new OrderedShapeManager();
     wallShapeManager = new OrderedShapeManager();
     boardShapeManager = new ShapeManager();
+    scoreBoardShapeManager = new ShapeManager();
+
     final Attribute wallAttribute = new Attribute(250, 230, 200, true, 0, 0, 0);
     /*
      * 壁を描画するために必要な長方形たちを追加する
