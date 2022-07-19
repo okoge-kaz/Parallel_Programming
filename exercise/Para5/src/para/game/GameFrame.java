@@ -127,9 +127,11 @@ public class GameFrame extends Application {
    */
   public void start(Stage stage) {
     stage.setTitle(title);
+
     VBox root = new VBox();
     root.setAlignment(Pos.TOP_CENTER);
     root.requestFocus();
+
     Scene scene = new Scene(root);
     Button button = new Button("Start");
     HBox low = new HBox();
@@ -137,6 +139,10 @@ public class GameFrame extends Application {
     stage.setOnCloseRequest(ev -> {
       System.exit(0);
     });
+
+    /*
+     * キーボードのキーが離れたかどうかで Event が発火
+     */
     root.addEventHandler(KeyEvent.KEY_RELEASED, ev -> {
       switch (ev.getCode()) {
         case F: // "F" key
@@ -147,6 +153,10 @@ public class GameFrame extends Application {
           break;
       }
     });
+
+    /*
+     * キーボードのキーが押されたかどうかで Event が発火
+     */
     root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
       switch (ev.getCode()) {
         case F: // "F" key
@@ -157,9 +167,11 @@ public class GameFrame extends Application {
           break;
       }
     });
+
     canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, ev -> {
       xy.set((float) ev.getX(), (float) ev.getY(), System.currentTimeMillis());
     });
+    
     canvas.setFocusTraversable(true);
     button.setPrefHeight(30);
     button.setPrefWidth(100);
