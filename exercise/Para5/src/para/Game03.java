@@ -42,7 +42,7 @@ public class Game03 extends GameFrame {
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
-    
+
     shapeManager = new OrderedShapeManager();
     wallShapeManager = new OrderedShapeManager();
     boardShapeManager = new ShapeManager();
@@ -80,6 +80,7 @@ public class Game03 extends GameFrame {
       boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
       canvas.draw(boardShapeManager);
       canvas.draw(shapeManager);
+
       float time;
       float[] btime = new float[] { 1.0f };
       float[] stime = new float[] { 1.0f };
@@ -108,10 +109,12 @@ public class Game03 extends GameFrame {
         canvas.draw(wallShapeManager);
         canvas.flush();
         time = 1.0f;
+
         while (0 < time) {
           btime[0] = time;
           stime[0] = time;
           wtime[0] = time;
+
           Vec2 tmpbpos = new Vec2(pos);
           Vec2 tmpbvel = new Vec2(vel);
           Vec2 tmpspos = new Vec2(pos);
