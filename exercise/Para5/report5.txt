@@ -56,18 +56,19 @@ PARALLEL: 18101 msec
 
 
 2.2)
-衝突判定部分の高速化についてのjvisualvmを使用した調査方法の説明
+衝突判定部分の高速化についてのvisualvmを使用した調査方法の説明
 
-
-
+visual VM のSampler - CPU samples Thread-3 para.graphic.shape.CollisionCheckParallel2.checkに着目すると、"SINGLE"を渡した際は、Total time: 43876 msecとなるが、"PARALLEL"を渡した際は、Total time: 2771 msecとなる。
 
 
 調査により判明した衝突判定部分の高速化前後の処理速度の比率
 
+前述のように
 
+SINGLE: 43876 msec
+PARALLEL: 2771 msec
 
-
-
+であるので、衝突判定部分は並列により約16倍速くなったといえる。
 
 
 2.3)
