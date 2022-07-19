@@ -87,11 +87,10 @@ ShapeManager の removeメソッドの synchronized の位置を変更する。
 
 処理時間の定義
 
+visual VM における CPU samples Thread-3 para.graphic.shape.ShapeManager.remove() の Total timeを処理時間と定義する。
 
 
-
-改良前と比べ改良後の処理時間は　　　　％となった
-
+改良前と比べ改良後の処理時間は 95 ％となった
 
 
 回答3 :
