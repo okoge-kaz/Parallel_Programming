@@ -121,9 +121,11 @@ public class Game03 extends GameFrame {
           Vec2 tmpsvel = new Vec2(vel);
           Vec2 tmpwpos = new Vec2(pos);
           Vec2 tmpwvel = new Vec2(vel);
+
           Shape b = ccp.check(boardShapeManager, tmpbpos, tmpbvel, btime);
           Shape s = ccp.check(shapeManager, tmpspos, tmpsvel, stime);
           Shape w = ccp.check(wallShapeManager, tmpwpos, tmpwvel, wtime);
+          
           if (b != null &&
               (s == null || stime[0] < btime[0]) &&
               (w == null || wtime[0] < btime[0])) {
@@ -144,6 +146,7 @@ public class Game03 extends GameFrame {
             time = 0;
           }
         }
+
       }
     });
     thread.start();
