@@ -33,12 +33,12 @@ public class Game03 extends GameFrame {
      * 2. キャンバスのタイトルを指定
      * 
      * shapeManager: 
-     * 
+     *  ピンク色の破壊されていく対象を管理する ShapeManager
      * wallShapeManager:
-     *  壁を描画するための shapeManager
+     *  壁を描画するための shapeManager（これ自体に当たり判定があるわけではなく、あくまで描画対象を指定するだけ）
      * 
      * boardShapeManager:
-     *   どこからどこまでを描画しているのかわかっていない
+     *   F keyと J keyで左右に移動させる対象のボードを描画するための shapeManager
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
