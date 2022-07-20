@@ -95,6 +95,7 @@ public class Game03 extends GameFrame {
       Attribute attr = new Attribute(150, 150, 150, true);
       boardShapeManager.put(new Camera(0, 0, 320, attr));
       boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
+      scoreBoardShapeManager.put(new Rectangle(20000, bpos - 40, 600, 100, 50, attr));
       canvas.draw(boardShapeManager);
       canvas.draw(shapeManager);
 
@@ -124,6 +125,7 @@ public class Game03 extends GameFrame {
             new Attribute(0, 0, 0, true, 0, 0, 0));
         canvas.draw(shapeManager);
         canvas.draw(wallShapeManager);
+        canvas.draw(scoreBoardShapeManager);
         canvas.flush();
         time = 1.0f;
 
