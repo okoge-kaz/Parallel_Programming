@@ -144,10 +144,10 @@ if (gameScore > 999) {
   // ゲームの終了条件
   gameScore = 999;
   Thread.currentThread().interrupt();
+  break;
 }
 ```
-
-
+また、無限ループにならないように、もう１つのwhile文も適切に break でループを抜けるようにしている。
 
 スタートボタンを押した際の新たな初期化処理について
 
@@ -183,16 +183,28 @@ gamestart の際に渡される 引数である gameLevel を用いて、 10 / g
 3.2)さらなるゲーム性を高めるための実装
 実装方針
 
-
-
+ゲーム終了時に、ポップアップが出るようにする。
+点数が 999 を超えた場合には、ゲームを終了する形なので、終了までに要した時間を ms 単位で表示するようにする。
+また、この際 JavaFX のスレッド外からUI操作を行うので Platform.runLater() を使用する。
 
 実装箇所
 
+Game03 209-218 行目に該当箇所
 
+```
+Platform.runLater(() -> {
+  long endTimeMS = System.currentTimeMillis();
+  long timeMS = endTimeMS - startTimeMS;
 
-
-
+  Alert alert = new Alert(AlertType.INFORMATION);
+  alert.setTitle("Game Over");
+  alert.setHeaderText("Game Over");
+  alert.setContentText("Time is " + timeMS + "ms");
+  alert.showAndWait();
+});
+```
 
 
 今回の課題で特に学べたと感じたこと
 
+stream に関する理解がそもそも低かったため、parallelStream というよりも Java Stream に関する知識が得られた。
