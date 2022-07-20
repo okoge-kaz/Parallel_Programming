@@ -117,10 +117,12 @@ public class Game03 extends GameFrame {
       float[] wtime = new float[] { 1.0f };
 
       while (true) {
+
         try {
           Thread.sleep(80);
         } catch (InterruptedException ex) {
         }
+
         if ((lefton == 1 || righton == 1)) {
           bpos = bpos - 8 * lefton + 8 * righton;
           if (bpos < 35) {
@@ -130,7 +132,14 @@ public class Game03 extends GameFrame {
           }
           boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
         }
+
+        // 点数を描画するようにする 3桁表示
+        scoreBoardShapeManager.put(new Digit(20001, 130, 625, 10, gameScore / 100, scoreBoardScoreNumberAttribute));
+        scoreBoardShapeManager.put(new Digit(20002, 160, 625, 10, gameScore / 10 % 10, scoreBoardScoreNumberAttribute));
+        scoreBoardShapeManager.put(new Digit(20003, 190, 625, 10, gameScore % 10, scoreBoardScoreNumberAttribute));
+
         CollisionChecker ccp = new CollisionCheckerParallel2(true);
+
         canvas.clear();
         canvas.draw(boardShapeManager);
         canvas.drawCircle(10000, (int) pos.data[0], (int) pos.data[1], 5,
@@ -139,6 +148,7 @@ public class Game03 extends GameFrame {
         canvas.draw(wallShapeManager);
         canvas.draw(scoreBoardShapeManager);
         canvas.flush();
+
         time = 1.0f;
 
         while (0 < time) {
@@ -168,6 +178,8 @@ public class Game03 extends GameFrame {
             pos = tmpspos;
             vel = tmpsvel;
             time = stime[0];
+
+            gameScore += 1;
           } else if (w != null) {
             pos = tmpwpos;
             vel = tmpwvel;
