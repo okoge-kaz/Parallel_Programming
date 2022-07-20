@@ -95,9 +95,10 @@ public class Game03 extends GameFrame {
       Attribute attr = new Attribute(150, 150, 150, true);
       boardShapeManager.put(new Camera(0, 0, 320, attr));
       boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
-      scoreBoardShapeManager.put(new Rectangle(20000, bpos - 40, 600, 100, 50, attr));
+      scoreBoardShapeManager.put(new Rectangle(20000, 110, 600, 100, 50, attr));
       canvas.draw(boardShapeManager);
       canvas.draw(shapeManager);
+      canvas.draw(scoreBoardShapeManager);
 
       float time;
       float[] btime = new float[] { 1.0f };
