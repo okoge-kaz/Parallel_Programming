@@ -14,7 +14,6 @@ B: 64 (= 4 ** 3)
 
 C: 256
 
-理由 :
 
 1.2)
 並列化で問題となるStreamの処理の番号
@@ -30,10 +29,8 @@ averageRGBArray.get(label).add(inImage[n]); の箇所において add により�
 
 1.4)並列化に対応するために行った変更点
 
-
-
-
-
+parallelStreamが collection にしか対応していないので困る。
+TargetColorFilter2を変更することはわかるが...
 
 
 回答2 :
@@ -97,17 +94,40 @@ visual VM における CPU samples Thread-3 para.graphic.shape.ShapeManager.remo
 3.1)ゲーム性を高めるための実装
 得点ルールの定義
 
-
+ピンク色の箇所が１つ壊れるごとに一定の得点を与える。
 
 
 得点計算のコード部分について
 
+Game03.javaの以下の部分が該当箇所
 
+```
+} else if (s != null) {
+  shapeManager.remove(s);
+  pos = tmpspos;
+  vel = tmpsvel;
+  time = stime[0];
 
+  gameScore += 10 / gameLevel;
+
+  if (gameScore > 999) {
+    // ゲームの終了条件
+    gameScore = 999;
+    Thread.currentThread().interrupt();
+  } 
+```
 
 得点表示のためのコード部分について
 
+毎回の描画処理の前準備は以下で行なっている
+(Game03.java 136-139)
 
+```
+// 点数を描画するようにする 3桁表示
+scoreBoardShapeManager.put(new Digit(20001, 130, 625, 10, gameScore / 100, scoreBoardScoreNumberAttribute));
+scoreBoardShapeManager.put(new Digit(20002, 160, 625, 10, gameScore / 10 % 10, scoreBoardScoreNumberAttribute));
+scoreBoardShapeManager.put(new Digit(20003, 190, 625, 10, gameScore % 10, scoreBoardScoreNumberAttribute));
+```
 
 
 ゲームの終了条件の定義
@@ -123,21 +143,32 @@ visual VM における CPU samples Thread-3 para.graphic.shape.ShapeManager.remo
 
 スタートボタンを押した際の新たな初期化処理について
 
-
-
-
+以下のように、新たなスレッドを開始することで初期化処理を行う。
+  
+```
+button.setOnAction(ev -> {
+  thread = null;
+  gameScore = 0;
+  // 難易度の値を取得してからゲームを開始する
+  gamestart(spinner.getValue());
+});
+```
 
 
 ゲームの難易度の方針
 
+1つのブロックを破壊した際にもらえる点数を以下のようにすることで実現する。
+```
+gameScore += 10 / gameLevel;
+```
 
-
-
+このように難易度が上がるほど得点を得るのが難しくなる方針である。
+なお gameLevel は、ゲームの難易度を表す。
 
 数値選択とゲーム難易度についての実装部分について
 
 
-
+gamestart の際に渡される 引数である gameLevel を用いて、 10 / gameLevelが１つのブロックを破壊した際に得られる点数となるようにする。
 
 
 
