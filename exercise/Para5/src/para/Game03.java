@@ -93,9 +93,17 @@ public class Game03 extends GameFrame {
        *   boardShapeManagerと shapeManager(ピンク色の破壊される対象)を実際に描画
        */
       Attribute attr = new Attribute(150, 150, 150, true);
+      Attribute scoreBoardBackgroundAttribute = new Attribute(200, 255, 255, true);
+      Attribute scoreBoardScoreNumberAttribute = new Attribute(40, 40, 40, true);
       boardShapeManager.put(new Camera(0, 0, 320, attr));
       boardShapeManager.put(new Rectangle(15000, bpos - 40, 225, 80, 10, attr));
-      scoreBoardShapeManager.put(new Rectangle(20000, 110, 600, 100, 50, attr));
+      scoreBoardShapeManager.put(new Rectangle(20000, 110, 600, 100, 50, scoreBoardBackgroundAttribute));
+
+      // 点数を描画するようにする 3桁表示
+      scoreBoardShapeManager.put(new Digit(20001, 130, 625, 10, gameScore / 100, scoreBoardScoreNumberAttribute));
+      scoreBoardShapeManager.put(new Digit(20002, 160, 625, 10, gameScore / 10 % 10, scoreBoardScoreNumberAttribute));
+      scoreBoardShapeManager.put(new Digit(20003, 190, 625, 10, gameScore % 10, scoreBoardScoreNumberAttribute));
+
       canvas.draw(boardShapeManager);
       canvas.draw(shapeManager);
       canvas.draw(scoreBoardShapeManager);
