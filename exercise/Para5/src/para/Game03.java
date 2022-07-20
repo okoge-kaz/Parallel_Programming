@@ -60,6 +60,7 @@ public class Game03 extends GameFrame {
     // wall.add(new Rectangle(4, 200,281, 120, 20, wallAttribute));
   }
 
+  @Override
   public void gamestart(int v) {
     if (thread != null) {
       return;
