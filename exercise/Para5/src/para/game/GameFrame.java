@@ -34,7 +34,9 @@ public class GameFrame extends Application {
   final int WIDTH;
   final int HEIGHT;
   // 難易度
-  protected Spinner<Integer> spinner;
+  protected volatile Spinner<Integer> spinner;
+  // start button
+  protected volatile Button button;
 
   /**
    * ゲーム領域が 400 × 600 のゲームフレームを用意する
@@ -138,7 +140,7 @@ public class GameFrame extends Application {
     root.requestFocus();
 
     Scene scene = new Scene(root);
-    Button button = new Button("Start");
+    button = new Button("Start");
     HBox low = new HBox();
     // spinner: 難易度調節のやつ
     spinner = new Spinner<Integer>(1, 4, 1);

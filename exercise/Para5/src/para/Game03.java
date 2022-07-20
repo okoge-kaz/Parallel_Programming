@@ -64,7 +64,7 @@ public class Game03 extends GameFrame {
   }
 
   @Override
-  public void gamestart(int v) {
+  public void gamestart(final int gameLevel) {
     if (thread != null) {
       return;
     }
@@ -179,8 +179,13 @@ public class Game03 extends GameFrame {
             vel = tmpsvel;
             time = stime[0];
 
-            gameScore += 10 / spinner.getValue();
-            System.out.println(spinner.getValue());
+            gameScore += 10 / gameLevel;
+
+            if (gameScore > 999) {
+              // ゲームの終了条件
+              gameScore = 999;
+              Thread.currentThread().interrupt();
+            }
           } else if (w != null) {
             pos = tmpwpos;
             vel = tmpwvel;
@@ -194,5 +199,12 @@ public class Game03 extends GameFrame {
       }
     });
     thread.start();
+
+    button.setOnAction(ev -> {
+      thread = null;
+      gameScore = 0;
+      // 難易度の値を取得してからゲームを開始する
+      gamestart(spinner.getValue());
+    });
   }
 }
