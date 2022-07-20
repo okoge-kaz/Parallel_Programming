@@ -179,7 +179,8 @@ public class Game03 extends GameFrame {
             vel = tmpsvel;
             time = stime[0];
 
-            gameScore += 1;
+            gameScore += 10 / spinner.getValue();
+            System.out.println(spinner.getValue());
           } else if (w != null) {
             pos = tmpwpos;
             vel = tmpwvel;

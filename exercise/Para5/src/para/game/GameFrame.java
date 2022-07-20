@@ -33,6 +33,8 @@ public class GameFrame extends Application {
   protected final SynchronizedPoint xy;
   final int WIDTH;
   final int HEIGHT;
+  // 難易度
+  protected Spinner<Integer> spinner;
 
   /**
    * ゲーム領域が 400 × 600 のゲームフレームを用意する
@@ -139,7 +141,8 @@ public class GameFrame extends Application {
     Button button = new Button("Start");
     HBox low = new HBox();
     // spinner: 難易度調節のやつ
-    Spinner<Integer> spinner = new Spinner<Integer>(1, 4, 1);
+    spinner = new Spinner<Integer>(1, 4, 1);
+
     stage.setOnCloseRequest(ev -> {
       System.exit(0);
     });
