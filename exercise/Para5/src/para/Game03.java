@@ -86,11 +86,11 @@ public class Game03 extends GameFrame {
       /*
        * boardShapeManager:
        *  Camera (webカメラを投影する要素)を put 
-       *  長方形 (役割不明) を put
+       *  長方形 (F keyと J keyで左右に移動させる対象のボード)を put
        * 
        * canvas:
        *  一番大きな root の要素
-       *   boardShapeManagerと shapeManager(役割どこ??)を実際に描画
+       *   boardShapeManagerと shapeManager(ピンク色の破壊される対象)を実際に描画
        */
       Attribute attr = new Attribute(150, 150, 150, true);
       boardShapeManager.put(new Camera(0, 0, 320, attr));
