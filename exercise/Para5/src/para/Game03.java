@@ -7,6 +7,7 @@ import para.graphic.shape.Attribute;
 import para.graphic.shape.Camera;
 import para.graphic.shape.CollisionChecker;
 import para.graphic.shape.CollisionCheckerParallel2;
+import para.graphic.shape.Digit;
 import para.graphic.shape.MathUtil;
 import para.graphic.shape.OrderedShapeManager;
 import para.graphic.shape.Rectangle;
@@ -27,18 +28,20 @@ public class Game03 extends GameFrame {
   static final int WIDTH = 320;
   static final int HEIGHT = 660;
 
+  volatile int gameScore = 0;
+
   public Game03() {
     /*
      * 1. 描画対象のキャンバスのサイズ指定を行う
      * 2. キャンバスのタイトルを指定
      * 
-     * shapeManager: 
-     *  ピンク色の破壊されていく対象を管理する ShapeManager
+     * shapeManager:
+     * ピンク色の破壊されていく対象を管理する ShapeManager
      * wallShapeManager:
-     *  壁を描画するための shapeManager（これ自体に当たり判定があるわけではなく、あくまで描画対象を指定するだけ）
+     * 壁を描画するための shapeManager（これ自体に当たり判定があるわけではなく、あくまで描画対象を指定するだけ）
      * 
      * boardShapeManager:
-     *   F keyと J keyで左右に移動させる対象のボードを描画するための shapeManager
+     * F keyと J keyで左右に移動させる対象のボードを描画するための shapeManager
      */
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
     this.title = "Break Out";
@@ -85,12 +88,12 @@ public class Game03 extends GameFrame {
 
       /*
        * boardShapeManager:
-       *  Camera (webカメラを投影する要素)を put 
-       *  長方形 (F keyと J keyで左右に移動させる対象のボード)を put
+       * Camera (webカメラを投影する要素)を put
+       * 長方形 (F keyと J keyで左右に移動させる対象のボード)を put
        * 
        * canvas:
-       *  一番大きな root の要素
-       *   boardShapeManagerと shapeManager(ピンク色の破壊される対象)を実際に描画
+       * 一番大きな root の要素
+       * boardShapeManagerと shapeManager(ピンク色の破壊される対象)を実際に描画
        */
       Attribute attr = new Attribute(150, 150, 150, true);
       Attribute scoreBoardBackgroundAttribute = new Attribute(200, 255, 255, true);
@@ -153,7 +156,7 @@ public class Game03 extends GameFrame {
           Shape b = ccp.check(boardShapeManager, tmpbpos, tmpbvel, btime);
           Shape s = ccp.check(shapeManager, tmpspos, tmpsvel, stime);
           Shape w = ccp.check(wallShapeManager, tmpwpos, tmpwvel, wtime);
-          
+
           if (b != null &&
               (s == null || stime[0] < btime[0]) &&
               (w == null || wtime[0] < btime[0])) {
