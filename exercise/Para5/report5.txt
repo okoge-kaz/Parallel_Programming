@@ -132,12 +132,20 @@ scoreBoardShapeManager.put(new Digit(20003, 190, 625, 10, gameScore % 10, scoreB
 
 ゲームの終了条件の定義
 
-
+点数が 999 を超えた場合に点数のカウントを終了するようにする。
 
 
 ゲームの終了判定のコード部分について
 
+Game03 の 184-188 行目に該当箇所
 
+```
+if (gameScore > 999) {
+  // ゲームの終了条件
+  gameScore = 999;
+  Thread.currentThread().interrupt();
+}
+```
 
 
 
