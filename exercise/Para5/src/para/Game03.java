@@ -2,6 +2,9 @@ package para;
 
 import java.util.stream.IntStream;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import para.game.GameFrame;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.Camera;
@@ -85,6 +88,8 @@ public class Game03 extends GameFrame {
       vel = new Vec2(2, 8);
 
       bpos = 150;
+
+      long startTimeMS = System.currentTimeMillis();
 
       /*
        * boardShapeManager:
@@ -185,6 +190,7 @@ public class Game03 extends GameFrame {
               // ゲームの終了条件
               gameScore = 999;
               Thread.currentThread().interrupt();
+              break;
             }
           } else if (w != null) {
             pos = tmpwpos;
@@ -195,8 +201,21 @@ public class Game03 extends GameFrame {
             time = 0;
           }
         }
-
+        if (gameScore == 999) {
+          break;
+        }
       }
+
+      Platform.runLater(() -> {
+        long endTimeMS = System.currentTimeMillis();
+        long timeMS = endTimeMS - startTimeMS;
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("Game Over");
+        alert.setContentText("Time is " + timeMS + "ms");
+        alert.showAndWait();
+      });
     });
     thread.start();
 
