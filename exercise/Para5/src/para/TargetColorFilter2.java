@@ -3,6 +3,7 @@ package para;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -41,31 +42,26 @@ public class TargetColorFilter2 extends TargetColorFilter {
       averageRGBArray.add(new RGB());
     }
     // 1番目のStream処理
-    IntStream.range(0, Camera.WIDTH * Camera.HEIGHT)
-        .forEach(n -> {
-          int min = 600000;
-          int label = 0;
-          for (int j = 0; j < sample.length; j++) {
-            int dp = distancePow(inImage[n], sample[j]);
-            if (dp < min) {
-              label = j;
-              min = dp;
-            }
-          }
-          averageRGBArray.get(label).add(inImage[n]);
-          /*
-           * add のあたりで問題が起きている。共有しているので??
-           * スレッドセーフ、同期をとるようにするなど...
-           */
-        });
-    // 2番目のStream処理
-    IntStream.range(0, SCOUNT3).forEach(n -> {
-      RGB rgb = averageRGBArray.get(n);
-      sample[n] = rgb.get();
+    Arrays.stream(inImage, 0, inImage.length).parallel().unordered().forEach(image -> {
+      int min = 600000;
+      int label = 0;
+      for (int j = 0; j < sample.length; j++) {
+        int dp = distancePow(image, sample[j]);
+        if (dp < min) {
+          label = j;
+          min = dp;
+        }
+      }
+      synchronized (averageRGBArray.get(label)) {
+        averageRGBArray.get(label).add(image);
+      }
     });
+    // 2番目のStream処理
+    sample = averageRGBArray.parallelStream().unordered().map(rgb -> rgb.get()).mapToInt(rgb -> rgb).toArray();
 
     // 3番目のStream処理
-    Map<Integer, Integer> classified = IntStream.range(0, Camera.WIDTH * Camera.HEIGHT)
+    Map<Integer, Integer> classified = IntStream.range(0, Camera.WIDTH *
+        Camera.HEIGHT).parallel().unordered()
         .boxed()
         .collect(Collectors.toMap(n -> n,
             n -> {
