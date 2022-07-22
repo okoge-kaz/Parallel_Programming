@@ -104,5 +104,5 @@ cleanall:: bin javadoc
 
 doc:: javadoc
 	$(FIND) . -name "._*" -exec $(RM) {} \;
-	cp -R lib/javadoc/easycl javadoc
+	# cp -R lib/javadoc/easycl javadoc
 	$(JAVADOC0) para para.graphic.shape para.graphic.target para.graphic.parser para.graphic.camera para.graphic.opencl para.opencl
