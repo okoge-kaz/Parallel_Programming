@@ -27,47 +27,47 @@ public class Sum3 {
     CLSetup cl = CLSetupCreator.createCLSetup();
     cl.initContext();
 
-    FloatBuffer floatBuffer;
-    // data a の読み取り
-    floatBuffer = loadData("data/dataa.txt");
-    CLBuffer<FloatBuffer> bufferA = cl.createBuffer(floatBuffer, READ_ONLY);
-    floatBuffer.rewind();
+    FloatBuffer tmpfb;
 
-    // data b の読み取り
-    floatBuffer = loadData("data/datab.txt");
-    CLBuffer<FloatBuffer> bufferB = cl.createBuffer(floatBuffer, READ_ONLY);
-    floatBuffer.rewind();
+    // data a の読み込み
+    tmpfb = loadData("data/dataa.txt");
+    CLBuffer<FloatBuffer> BufferA = cl.createBuffer(tmpfb, READ_ONLY);
+    tmpfb.rewind();
 
-    // data c の読み取り
-    floatBuffer = loadData("data/datac.txt");
-    CLBuffer<FloatBuffer> bufferC = cl.createBuffer(floatBuffer, READ_ONLY);
-    floatBuffer.rewind();
+    // data b の読み込み
+    tmpfb = loadData("data/datab.txt");
+    CLBuffer<FloatBuffer> BufferB = cl.createBuffer(tmpfb, READ_ONLY);
+    tmpfb.rewind();
 
-    // a + b + c の計算の用意
-    CLBuffer<FloatBuffer> bufferD = cl.createFloatBuffer(floatBuffer.limit(), WRITE_ONLY);
+    // data c の読み込み
+    tmpfb = loadData("data/datac.txt");
+    CLBuffer<FloatBuffer> BufferC = cl.createBuffer(tmpfb, READ_ONLY);
+    tmpfb.rewind();
 
-    int dataSize = floatBuffer.limit();
+    // data d の準備
+    CLBuffer<FloatBuffer> BufferD = cl.createFloatBuffer(tmpfb.limit(),
+        WRITE_ONLY);
+    int datasize = tmpfb.limit();
     CLCommandQueue queue = cl.createQueue();
 
-    // OpenCLプログラム
     CLProgram program = cl.createProgramFromResource(this, "sum3.cl");
     CLKernel kernel = program.createCLKernel("Sum3");
-    kernel.putArgs(bufferA, bufferB, bufferC, bufferD);
-    kernel.setArgs(4, dataSize);
+    kernel.putArgs(BufferA, BufferB, BufferC, BufferD);
+    kernel.setArg(4, datasize);
 
-    bufferD.getBuffer().rewind();
+    BufferD.getBuffer().rewind();
+    // デバイスへ転送、並列演算、演算結果の取得
+    queue.putWriteBuffer(BufferA, false)// BufferAのデータをカーネル側へ転送指令
+        .putWriteBuffer(BufferB, false)// BufferBのデータをカーネル側へ転送指令
+        .putWriteBuffer(BufferC, false)// BufferBのデータをカーネル側へ転送指令
+        .putBarrier() // 今までの指令がすべて完了するまで待つ
+        .put1DRangeKernel(kernel, 0, datasize, 1)// 演算指令
+        .putBarrier() // 今までの指令がすべて完了するまで待つ
+        .putReadBuffer(BufferD, true);// BufferDのデータをホスト側へ転送指令
+                                      // 転送完了まで待つ
 
-    // 演算の実行
-    queue.putWriteBuffer(bufferA, false)
-        .putWriteBuffer(bufferB, false)
-        .putWriteBuffer(bufferC, false)
-        .putBarrier()
-        .put1DRangeKernel(kernel, 0, dataSize, 1)
-        .putBarrier()
-        .putReadBuffer(bufferD, true);
-
-    // 結果の出力
-    FloatBuffer fb = bufferD.getBuffer();
+    // 演算結果の出力
+    FloatBuffer fb = BufferD.getBuffer();
     fb.rewind();
     for (int i = 0; i < fb.limit(); i++) {
       System.out.print(fb.get() + " ");
