@@ -9,7 +9,7 @@ JAVABIN=
 #####
 ## set javafx-sdk directory your installed 
 #####
-JAVAFXMODULE=../javafx-sdk-18.0.2/lib
+JAVAFXMODULE=../javafx-sdk-18.0.1/lib
 
 #####
 ##  set proxy server address and port number, if your machine connects
