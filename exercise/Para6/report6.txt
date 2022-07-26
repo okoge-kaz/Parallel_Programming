@@ -16,7 +16,24 @@ max(max(a[i], b[i]), c[i]); のように、演算子を複数回作用させる�
 3.1)
 barrier(CLK_LOCAL_MEM_FENCE)の挿入箇所とその必要な理由
 
+挿入箇所
 
+```
+  for(int c=0; c<3; c++){
+    for(int diff=1; diff<8; diff*=2){
+      for(int x=0; x<lx; x+= 2 * diff){
+        for(int y=0; y<ly; y+= 2 * diff){
+          ldata[(y*8+x)*3+c] = (ldata[(y*8+x)*3+c] + ldata[(y*8+x+diff)*3+c] + ldata[((y+diff)*8+x)*3+c] + ldata[((y+diff)*8+x+diff)*3+c])/4;
+        }
+      }
+      barrier(CLK_LOCAL_MEM_FENCE);
+    }
+  }
+```
+このように集約する正方形のサイズが変化するごとに同期をワークグループ内でとる。
+
+(理由)
+小規模な正方形で集約し平均した値を、次のもう少し大きな正方形にて集約を行う際に利用するため、集約する正方形のサイズが変更される前にワークグループ内で同期を取る必要がある。
 
 
 3.2)
