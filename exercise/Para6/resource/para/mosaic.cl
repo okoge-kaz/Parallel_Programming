@@ -43,8 +43,8 @@ __kernel void Mosaic(const int width, const int height,
 
   for(int c=0; c<3; c++){
     for(int diff=1; diff<8; diff*=2){
-      for(int x=0; x<lx; x+= diff){
-        for(int y=0; y<ly; y+= diff){
+      for(int x=0; x<lx; x+= 2 * diff){
+        for(int y=0; y<ly; y+= 2 * diff){
           ldata[(y*8+x)*3+c] = (ldata[(y*8+x)*3+c] + ldata[(y*8+x+diff)*3+c] + ldata[((y+diff)*8+x)*3+c] + ldata[((y+diff)*8+x+diff)*3+c])/4;
           barrier(CLK_LOCAL_MEM_FENCE);
         }
