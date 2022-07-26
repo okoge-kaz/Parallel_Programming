@@ -1,3 +1,4 @@
+// 藤井一喜 20B30790
 package para.opencl;
 
 import com.jogamp.opencl.CLBuffer;
