@@ -19,14 +19,13 @@ public class Main12 {
   }
 
   public void start() {
-    Target target = new TargetImageFilter(
-        new JavaFXTarget("GrayscaleFilter", 320, 240), this,
-        "gray.cl", "Gray");
+    Target target = new TargetImageFilter(new JavaFXTarget("GrayscaleFilter", 320, 240), this, "gray.cl", "Gray");
     ShapeManager sm = new OrderedShapeManager();
     sm.add(new Camera(20, 0, 0));
     target.init();
     target.clear();
     target.flush();
+
     int i = 0;
     while (true) {
       sm.put(new Circle(30, i, 200, 10, new Attribute(255, 255, 0, true)));
