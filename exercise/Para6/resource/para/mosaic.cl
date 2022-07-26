@@ -46,12 +46,11 @@ __kernel void Mosaic(const int width, const int height,
       for(int x=0; x<lx; x+= 2 * diff){
         for(int y=0; y<ly; y+= 2 * diff){
           ldata[(y*8+x)*3+c] = (ldata[(y*8+x)*3+c] + ldata[(y*8+x+diff)*3+c] + ldata[((y+diff)*8+x)*3+c] + ldata[((y+diff)*8+x+diff)*3+c])/4;
-          barrier(CLK_LOCAL_MEM_FENCE);
         }
       }
+      barrier(CLK_LOCAL_MEM_FENCE);
     }
   }
-  barrier(CLK_LOCAL_MEM_FENCE);
   
   /**
    * fill one color in a block area
