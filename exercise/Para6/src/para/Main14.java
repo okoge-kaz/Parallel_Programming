@@ -1,3 +1,4 @@
+// 藤井一喜 20B30790
 package para;
 
 import javafx.application.Application;
@@ -6,7 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import para.graphic.shape.Attribute;
 import para.graphic.shape.Camera;
+import para.graphic.shape.Circle;
 import para.graphic.shape.OrderedShapeManager;
 import para.graphic.shape.ShapeManager;
 import para.graphic.target.JavaFXCanvasTarget;
@@ -34,10 +37,12 @@ public class Main14 extends Application {
     target.init();
     target.clear();
     sm.add(new Camera(0, 20, 20));
+    value = 120;
     thread = new Thread(new Runnable() {
       public void run() {
         while (true) {
           // System.out.println(Thread.currentThread().getName());
+          sm.put(new Circle(30, value, 200, 10, new Attribute(255, 255, 0, true)));
           target.draw(sm);
           target.flush();
           try {
@@ -50,6 +55,7 @@ public class Main14 extends Application {
   }
 
   public void start(Stage stage) {
+    // JavaFX Application Thread
     BorderPane pane = new BorderPane();
     pane.setCenter(jfc);
     Slider slider = new Slider(0, 1.0, 0.2);
@@ -59,6 +65,7 @@ public class Main14 extends Application {
             Number old_val, Number new_val) -> {
           // System.out.println(Thread.currentThread().getName());
           filter.setParameter((float) slider.getValue());
+          value = (int) (slider.getValue() * 360);
         });
     Scene scene = new Scene(pane);
     stage.setTitle("DelaySlider");
