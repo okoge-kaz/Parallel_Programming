@@ -1,3 +1,4 @@
+// 20B30790 藤井一喜
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 __kernel void Sum3(__constant float* a,__constant float* b, __constant float* c, __global float* d, int numElements)

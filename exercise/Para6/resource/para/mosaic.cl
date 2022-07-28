@@ -1,3 +1,4 @@
+// 20B30790 藤井一喜
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 // OpenCL Kernel Function
