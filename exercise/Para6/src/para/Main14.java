@@ -43,8 +43,10 @@ public class Main14 extends Application {
         while (true) {
           // System.out.println(Thread.currentThread().getName());
           sm.put(new Circle(30, value, 200, 10, new Attribute(255, 255, 0, true)));
+          target.clear();
           target.draw(sm);
           target.flush();
+
           try {
             Thread.sleep(80);
           } catch (InterruptedException e) {
@@ -65,7 +67,9 @@ public class Main14 extends Application {
             Number old_val, Number new_val) -> {
           // System.out.println(Thread.currentThread().getName());
           filter.setParameter((float) slider.getValue());
-          value = (int) (slider.getValue() * 360);
+          synchronized (slider) {
+            value = (int) (slider.getValue() * 360);
+          }
         });
     Scene scene = new Scene(pane);
     stage.setTitle("DelaySlider");

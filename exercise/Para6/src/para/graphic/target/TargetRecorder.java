@@ -119,7 +119,7 @@ public class TargetRecorder implements Target{
   }
 
   @Override
-  public void draw(ShapeManager sm){
+  public synchronized void draw(ShapeManager sm){
     target.draw(sm);
   }
 
