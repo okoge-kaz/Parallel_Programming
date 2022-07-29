@@ -160,23 +160,23 @@ __kernel void Filter2(const int width, const int height,
   // get index of global data array
   int lx = get_global_id(0);
   int ly = get_global_id(1);
-/*
+
   // bound check (equivalent to the limit on a 'for' loop for standard/serial C code
   if (lx > width || ly >height)  {
     return;
   }
-*/
+
   float samp = scale/50; 
   int add = addr(width,height,lx,ly);
   int oadd = (ly*width+lx)*4;
   outb[oadd  ]= bound(filter2(in,width,height,lx,ly,0)*samp+128);
   outb[oadd+1]= bound(filter2(in,width,height,lx,ly,1)*samp+128);
   outb[oadd+2]= bound(filter2(in,width,height,lx,ly,2)*samp+128);
-/*
+
   outb[oadd  ]= bound(in[add]+filter2(in,width,height,lx,ly,0)*samp);
   outb[oadd+1]= bound(in[add+1]+filter2(in,width,height,lx,ly,1)*samp);
   outb[oadd+2]= bound(in[add+2]+filter2(in,width,height,lx,ly,2)*samp);
-*/
+
   outb[oadd+3]= 255;
 }
 
