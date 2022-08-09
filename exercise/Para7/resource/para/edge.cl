@@ -14,28 +14,62 @@ float bound(const float in){
   return in;
 }
 
-float filter(__global const uchar* in, const int width, const int height,
+float filterA(__global const uchar* in, const int width, const int height,
            const int lx,const int ly, const int shift){
   return (
-          in[addr(width, height, lx-1, ly-1)+shift] * (0.7f)+
-          in[addr(width, height, lx  , ly-1)+shift] * (1)+
-          in[addr(width, height, lx+1, ly-1)+shift] * (0.7f)+
+          in[addr(width, height, lx-1, ly-1)+shift] * (-1)+
+          in[addr(width, height, lx  , ly-1)+shift] * (0)+
+          in[addr(width, height, lx+1, ly-1)+shift] * (1)+
 
-          in[addr(width, height, lx-1, ly)+shift] * (1)+
-          in[addr(width, height, lx  , ly)+shift] * 1.2f+
-          in[addr(width, height, lx+1, ly)+shift] * (1)+
+          in[addr(width, height, lx-1, ly)+shift] * (-2)+
+          in[addr(width, height, lx  , ly)+shift] * (0)+
+          in[addr(width, height, lx+1, ly)+shift] * (2)+
 
-          in[addr(width, height, lx-1, ly+1)+shift] * (0.7f)+
-          in[addr(width, height, lx  , ly+1)+shift] * (1)+
-          in[addr(width, height, lx+1, ly+1)+shift] * (0.7f)
-          )/8.0;
+          in[addr(width, height, lx-1, ly+1)+shift] * (-1)+
+          in[addr(width, height, lx  , ly+1)+shift] * (0)+
+          in[addr(width, height, lx+1, ly+1)+shift] * (1)
+          );
+}
+
+float filterB(__global const uchar* in, const int width, const int height,
+           const int lx,const int ly, const int shift){
+  return (
+          in[addr(width, height, lx-1, ly-1)+shift] * (-1)+
+          in[addr(width, height, lx  , ly-1)+shift] * (-2)+
+          in[addr(width, height, lx+1, ly-1)+shift] * (-1)+
+
+          in[addr(width, height, lx-1, ly)+shift] * (0)+
+          in[addr(width, height, lx  , ly)+shift] * (0)+
+          in[addr(width, height, lx+1, ly)+shift] * (0)+
+
+          in[addr(width, height, lx-1, ly+1)+shift] * (1)+
+          in[addr(width, height, lx  , ly+1)+shift] * (2)+
+          in[addr(width, height, lx+1, ly+1)+shift] * (1)
+          );
+}
+
+float filterC(__global const uchar* in, const int width, const int height,
+           const int lx,const int ly, const int shift){
+  return (
+          in[addr(width, height, lx-1, ly-1)+shift] +
+          in[addr(width, height, lx  , ly-1)+shift] +
+          in[addr(width, height, lx+1, ly-1)+shift] +
+
+          in[addr(width, height, lx-1, ly)+shift] +
+          in[addr(width, height, lx  , ly)+shift] +
+          in[addr(width, height, lx+1, ly)+shift] +
+
+          in[addr(width, height, lx-1, ly+1)+shift] +
+          in[addr(width, height, lx  , ly+1)+shift] +
+          in[addr(width, height, lx+1, ly+1)+shift]
+          );
 }
 
 // OpenCL Kernel Function 
 __kernel void Filter(const int width, const int height, 
                      __global const uchar* in, 
                      __global uchar *outb,
-		     const float amp) {
+		     const float s) {
   // get index of global data array
   int lx = get_global_id(0);
   int ly = get_global_id(1);
@@ -45,10 +79,13 @@ __kernel void Filter(const int width, const int height,
     return;
   }
 */
-  float samp = amp/15;
   int oadd = (ly*width+lx)*4;
-  outb[oadd  ]= bound(filter(in,width,height,lx,ly,0)*samp);
-  outb[oadd+1]= bound(filter(in,width,height,lx,ly,1)*samp);
-  outb[oadd+2]= bound(filter(in,width,height,lx,ly,2)*samp);
+
+  outb[oadd  ]= bound((filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * (filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) + (filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))*(filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * s / 1600);
+
+  outb[oadd+1]= bound((filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * (filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) + (filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))*(filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * s / 1600);
+
+  outb[oadd+2]= bound((filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * (filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) + (filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))*(filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * s / 1600);
+
   outb[oadd+3]= 255;
 }
