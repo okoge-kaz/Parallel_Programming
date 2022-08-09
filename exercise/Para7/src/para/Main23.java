@@ -5,6 +5,6 @@ package para;
 
 public class Main23 extends Main15{
   public Main23(){
-    super("imagefilter.cl", "Filter6");
+    super("imagefilter.cl", "Filter9");
   }
 }
