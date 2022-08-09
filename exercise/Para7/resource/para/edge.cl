@@ -81,11 +81,11 @@ __kernel void Filter(const int width, const int height,
 */
   int oadd = (ly*width+lx)*4;
 
-  outb[oadd  ]= bound((filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * (filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) + (filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))*(filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * s / 1600);
+  outb[oadd  ]= bound(((filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * (filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) + (filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))*(filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))) * s / 1600);
 
-  outb[oadd+1]= bound((filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * (filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) + (filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))*(filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * s / 1600);
+  outb[oadd+1]= bound(((filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * (filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) + (filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))*(filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))) * s / 1600);
 
-  outb[oadd+2]= bound((filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * (filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) + (filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))*(filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * s / 1600);
+  outb[oadd+2]= bound(((filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * (filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) + (filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))*(filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))) * s / 1600);
 
   outb[oadd+3]= 255;
 }
