@@ -14,54 +14,37 @@ float bound(const float in){
   return in;
 }
 
-float filterA(__global const uchar* in, const int width, const int height,
+float filterAC(__global const uchar* in, const int width, const int height,
            const int lx,const int ly, const int shift){
   return (
-          in[addr(width, height, lx-1, ly-1)+shift] * (-1)+
-          in[addr(width, height, lx  , ly-1)+shift] * (0)+
-          in[addr(width, height, lx+1, ly-1)+shift] * (1)+
+          in[addr(width, height, lx-1, ly-1)+shift] * (-1) * in[addr(width, height, lx-1, ly-1)+shift] +
+          in[addr(width, height, lx  , ly-1)+shift] * (0)  * in[addr(width, height, lx  , ly-1)+shift] +
+          in[addr(width, height, lx+1, ly-1)+shift] * (1)  * in[addr(width, height, lx+1, ly-1)+shift] +
 
-          in[addr(width, height, lx-1, ly)+shift] * (-2)+
-          in[addr(width, height, lx  , ly)+shift] * (0)+
-          in[addr(width, height, lx+1, ly)+shift] * (2)+
+          in[addr(width, height, lx-1, ly)+shift] * (-2)   * in[addr(width, height, lx-1, ly)+shift]   +
+          in[addr(width, height, lx  , ly)+shift] * (0)    * in[addr(width, height, lx  , ly)+shift]   +
+          in[addr(width, height, lx+1, ly)+shift] * (2)    * in[addr(width, height, lx+1, ly)+shift]   +
 
-          in[addr(width, height, lx-1, ly+1)+shift] * (-1)+
-          in[addr(width, height, lx  , ly+1)+shift] * (0)+
-          in[addr(width, height, lx+1, ly+1)+shift] * (1)
+          in[addr(width, height, lx-1, ly+1)+shift] * (-1) * in[addr(width, height, lx-1, ly+1)+shift] +
+          in[addr(width, height, lx  , ly+1)+shift] * (0)  * in[addr(width, height, lx  , ly+1)+shift] +
+          in[addr(width, height, lx+1, ly+1)+shift] * (1)  * in[addr(width, height, lx+1, ly+1)+shift]
           );
 }
 
-float filterB(__global const uchar* in, const int width, const int height,
+float filterBC(__global const uchar* in, const int width, const int height,
            const int lx,const int ly, const int shift){
   return (
-          in[addr(width, height, lx-1, ly-1)+shift] * (-1)+
-          in[addr(width, height, lx  , ly-1)+shift] * (-2)+
-          in[addr(width, height, lx+1, ly-1)+shift] * (-1)+
+          in[addr(width, height, lx-1, ly-1)+shift] * (-1) * in[addr(width, height, lx-1, ly-1)+shift]+
+          in[addr(width, height, lx  , ly-1)+shift] * (-2) * in[addr(width, height, lx  , ly-1)+shift]+
+          in[addr(width, height, lx+1, ly-1)+shift] * (-1) * in[addr(width, height, lx+1, ly-1)+shift]+
 
-          in[addr(width, height, lx-1, ly)+shift] * (0)+
-          in[addr(width, height, lx  , ly)+shift] * (0)+
-          in[addr(width, height, lx+1, ly)+shift] * (0)+
+          in[addr(width, height, lx-1, ly)+shift] * (0) * in[addr(width, height, lx-1, ly)+shift]+
+          in[addr(width, height, lx  , ly)+shift] * (0) * in[addr(width, height, lx  , ly)+shift]+
+          in[addr(width, height, lx+1, ly)+shift] * (0) * in[addr(width, height, lx+1, ly)+shift]+
 
-          in[addr(width, height, lx-1, ly+1)+shift] * (1)+
-          in[addr(width, height, lx  , ly+1)+shift] * (2)+
-          in[addr(width, height, lx+1, ly+1)+shift] * (1)
-          );
-}
-
-float filterC(__global const uchar* in, const int width, const int height,
-           const int lx,const int ly, const int shift){
-  return (
-          in[addr(width, height, lx-1, ly-1)+shift] +
-          in[addr(width, height, lx  , ly-1)+shift] +
-          in[addr(width, height, lx+1, ly-1)+shift] +
-
-          in[addr(width, height, lx-1, ly)+shift] +
-          in[addr(width, height, lx  , ly)+shift] +
-          in[addr(width, height, lx+1, ly)+shift] +
-
-          in[addr(width, height, lx-1, ly+1)+shift] +
-          in[addr(width, height, lx  , ly+1)+shift] +
-          in[addr(width, height, lx+1, ly+1)+shift]
+          in[addr(width, height, lx-1, ly+1)+shift] * (1 * in[addr(width, height, lx-1, ly+1)+shift])+
+          in[addr(width, height, lx  , ly+1)+shift] * (2) * in[addr(width, height, lx  , ly+1)+shift]+
+          in[addr(width, height, lx+1, ly+1)+shift] * (1) * in[addr(width, height, lx+1, ly+1)+shift]
           );
 }
 
@@ -81,11 +64,11 @@ __kernel void Filter(const int width, const int height,
 */
   int oadd = (ly*width+lx)*4;
 
-  outb[oadd  ]= bound(((filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) * (filterA(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0)) + (filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))*(filterB(in,width,height,lx,ly,0)*filterC(in,width,height,lx,ly,0))) * s / 1600);
+  outb[oadd  ]= bound((filterAC(in,width,height,lx,ly,0)*filterAC(in,width,height,lx,ly,0)) + (filterBC(in,width,height,lx,ly,0)*filterBC(in,width,height,lx,ly,0)) * s / 1600);
 
-  outb[oadd+1]= bound(((filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) * (filterA(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1)) + (filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))*(filterB(in,width,height,lx,ly,1)*filterC(in,width,height,lx,ly,1))) * s / 1600);
+  outb[oadd+1]= bound((filterAC(in,width,height,lx,ly,1)*filterAC(in,width,height,lx,ly,1)) + (filterBC(in,width,height,lx,ly,1)*filterBC(in,width,height,lx,ly,1)) * s / 1600);
 
-  outb[oadd+2]= bound(((filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) * (filterA(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2)) + (filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))*(filterB(in,width,height,lx,ly,2)*filterC(in,width,height,lx,ly,2))) * s / 1600);
+  outb[oadd+2]= bound((filterAC(in,width,height,lx,ly,2)*filterAC(in,width,height,lx,ly,2)) + (filterBC(in,width,height,lx,ly,2)*filterBC(in,width,height,lx,ly,2)) * s / 1600);
 
   outb[oadd+3]= 255;
 }
