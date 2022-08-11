@@ -51,6 +51,10 @@ public class GameServer01 {
   final CollisionChecker checker;
 
   private GameServer01() {
+    /*
+     * CollisionChecker 以外は、すべてlength = 2の配列になっている。
+     * そのため、 for 文の中身としては [0], [1] にそれぞれのオブジェクトを代入しているだけ
+     */
     checker = new CollisionChecker();
     gsf = new GameServerFrame(MAXCONNECTION);
     userinput = new ShapeManager[MAXCONNECTION];
@@ -60,6 +64,7 @@ public class GameServer01 {
     pos = new Vec2[MAXCONNECTION];
     vel = new Vec2[MAXCONNECTION];
     score = new int[MAXCONNECTION];
+
     for (int i = 0; i < userinput.length; i++) {
       userinput[i] = new ShapeManager();
       ballandscore[i] = new ShapeManager();
