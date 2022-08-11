@@ -21,20 +21,20 @@ import para.game.GameTextTarget;
 
 public class GameServer01 {
   /*
-   * Attribute 
-   *  wallattr: wall attribute 壁を描画する際の属性
-   *  ballattr: ball attribute ボールを描画する際の属性
-   *  scoreattr: score attribute スコアを描画する際の属性
+   * Attribute
+   * wallattr: wall attribute 壁を描画する際の属性
+   * ballattr: ball attribute ボールを描画する際の属性
+   * scoreattr: score attribute スコアを描画する際の属性
    * 
    * MAXCOLLISION: max connection 最大接続数
    * gst: game server frame ゲームサーバフレーム
    * 
    * ShapeManager
-   *   userinput: user input
-   *   wall: wall
-   *   blocks: blocks
-   *   ballandscore: ball and score
-   *   
+   * userinput: user input
+   * wall: wall
+   * blocks: blocks
+   * ballandscore: ball and score
+   * 
    */
   final Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
   final Attribute ballattr = new Attribute(250, 120, 120, true, 0, 0, 0);
@@ -76,6 +76,10 @@ public class GameServer01 {
   }
 
   public void start() {
+    /*
+     * Game Server Frame を init したのち、welcomeにより start される。
+     * GameServerFrame extends Thread であるため、この welcome メソッドにより Thread がスタートされる。
+     */
     try {
       gsf.init();
     } catch (IOException ex) {
@@ -92,16 +96,31 @@ public class GameServer01 {
         init(id);
         startReceiver(git);
       }
+
       try {
         Thread.sleep(100);
       } catch (InterruptedException ex) {
       }
+
+      /*
+       * 0: ユーザー1
+       * 1: ユーザー2
+       * 
+       * gsf: GameServerFrame は、 getUserOUtput(int id) メソッドにより下記の動作をする。
+       * return useroutput[id] により、ユーザーごとの GameTextTarget を取得する。
+       * 
+       * このとき GameTextTarget が null でないときは、 clacForOneUser(int id)
+       * メソッドにより、ユーザーごとの現在の状態の計算を行う。
+       * 
+       */
       for (int i = 0; i < MAXCONNECTION; i++) {
         GameTextTarget out = gsf.getUserOutput(i);
         if (out != null) {
           calcForOneUser(i);
+
           ballandscore[i].put(new Circle(i * 10000 + 1, (int) pos[i].data[0],
               (int) pos[i].data[1], 5, ballattr));
+
           putScore(i, score[i]);
           out.gamerstate(gs); // Gamerの状態をクライアントに伝える
           distributeOutput(out);
