@@ -57,19 +57,23 @@ public class GameServer01 {
      */
     checker = new CollisionChecker();
     gsf = new GameServerFrame(MAXCONNECTION);
+
     userinput = new ShapeManager[MAXCONNECTION];
     wall = new OrderedShapeManager[MAXCONNECTION];
     blocks = new OrderedShapeManager[MAXCONNECTION];
     ballandscore = new ShapeManager[MAXCONNECTION];
+
     pos = new Vec2[MAXCONNECTION];
     vel = new Vec2[MAXCONNECTION];
     score = new int[MAXCONNECTION];
 
     for (int i = 0; i < userinput.length; i++) {
+
       userinput[i] = new ShapeManager();
       ballandscore[i] = new ShapeManager();
       wall[i] = new OrderedShapeManager();
       blocks[i] = new OrderedShapeManager();
+
       pos[i] = new Vec2(i * 350 + 150, 200);
       vel[i] = new Vec2(0, 0);
     }
@@ -133,22 +137,24 @@ public class GameServer01 {
     int id = git.getUserID();
     git.init(new TranslateTarget(userinput[id],
         new TranslationRule(id * 10000, new Vec2(id * 350, 0))),
-        new ShapeManager[] { userinput[id], wall[id],
-            blocks[id], ballandscore[id] });
+        new ShapeManager[] { userinput[id], wall[id], blocks[id], ballandscore[id] });
     git.start();
   }
 
   private void init(int id) {
+
     wall[id].add(new Rectangle(id * 10000 + 5, id * 350 + 0, 0, 320, 20, wallattr));
     wall[id].add(new Rectangle(id * 10000 + 6, id * 350 + 0, 0, 20, 300, wallattr));
     wall[id].add(new Rectangle(id * 10000 + 7, id * 350 + 300, 0, 20, 300, wallattr));
     wall[id].add(new Rectangle(id * 10000 + 8, id * 350 + 0, 281, 320, 20, wallattr));
+
     IntStream.range(0, 33 * 20).forEach(n -> {
       int x = n % 33;
       int y = n / 33;
       blocks[id].add(new Rectangle(id * 10000 + n, id * 350 + 30 + x * 8, 30 + y * 8, 6, 6,
           new Attribute(250, 100, 250, true, 0, 0, 0)));
     });
+
     pos[id] = new Vec2(id * 350 + 150, 200);
     vel[id] = new Vec2(4, -12);
     score[id] = 0;

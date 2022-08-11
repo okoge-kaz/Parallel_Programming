@@ -38,6 +38,7 @@ public class Game04 extends GameFrame {
     }
   }
 
+  @Override
   public void gamestart(int v) {
     if (thread != null) {
       return;
@@ -45,10 +46,12 @@ public class Game04 extends GameFrame {
     try {
       Socket socket;
       socket = new Socket(serveraddress, para.game.GameServerFrame.PORTNO);
+
       istream = socket.getInputStream();
       OutputStream ostream = socket.getOutputStream();
-      inputside = new TargetImageFilter(new TextTarget(WIDTH, HEIGHT, ostream),
-          this, "imagefilter.cl", "Filter9");
+
+      inputside = new TargetImageFilter(new TextTarget(WIDTH, HEIGHT, ostream), this, "imagefilter.cl", "Filter9");
+
     } catch (IOException ex) {
       System.err.print("To:" + serveraddress + " ");
       System.err.println(ex);
@@ -59,9 +62,12 @@ public class Game04 extends GameFrame {
     thread = new Thread(() -> {
       int x = 150;
       Attribute attr = new Attribute(200, 128, 128);
+
       ism.put(new Camera(0, 0, 300, attr));
       ism.put(new Rectangle(v + 1, x, 30 * v + 225, 60, 20, attr));
+
       inputside.draw(ism);
+
       while (true) {
         try {
           Thread.sleep(80);
@@ -83,10 +89,19 @@ public class Game04 extends GameFrame {
     Thread thread2 = new Thread(() -> {
       GameMainParser parser = new GameMainParser(this, outputside, osm);
       BufferedReader br = new BufferedReader(new InputStreamReader(istream));
+
       parser.parse(new Scanner(istream));// loop
+
       System.out.println("connection closed");
       thread.interrupt();
     });
     thread2.start();
+
+    button.setOnAction(ev -> {
+      thread = null;
+      gameScore = 0;
+      // 難易度の値を取得してからゲームを開始する
+      gamestart(spinner.getValue());
+    });
   }
 }
