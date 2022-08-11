@@ -20,6 +20,22 @@ import para.game.GameInputThread;
 import para.game.GameTextTarget;
 
 public class GameServer01 {
+  /*
+   * Attribute 
+   *  wallattr: wall attribute 壁を描画する際の属性
+   *  ballattr: ball attribute ボールを描画する際の属性
+   *  scoreattr: score attribute スコアを描画する際の属性
+   * 
+   * MAXCOLLISION: max connection 最大接続数
+   * gst: game server frame ゲームサーバフレーム
+   * 
+   * ShapeManager
+   *   userinput: user input
+   *   wall: wall
+   *   blocks: blocks
+   *   ballandscore: ball and score
+   *   
+   */
   final Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
   final Attribute ballattr = new Attribute(250, 120, 120, true, 0, 0, 0);
   final Attribute scoreattr = new Attribute(60, 60, 60, true, 0, 0, 0);
